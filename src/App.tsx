@@ -11,8 +11,12 @@ import CollectionPage from "./pages/CollectionPage";
 import SectionPage from "./pages/SectionPage";
 import SearchPage from "./pages/SearchPage";
 
+function isBrowsePath(path: string) {
+  return path === "/" || path === "/archive" || path === "/search" || path.startsWith("/s/");
+}
+
 export default function App() {
-  const reading = useLocation().pathname !== "/";
+  const reading = !isBrowsePath(useLocation().pathname);
   const root = useRef<HTMLDivElement>(null);
   useAppMotion(root);
 

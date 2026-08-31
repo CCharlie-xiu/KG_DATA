@@ -16,11 +16,9 @@ export default function GateWall({
   if (needsGate(section)) {
     return (
       <>
-        <section className="article">
-          <div className="kicker">受保护</div>
-          <h1>{section.label}</h1>
-          <p className="muted">这个类别需要邮箱验证后才能查看。</p>
-        </section>
+        <div className="gate-behind" aria-hidden="true">
+          {children}
+        </div>
         <EmailCodeGate
           open
           title={section.label}
