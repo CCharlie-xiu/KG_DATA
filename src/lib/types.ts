@@ -13,6 +13,7 @@ export type CatalogItem = {
   viewer: "ga-catalog" | "article";
   entry: string;
   section?: string;
+  cover?: string;
 };
 
 export type Catalog = {
@@ -22,6 +23,7 @@ export type Catalog = {
     tagline: string;
     description: string;
     locale: string;
+    defaultCover?: string;
   };
   nav: { id: string; label: string; href: string }[];
   categories: { id: string; label: string }[];

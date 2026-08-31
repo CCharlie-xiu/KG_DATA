@@ -4,7 +4,8 @@
     "fullName": "Knowledge Gazette",
     "tagline": "内部知识与方案归档",
     "description": "首页是目录。每条条目对应 data/collections 下一份自包含数据。后续短剧、RPA 等按同一规范接入。",
-    "locale": "zh-CN"
+    "locale": "zh-CN",
+    "defaultCover": "covers/kg-default.jpg"
   },
   "nav": [
     { "id": "home", "label": "目录", "href": "/" },
@@ -30,7 +31,8 @@
       "updated": "2026-08-31",
       "viewer": "ga-catalog",
       "entry": "meta.json",
-      "section": "design"
+      "section": "design",
+      "cover": "covers/kg-default.jpg"
     },
     {
       "id": "short-drama",
@@ -44,7 +46,8 @@
       "updated": "2026-08-31",
       "viewer": "article",
       "entry": "meta.json",
-      "section": "architecture"
+      "section": "architecture",
+      "cover": "covers/kg-default.jpg"
     },
     {
       "id": "rpa-playbooks",
@@ -58,7 +61,8 @@
       "updated": "2026-08-31",
       "viewer": "article",
       "entry": "meta.json",
-      "section": "breakthrough"
+      "section": "breakthrough",
+      "cover": "covers/kg-default.jpg"
     }
   ]
 }

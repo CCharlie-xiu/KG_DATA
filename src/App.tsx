@@ -1,6 +1,9 @@
-import { NavLink, Route, Routes } from "react-router-dom";
+import { useRef } from "react";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import catalog from "../data/catalog.json";
 import SectionNav from "./components/SectionNav";
+import WebThreads from "./components/WebThreads";
+import { useAppMotion } from "./hooks/useAppMotion";
 import Home from "./pages/Home";
 import Archive from "./pages/Archive";
 import About from "./pages/About";
@@ -9,27 +12,45 @@ import SectionPage from "./pages/SectionPage";
 import SearchPage from "./pages/SearchPage";
 
 export default function App() {
+  const reading = useLocation().pathname !== "/";
+  const root = useRef<HTMLDivElement>(null);
+  useAppMotion(root);
+
   return (
-    <div className="app">
-      <header className="masthead">
-        <div className="shell">
-          <div className="masthead-top">
-            <div>
-              <div className="brand-kicker">{catalog.site.fullName}</div>
-              <div className="brand">{catalog.site.name}</div>
-            </div>
-            <SectionNav />
-          </div>
-          <div className="issue-line">
-            <nav className="nav">
-              {catalog.nav.map((item) => (
-                <NavLink key={item.id} to={item.href} end={item.href === "/"} className={({ isActive }) => (isActive ? "active" : "")}>
-                  {item.label}
-                </NavLink>
-              ))}
-            </nav>
-            <span>Vol. 01 · 2026-08-31</span>
-          </div>
+    <div ref={root} className={reading ? "app app--read" : "app app--home"}>
+      <div className="site-threads" aria-hidden="true">
+        <WebThreads
+          color1="#5227ff"
+          color2="#ff9ffc"
+          color3="#9d8cff"
+          speed={0.2}
+          threadCount={6}
+          frequency={5}
+          spread={0.18}
+          taper={1}
+          position={0.5}
+          fanMode="center"
+          glow={0.02}
+          falloff={0.62}
+          thickness={1.05}
+          brightness={0.42}
+          opacity={0.85}
+          mirror={false}
+          shimmer={false}
+          grain
+          grainIntensity={0.05}
+          mouseInteraction
+          mouseStrength={0.3}
+        />
+      </div>
+      <div className={reading ? "site-veil site-veil--read" : "site-veil site-veil--home"} aria-hidden="true" />
+
+      <header className="topbar">
+        <div className="shell topbar-inner">
+          <Link className="logo" to="/">
+            KG_DATA<span>.</span>
+          </Link>
+          <SectionNav />
         </div>
       </header>
 
@@ -45,9 +66,9 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <div className="shell" style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", width: "100%" }}>
-          <span>数据源在仓库 data/ 目录，不走远程库。</span>
-          <span>GitHub Pages · Hash 路由</span>
+        <div className="shell footer-inner">
+          <span>{catalog.site.tagline}</span>
+          <span>数据在仓库 data/ · Pages 静态发布</span>
         </div>
       </footer>
     </div>

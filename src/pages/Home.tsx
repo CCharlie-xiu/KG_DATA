@@ -1,78 +1,60 @@
 import { Link } from "react-router-dom";
 import catalog from "../../data/catalog.json";
-import WebThreads from "../components/WebThreads";
+import DriftWall, { type DriftWallItem } from "../components/DriftWall";
+import { gateConfig } from "../lib/gates";
+
+function sectionLabel(id?: string) {
+  return gateConfig.sections.find((item) => item.id === id)?.label ?? id ?? "";
+}
+
+function clip(text: string, n = 36) {
+  const next = text.replace(/\s+/g, " ").trim();
+  return next.length > n ? `${next.slice(0, n)}…` : next;
+}
+
+function buildTiles(): DriftWallItem[] {
+  const fromCollections: DriftWallItem[] = catalog.collections.map((item) => ({
+    title: item.title,
+    kicker: item.featured ? `本期重点 · ${sectionLabel(item.section)}` : `${sectionLabel(item.section)} · ${item.status === "published" ? item.updated : "即将收录"}`,
+    excerpt: clip(item.subtitle && item.subtitle !== "待收录" ? `${item.subtitle}。${item.summary}` : item.summary),
+    href: item.status === "published" ? `/c/${item.id}` : `/s/${item.section}`,
+  }));
+
+  const fromSections: DriftWallItem[] = gateConfig.sections.map((section) => {
+    const count = catalog.collections.filter((item) => item.section === section.id).length;
+    return {
+      title: section.label,
+      kicker: count ? `${count} 条条目` : "分类",
+      excerpt: clip(section.summary),
+      href: section.href,
+    };
+  });
+
+  const tiles = [...fromCollections, ...fromSections];
+  const filled = [...tiles];
+  let i = 0;
+  while (filled.length < 12) {
+    filled.push({ ...tiles[i % tiles.length] });
+    i += 1;
+  }
+  return filled;
+}
 
 export default function Home() {
-  const featured = catalog.collections.find((item) => item.featured && item.status === "published");
-  const rest = catalog.collections.filter((item) => item.id !== featured?.id);
+  const tiles = buildTiles();
 
   return (
-    <>
-      <div className="home-threads" aria-hidden="true">
-        <WebThreads
-          color1="#5227ff"
-          color2="#ff9ffc"
-          color3="#ffffff"
-          speed={0.2}
-          threadCount={6}
-          frequency={5}
-          spread={0.18}
-          taper={1}
-          position={0.5}
-          fanMode="center"
-          glow={0.02}
-          falloff={0.6}
-          thickness={1.1}
-          brightness={0.6}
-          opacity={1}
-          mirror={false}
-          shimmer={false}
-          grain
-          grainIntensity={0.05}
-          mouseInteraction
-          mouseStrength={0.3}
-        />
-      </div>
-
-      <section className="hero">
-        <h1>一份可以切换的知识目录。</h1>
-        <p>{catalog.site.description}</p>
+    <div className="home-screen">
+      <section className="board-head">
+        <h1>全部条目</h1>
+        <Link className="see-new" to="/archive">
+          查看归档 →
+        </Link>
       </section>
 
-      <section className="featured">
-        {featured ? (
-          <article className="feature-card">
-            <div className="kicker">本期重点 · {featured.category}</div>
-            <h2>{featured.title}</h2>
-            <p className="muted">{featured.summary}</p>
-            <div className="chips">
-              {featured.tags.map((tag) => (
-                <span key={tag} className="chip">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <Link className="btn" to={`/c/${featured.id}`}>
-              查看埋点方案
-            </Link>
-          </article>
-        ) : null}
-
-        <div className="side-stack">
-          {rest.map((item) => (
-            <article key={item.id} className={`side-card ${item.status === "planned" ? "planned" : ""}`}>
-              <div className="kicker">{item.status === "planned" ? "即将收录" : item.category}</div>
-              <h3>{item.title}</h3>
-              <p className="muted">{item.summary}</p>
-              {item.status === "published" ? (
-                <Link to={`/c/${item.id}`}>进入 →</Link>
-              ) : (
-                <span className="muted">目录已占位，数据待补</span>
-              )}
-            </article>
-          ))}
-        </div>
+      <section className="drift-stage">
+        <DriftWall items={tiles} tilt={6} turn={-6} dim={0.96} fade={0.32} overlayColor="#05050a" />
       </section>
-    </>
+    </div>
   );
 }

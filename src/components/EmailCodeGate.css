@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgba(3, 3, 8, 0.62);
+  background: rgba(5, 5, 10, 0.55);
   backdrop-filter: blur(10px);
   display: grid;
   place-items: center;
@@ -10,78 +10,117 @@
 }
 
 .gate-card {
-  width: min(420px, 100%);
-  background: rgba(14, 12, 24, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-  padding: 28px 26px 20px;
+  width: min(400px, 100%);
+  background: rgba(12, 10, 20, 0.9);
+  backdrop-filter: blur(22px);
+  color: #f4f1ff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.4);
+  padding: 28px 28px 22px;
 }
 
 .gate-kicker {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-family: var(--song);
+  font-size: 12px;
+  letter-spacing: 0.18em;
   color: #ff9ffc;
 }
 
 .gate-card h2 {
-  font-family: Fraunces, serif;
-  font-size: 26px;
-  margin: 8px 0 10px;
+  font-family: var(--song);
+  letter-spacing: 0.1em;
+  font-size: 28px;
+  margin: 8px 0 12px;
 }
 
 .gate-notice {
-  margin: 0 0 6px;
-  font-size: 16px;
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: rgba(244, 241, 255, 0.88);
 }
 
 .gate-hint,
 .gate-error {
-  margin: 0 0 14px;
-  color: #b8b0d0;
+  margin: 0 0 18px;
+  color: rgba(244, 241, 255, 0.48);
   font-size: 13px;
 }
 
 .gate-error {
-  color: #ff8b8b;
+  color: #ff8a8a;
+  margin-top: -8px;
 }
 
 .gate-input {
   width: 100%;
-  background: #0b0b14;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #f4f1ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 22px;
-  letter-spacing: 0.28em;
+  font-size: 26px;
+  letter-spacing: 0.42em;
   text-align: center;
-  padding: 12px 10px;
-  margin-bottom: 14px;
+  border-radius: 18px;
+  padding: 14px 10px 14px 18px;
+  margin-bottom: 18px;
+}
+
+.gate-input::placeholder {
+  color: rgba(255, 255, 255, 0.22);
+  letter-spacing: 0.42em;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.gate-input:focus {
+  outline: none;
+  border-color: rgba(255, 159, 252, 0.7);
+  box-shadow: 0 0 0 3px rgba(82, 39, 255, 0.22);
 }
 
 .gate-actions {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
-  flex-wrap: wrap;
+}
+
+.gate-go {
+  flex: 1;
+  background: #fff;
+  color: #111;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-family: var(--song);
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.gate-go:disabled {
+  opacity: 0.38;
+  cursor: default;
 }
 
 .gate-resend,
 .gate-close {
   background: transparent;
   border: 0;
-  color: #b8b0d0;
+  color: rgba(244, 241, 255, 0.5);
   cursor: pointer;
   font-size: 13px;
+  letter-spacing: 0.06em;
 }
 
 .gate-resend:disabled {
   cursor: default;
-  opacity: 0.7;
 }
 
 .gate-close {
   display: block;
   margin-top: 16px;
+}
+
+.gate-close:hover,
+.gate-resend:not(:disabled):hover {
+  color: #fff;
 }
