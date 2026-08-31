@@ -1,0 +1,6 @@
+{
+  "id": "short-drama",
+  "title": "短剧内容与流程",
+  "status": "planned",
+  "body": "占位。接入时在本目录补充分集、投放与转化 JSON，并保持 catalog.json 中的 id 一致。"
+}

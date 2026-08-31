@@ -1,0 +1,6 @@
+{
+  "id": "rpa-playbooks",
+  "title": "RPA 剧本与节点",
+  "status": "planned",
+  "body": "占位。接入时在本目录补充剧本、节点与账号口径 JSON，并保持 catalog.json 中的 id 一致。"
+}

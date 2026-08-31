@@ -1,0 +1,100 @@
+{
+  "title": "关键事件",
+  "summary": "「建议看」用于漏斗和收入。绿=优先，蓝=本条，黄=官方双报，橙=自定义对照。",
+  "lookLegend": [
+    { "id": "prefer", "label": "优先" },
+    { "id": "watch", "label": "本条" },
+    { "id": "dual", "label": "双报" },
+    { "id": "custom", "label": "自定义" },
+    { "id": "detail", "label": "明细" },
+    { "id": "revenue", "label": "收入" }
+  ],
+  "groups": [
+    {
+      "id": "visit",
+      "title": "访问与大厅",
+      "events": [
+        { "name": "page_view", "label": "页面浏览", "look": "watch", "when": "打开独立页面", "extra": "page_path / page_location / page_title / page_referrer", "tone": "info" },
+        { "name": "channel_entrance", "label": "渠道入口", "look": "watch", "when": "本会话首次进大厅，只打一次", "extra": "entrance_channel", "tone": "info" },
+        { "name": "game_hall_enter", "label": "进入游戏大厅", "look": "watch", "when": "切到 Game Tab", "extra": "—", "tone": "info" },
+        { "name": "rank_page_enter", "label": "进入排行榜", "look": "watch", "when": "切到 Rank Tab", "extra": "—", "tone": "info" },
+        { "name": "lottery_page_enter", "label": "进入抽奖页", "look": "watch", "when": "切到 Spin&Win Tab", "extra": "—", "tone": "info" }
+      ]
+    },
+    {
+      "id": "login",
+      "title": "登录",
+      "events": [
+        { "name": "login_page_enter", "label": "进入登录页", "look": "watch", "when": "打开登录抽屉", "extra": "—", "tone": "info" },
+        { "name": "send_verify_code", "label": "发送验证码", "look": "watch", "when": "点发送", "extra": "phone_prefix=+27 · msisdn_hash", "tone": "info" },
+        { "name": "send_otp_success", "label": "验证码发送成功", "look": "watch", "when": "短信接口成功", "extra": "phone_prefix · msisdn_hash · channel=sms", "tone": "success" },
+        { "name": "send_otp_fail", "label": "验证码发送失败", "look": "watch", "when": "短信接口失败", "extra": "fail_reason", "tone": "danger" },
+        { "name": "login_attempt", "label": "尝试登录", "look": "watch", "when": "点登录提交", "extra": "verify_result=1|0", "tone": "info" },
+        { "name": "login_success", "label": "登录成功", "look": "prefer", "when": "登录成功", "extra": "method / login_type=sms_code|identity_jump", "tone": "success" },
+        { "name": "login", "label": "登录（官方）", "look": "dual", "when": "同上", "extra": "同 login_success", "tone": "warning" },
+        { "name": "login_failed", "label": "登录失败", "look": "watch", "when": "验证失败", "extra": "fail_reason · msisdn_hash", "tone": "danger" },
+        { "name": "logout", "label": "退出登录", "look": "watch", "when": "用户确认退出", "extra": "—", "tone": "info" },
+        { "name": "account_kickout", "label": "账号被踢", "look": "watch", "when": "401 强制登出", "extra": "fail_code · fail_reason=auth_logout", "tone": "danger" },
+        { "name": "invite_bind", "label": "邀请绑定", "look": "watch", "when": "登录带了 inviteCode", "extra": "invite_code", "tone": "info" }
+      ]
+    },
+    {
+      "id": "game",
+      "title": "游戏",
+      "events": [
+        { "name": "game_click", "label": "点击游戏", "look": "custom", "when": "点卡片（未登录也打）", "extra": "game_id · game_name · game_type · entry", "tone": "neutral" },
+        { "name": "select_content", "label": "选择内容（官方）", "look": "prefer", "when": "与 game_click 同时", "extra": "content_type=game · item_id/name", "tone": "success" },
+        { "name": "vip_popup_show", "label": "VIP 弹窗展示", "look": "watch", "when": "未订阅被拦住", "extra": "game_id/name/type · source=game|lottery", "tone": "info" },
+        { "name": "vip_popup_click_subscribe", "label": "弹窗点订阅", "look": "watch", "when": "去订阅", "extra": "同上", "tone": "info" },
+        { "name": "vip_popup_close", "label": "关闭 VIP 弹窗", "look": "watch", "when": "关闭 / 遮罩", "extra": "同上", "tone": "info" },
+        { "name": "game_load_start", "label": "游戏开始加载", "look": "watch", "when": "过门禁后打开 WebView", "extra": "game_id · game_name · game_type", "tone": "info" },
+        { "name": "game_load_success", "label": "游戏加载成功", "look": "watch", "when": "收到 gameLoaded", "extra": "load_cost（毫秒）", "tone": "success" },
+        { "name": "game_load_fail", "label": "游戏加载失败", "look": "watch", "when": "超时/错误（不是门禁）", "extra": "fail_reason", "tone": "danger" },
+        { "name": "game_play_stat", "label": "游戏游玩统计", "look": "watch", "when": "游戏上报或离开页", "extra": "play_duration_sec · play_times_single · end_reason", "tone": "info" }
+      ]
+    },
+    {
+      "id": "pay",
+      "title": "订阅与支付",
+      "events": [
+        { "name": "subscription_page_enter", "label": "进入订阅页", "look": "custom", "when": "打开订阅页", "extra": "item_list_id/name=shop", "tone": "neutral" },
+        { "name": "view_item_list", "label": "查看套餐列表（官方）", "look": "prefer", "when": "与上同时", "extra": "同上", "tone": "success" },
+        { "name": "subscribe_tab_switch", "label": "切换订阅 Tab", "look": "watch", "when": "Premium / Coins", "extra": "tab=premium|coins", "tone": "info" },
+        { "name": "subscription_package_click", "label": "点击套餐", "look": "custom", "when": "点选档位", "extra": "package_id/name/price · currency=ZAR", "tone": "neutral" },
+        { "name": "select_item", "label": "选择套餐（官方）", "look": "prefer", "when": "与上同时", "extra": "items[] · item_category2=subscribe|single", "tone": "success" },
+        { "name": "pay_init", "label": "发起支付", "look": "custom", "when": "订购成功即将跳收银台", "extra": "order_id · goods_type", "tone": "neutral" },
+        { "name": "begin_checkout", "label": "开始结账（官方）", "look": "prefer", "when": "与上同时", "extra": "value · currency · items[]", "tone": "success" },
+        { "name": "pay_success", "label": "支付成功", "look": "custom", "when": "回跳成功", "extra": "order_id · pay_channel=sdp", "tone": "neutral" },
+        { "name": "purchase", "label": "购买（官方）", "look": "revenue", "when": "与上同时", "extra": "transaction_id · value · currency=ZAR · items[]", "tone": "success" },
+        { "name": "pay_failed", "label": "支付失败", "look": "watch", "when": "回跳失败", "extra": "fail_code · fail_msg", "tone": "danger" },
+        { "name": "user_cancel_subscription", "label": "用户取消订阅", "look": "watch", "when": "退订成功", "extra": "package_id/name/price · cancel_time · original_expire_time", "tone": "warning" }
+      ]
+    },
+    {
+      "id": "coin",
+      "title": "金币变动",
+      "note": "change_reason：promo_claim / coins_purchase / subscribe_grant / lottery / invite_reward / game_spend / info_refresh。首次登录读到余额不算获得。",
+      "events": [
+        { "name": "coin_change", "label": "金币变动", "look": "detail", "when": "balance 真变了", "extra": "change_type · change_reason · coin_delta/before/after", "tone": "info" },
+        { "name": "earn_virtual_currency", "label": "获得虚拟货币（官方）", "look": "prefer", "when": "coin_delta 大于 0", "extra": "virtual_currency_name=coins · value · change_reason", "tone": "success" },
+        { "name": "spend_virtual_currency", "label": "消耗虚拟货币（官方）", "look": "prefer", "when": "coin_delta 小于 0", "extra": "value=绝对值 · item_name 可选", "tone": "warning" }
+      ]
+    },
+    {
+      "id": "ops",
+      "title": "抽奖 / 邀请 / 运营",
+      "events": [
+        { "name": "lottery_spin", "label": "发起抽奖", "look": "watch", "when": "过门禁后真正请求", "extra": "wheel_layer · is_free_retry", "tone": "info" },
+        { "name": "lottery_spin_result", "label": "抽奖结果", "look": "watch", "when": "抽奖接口成功", "extra": "prize_id · prize_name", "tone": "success" },
+        { "name": "invite_page_enter", "label": "进入邀请页", "look": "watch", "when": "打开邀请页", "extra": "—", "tone": "info" },
+        { "name": "invite_share_click", "label": "点击分享邀请", "look": "watch", "when": "点分享", "extra": "has_invite_code", "tone": "info" },
+        { "name": "promo_popup_show", "label": "新人奖励弹窗", "look": "watch", "when": "新客金币弹窗", "extra": "reward_code · coin_amount", "tone": "info" },
+        { "name": "promo_popup_claim", "label": "领取新人奖励", "look": "watch", "when": "领取成功", "extra": "同上", "tone": "success" },
+        { "name": "promo_popup_claim_fail", "label": "领取失败", "look": "watch", "when": "领取失败", "extra": "fail_code / fail_msg", "tone": "danger" },
+        { "name": "insufficient_balance_show", "label": "余额不足弹窗", "look": "watch", "when": "进游戏或游戏内报不足", "extra": "game_id · game_name", "tone": "warning" },
+        { "name": "insufficient_balance_click_recharge", "label": "余额不足去充值", "look": "watch", "when": "点去订阅/买金币", "extra": "同上", "tone": "info" },
+        { "name": "banner_click", "label": "点击首页 Banner", "look": "watch", "when": "点了有跳转的 Banner", "extra": "banner_id · path", "tone": "info" }
+      ]
+    }
+  ]
+}

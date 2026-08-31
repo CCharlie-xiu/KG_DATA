@@ -1,0 +1,27 @@
+{
+  "id": "safrica-funzone-ga",
+  "title": "南非 FunZone GA4 埋点方案",
+  "market": "ZA",
+  "currency": "ZAR",
+  "locale": ["en", "af"],
+  "property": "独立媒体资源，禁止共用孟加拉 Measurement ID",
+  "gaEnabled": "生产开启；测试服 VITE_APP_GA_ENABLED=false",
+  "notes": [
+    "每条事件都带公共字段，分表只列该事件额外参数。",
+    "过渡期官方事件与自定义双报，漏斗和收入只看「建议看」。",
+    "官方 User-ID 只走 gtag set，不要写成事件参数。",
+    "首次登录读到余额只更新用户属性，不算金币获得。"
+  ],
+  "stats": {
+    "events": 49,
+    "frontendUserProps": 8,
+    "funnels": 10,
+    "backendUserProps": 6
+  },
+  "files": {
+    "events": "events.json",
+    "params": "params.json",
+    "userProperties": "user-properties.json",
+    "funnels": "funnels.json"
+  }
+}

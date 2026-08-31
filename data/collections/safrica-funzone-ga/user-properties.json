@@ -1,0 +1,27 @@
+{
+  "title": "用户属性",
+  "summary": "用来圈人，不要用来算次数。已登录写真实值；退出后账号类清 null。游客仍带 distinct_id、entrance_channel。",
+  "userId": {
+    "name": "user_id",
+    "rule": "已登录=手机号；未登录=null。不是自定义维度，不要再登记。"
+  },
+  "sameNameTwice": "user_phone / userHas 事件范围看「这次」，用户范围看「这个人」。两条都要留。",
+  "items": [
+    { "category": "订阅状态", "label": "当前订阅状态", "name": "subscription_status", "example": "active / cancelled / none", "source": "frontend", "note": "cancelled 靠本机「见过在订」" },
+    { "category": "订阅状态", "label": "当前在订套餐", "name": "current_package_name", "example": "套餐名", "source": "frontend", "note": "仅 active 时有值" },
+    { "category": "订阅生命周期", "label": "首次订阅时间", "name": "first_subscribe_time", "example": "2026-01-15", "source": "backend", "note": "后端" },
+    { "category": "订阅生命周期", "label": "累计续费次数", "name": "total_renew_count", "example": "0 / 1 / 5", "source": "backend", "note": "后端" },
+    { "category": "来源与转化", "label": "入口渠道", "name": "entrance_channel", "example": "direct", "source": "frontend", "note": "与事件渠道同源" },
+    { "category": "来源与转化", "label": "累计充值金额", "name": "total_recharge_amount", "example": "1000", "source": "backend", "note": "后端" },
+    { "category": "登录与活跃", "label": "首次登录时间", "name": "first_login_time", "example": "ISO", "source": "backend", "note": "后端" },
+    { "category": "登录与活跃", "label": "最近登录时间", "name": "last_login_time", "example": "ISO", "source": "backend", "note": "后端" },
+    { "category": "登录与活跃", "label": "累计登录天数", "name": "total_login_days", "example": "15", "source": "backend", "note": "后端" },
+    { "category": "设备与账号", "label": "用户手机号", "name": "user_phone", "example": "27…", "source": "frontend", "note": "退出 null" },
+    { "category": "设备与账号", "label": "账户剩余金币", "name": "userHas", "example": "100", "source": "frontend", "note": "注意大小写" },
+    { "category": "设备与账号", "label": "设备唯一标识", "name": "distinct_id", "example": "uuid", "source": "frontend", "note": "游客也带" }
+  ],
+  "zaExtra": [
+    { "name": "app_locale", "value": "en / af", "why": "英 / 南非荷兰语" },
+    { "name": "is_new_user", "value": "1 / 0", "why": "新用户免订阅，圈人用" }
+  ]
+}

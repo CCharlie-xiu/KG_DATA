@@ -1,0 +1,61 @@
+{
+  "site": {
+    "name": "KG_DATA",
+    "fullName": "Knowledge Gazette",
+    "tagline": "内部知识与方案归档",
+    "description": "首页是目录。每条条目对应 data/collections 下一份自包含数据。后续短剧、RPA 等按同一规范接入。",
+    "locale": "zh-CN"
+  },
+  "nav": [
+    { "id": "home", "label": "目录", "href": "/" },
+    { "id": "archive", "label": "归档", "href": "/archive" },
+    { "id": "about", "label": "体例", "href": "/about" }
+  ],
+  "categories": [
+    { "id": "analytics", "label": "埋点 / 分析" },
+    { "id": "drama", "label": "短剧" },
+    { "id": "rpa", "label": "RPA" },
+    { "id": "ops", "label": "运营" }
+  ],
+  "collections": [
+    {
+      "id": "safrica-funzone-ga",
+      "title": "南非 FunZone GA4 埋点方案",
+      "subtitle": "关键事件 · 事件属性 · 用户属性 · 可用漏斗",
+      "category": "analytics",
+      "status": "published",
+      "featured": true,
+      "summary": "南非 H5 独立媒体资源的 GA4 口径：49 条事件（含官方双报）、前端可上报用户属性、10 条漏斗。测试服不上报。",
+      "tags": ["ZA", "ZAR", "GA4", "H5", "FunZone"],
+      "updated": "2026-08-31",
+      "viewer": "ga-catalog",
+      "entry": "meta.json"
+    },
+    {
+      "id": "short-drama",
+      "title": "短剧内容与流程",
+      "subtitle": "待收录",
+      "category": "drama",
+      "status": "planned",
+      "featured": false,
+      "summary": "短剧选题、分集、投放与转化口径将按本库规范接入。",
+      "tags": ["短剧"],
+      "updated": "2026-08-31",
+      "viewer": "article",
+      "entry": "meta.json"
+    },
+    {
+      "id": "rpa-playbooks",
+      "title": "RPA 剧本与节点",
+      "subtitle": "待收录",
+      "category": "rpa",
+      "status": "planned",
+      "featured": false,
+      "summary": "RPA 流程、账号与节点说明将按本库规范接入。",
+      "tags": ["RPA"],
+      "updated": "2026-08-31",
+      "viewer": "article",
+      "entry": "meta.json"
+    }
+  ]
+}

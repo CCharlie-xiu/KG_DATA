@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kg-data.local/schema/collection.schema.json",
+  "title": "KG_DATA Collection",
+  "description": "一条可被首页目录引用的知识条目。新增短剧 / RPA 等内容时，按本结构在 data/collections/<id>/ 下建目录，并登记到 catalog.json。",
+  "type": "object",
+  "required": ["id", "title", "category", "status", "summary"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "目录唯一 ID，对应 data/collections/<id>/"
+    },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "category": {
+      "type": "string",
+      "enum": ["analytics", "drama", "rpa", "ops", "other"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["published", "draft", "planned"]
+    },
+    "summary": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "updated": { "type": "string", "format": "date" },
+    "viewer": {
+      "type": "string",
+      "description": "前端查看器类型。ga-catalog 为埋点看板；article 为通用文档。"
+    },
+    "entry": {
+      "type": "string",
+      "description": "相对 collections/<id>/ 的主数据文件，默认 meta.json"
+    }
+  }
+}

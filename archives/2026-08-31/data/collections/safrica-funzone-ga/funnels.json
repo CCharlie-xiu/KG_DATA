@@ -1,0 +1,79 @@
+{
+  "title": "可用漏斗",
+  "summary": "GA4 探索里步骤用事件名，筛选 country=ZA。双报步骤用「建议看」。Tab 切换没有 page_view，大厅/排行/抽奖用 *_enter。漏斗按事件顺序，不是页面路径。",
+  "warning": "支付会出站到 SDP，begin_checkout 之后没有 purchase 可能是放弃也可能是回跳丢失。测试服不上报。收入用 purchase 的 value + currency=ZAR。",
+  "featured": [
+    {
+      "id": "new-visit",
+      "title": "新访转化",
+      "purpose": "acq",
+      "ask": "各渠道进来后有没有登录",
+      "steps": ["channel_entrance", "game_hall_enter", "login_success"]
+    },
+    {
+      "id": "login",
+      "title": "登录",
+      "purpose": "acq",
+      "ask": "OTP / 登录卡在哪；免密用 method 排除",
+      "steps": ["login_page_enter", "send_otp_success", "login_success"]
+    },
+    {
+      "id": "game",
+      "title": "游戏",
+      "purpose": "content",
+      "ask": "点了是不是真玩上了",
+      "steps": ["game_click", "game_load_start", "game_load_success"]
+    },
+    {
+      "id": "monetize",
+      "title": "变现",
+      "purpose": "money",
+      "ask": "商店到付费；item_category2 拆 Premium / Coins",
+      "steps": ["view_item_list", "select_item", "begin_checkout", "purchase"]
+    }
+  ],
+  "rest": [
+    {
+      "id": "gate",
+      "title": "门禁变现",
+      "purpose": "money",
+      "steps": "vip_popup_show → vip_popup_click_subscribe → begin_checkout → purchase",
+      "ask": "拦截后有没有订；source 拆游戏/抽奖"
+    },
+    {
+      "id": "broke",
+      "title": "金币耗尽",
+      "purpose": "money",
+      "steps": "insufficient_balance_show → insufficient_balance_click_recharge → purchase",
+      "ask": "玩到没钱会不会买金币"
+    },
+    {
+      "id": "invite",
+      "title": "邀请",
+      "purpose": "ops",
+      "steps": "invite_page_enter → invite_share_click → invite_bind",
+      "ask": "裂变是否闭环"
+    },
+    {
+      "id": "lottery",
+      "title": "抽奖",
+      "purpose": "ops",
+      "steps": "lottery_page_enter → lottery_spin → lottery_spin_result",
+      "ask": "抽奖参与和奖品"
+    },
+    {
+      "id": "earn",
+      "title": "金币获得",
+      "purpose": "ops",
+      "steps": "earn_virtual_currency（按 change_reason 拆）",
+      "ask": "购买 / 新人 / 邀请 / 抽奖各来多少"
+    },
+    {
+      "id": "spend",
+      "title": "金币消耗",
+      "purpose": "ops",
+      "steps": "spend_virtual_currency → insufficient_balance_show",
+      "ask": "花光的人会不会去充"
+    }
+  ]
+}

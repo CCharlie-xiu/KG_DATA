@@ -1,0 +1,19 @@
+{
+  "title": "每条事件都带的公共字段",
+  "summary": "漏斗拆渠道、串用户都靠这些。各事件表不再重复。",
+  "fields": [
+    { "name": "user_phone", "meaning": "这次动作时的手机号", "value": "已登录=真号；未登录=90", "group": "identity" },
+    { "name": "distinct_id", "meaning": "设备 / 访客 ID", "value": "长期稳定，游客也能串", "group": "identity" },
+    { "name": "userHas", "meaning": "当时金币余额", "value": "顶栏 balance，数字", "group": "asset" },
+    { "name": "network_type", "meaning": "网络", "value": "wifi / 2g–5g / ethernet / none / unknown", "group": "device" },
+    { "name": "country", "meaning": "国家", "value": "ZA", "group": "market" },
+    { "name": "channel", "meaning": "渠道", "value": "URL channel 或 utm_source，否则 direct", "group": "source" },
+    { "name": "entrance_channel", "meaning": "首次进入渠道", "value": "会话内保持", "group": "source" },
+    { "name": "utm_source / medium / campaign", "meaning": "投放 UTM", "value": "无则空串", "group": "source" },
+    { "name": "affiliate_id", "meaning": "联盟 ID", "value": "无则空串", "group": "source" },
+    { "name": "event_cn_name / en_name / af_name", "meaning": "事件展示名", "value": "中 / 英 / 南非荷兰语", "group": "i18n" }
+  ],
+  "doNotSendAsEventParam": [
+    "官方 User-ID 只走 gtag set。发码未登录时另带 msisdn_hash，用来对上「谁在发码」。"
+  ]
+}
