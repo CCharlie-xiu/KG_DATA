@@ -19,7 +19,7 @@ export default function SectionPage() {
 
   return (
     <GateWall section={section}>
-      <section className="article section-page section-page--swap">
+      <section className="section-stage">
         <div className="section-copy">
           <div className="kicker">{section.requireAuth ? "已验证" : "公开"}</div>
           <h1>{section.label}</h1>
@@ -31,7 +31,12 @@ export default function SectionPage() {
 
         {stack.length > 0 ? (
           <div className="section-swap">
+            <p className="section-swap-hint">滚轮或上下滑动切换</p>
             <CardSwap
+              width={680}
+              height={520}
+              cardDistance={78}
+              verticalDistance={92}
               pauseOnHover
               onCardClick={(idx) => {
                 const item = stack[idx];

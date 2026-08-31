@@ -85,6 +85,8 @@ export default function CardSwap({
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const intervalRef = useRef(0);
   const container = useRef<HTMLDivElement>(null);
+  const lockedRef = useRef(false);
+  const swipeRef = useRef({ y: 0, moved: false });
 
   useLayoutEffect(() => {
     const total = refs.length;
@@ -92,63 +94,142 @@ export default function CardSwap({
       if (r.current) placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount);
     });
 
-    const swap = () => {
-      if (order.current.length < 2) return;
-      const [front, ...rest] = order.current;
-      const elFront = refs[front]?.current;
-      if (!elFront) return;
-      const tl = gsap.timeline();
-      tlRef.current = tl;
+    const busy = () => lockedRef.current || Boolean(tlRef.current?.isActive());
 
-      tl.to(elFront, { y: "+=420", duration: config.durDrop, ease: config.ease });
-      tl.addLabel("promote", `-=${config.durDrop * config.promoteOverlap}`);
+    const restartTimer = () => {
+      window.clearInterval(intervalRef.current);
+      if (childArr.length > 1) intervalRef.current = window.setInterval(() => swap("next"), delay);
+    };
+
+    const swap = (dir: "next" | "prev" = "next") => {
+      if (order.current.length < 2 || busy()) return;
+      lockedRef.current = true;
+
+      if (dir === "next") {
+        const [front, ...rest] = order.current;
+        const elFront = refs[front]?.current;
+        if (!elFront) {
+          lockedRef.current = false;
+          return;
+        }
+        const tl = gsap.timeline({
+          onComplete: () => {
+            lockedRef.current = false;
+          },
+        });
+        tlRef.current = tl;
+        tl.to(elFront, { y: "+=420", duration: config.durDrop, ease: config.ease });
+        tl.addLabel("promote", `-=${config.durDrop * config.promoteOverlap}`);
+        rest.forEach((idx, i) => {
+          const el = refs[idx]?.current;
+          if (!el) return;
+          const slot = makeSlot(i, cardDistance, verticalDistance, refs.length);
+          tl.set(el, { zIndex: slot.zIndex }, "promote");
+          tl.to(el, { x: slot.x, y: slot.y, z: slot.z, duration: config.durMove, ease: config.ease }, `promote+=${i * 0.15}`);
+        });
+        const backSlot = makeSlot(refs.length - 1, cardDistance, verticalDistance, refs.length);
+        tl.addLabel("return", `promote+=${config.durMove * config.returnDelay}`);
+        tl.call(() => {
+          gsap.set(elFront, { zIndex: backSlot.zIndex });
+        }, undefined, "return");
+        tl.to(elFront, { x: backSlot.x, y: backSlot.y, z: backSlot.z, duration: config.durReturn, ease: config.ease }, "return");
+        tl.call(() => {
+          order.current = [...rest, front];
+        });
+        return;
+      }
+
+      const rest = order.current.slice(0, -1);
+      const back = order.current[order.current.length - 1];
+      const elBack = refs[back]?.current;
+      if (!elBack) {
+        lockedRef.current = false;
+        return;
+      }
+      const frontSlot = makeSlot(0, cardDistance, verticalDistance, refs.length);
+      const tl = gsap.timeline({
+        onComplete: () => {
+          lockedRef.current = false;
+        },
+      });
+      tlRef.current = tl;
+      gsap.set(elBack, { y: frontSlot.y + 420, zIndex: refs.length + 1 });
+      tl.to(elBack, { x: frontSlot.x, y: frontSlot.y, z: frontSlot.z, duration: config.durMove, ease: config.ease });
       rest.forEach((idx, i) => {
         const el = refs[idx]?.current;
         if (!el) return;
-        const slot = makeSlot(i, cardDistance, verticalDistance, refs.length);
-        tl.set(el, { zIndex: slot.zIndex }, "promote");
-        tl.to(el, { x: slot.x, y: slot.y, z: slot.z, duration: config.durMove, ease: config.ease }, `promote+=${i * 0.15}`);
+        const slot = makeSlot(i + 1, cardDistance, verticalDistance, refs.length);
+        tl.set(el, { zIndex: slot.zIndex }, "<");
+        tl.to(el, { x: slot.x, y: slot.y, z: slot.z, duration: config.durMove, ease: config.ease }, "<0.08");
       });
-
-      const backSlot = makeSlot(refs.length - 1, cardDistance, verticalDistance, refs.length);
-      tl.addLabel("return", `promote+=${config.durMove * config.returnDelay}`);
       tl.call(() => {
-        gsap.set(elFront, { zIndex: backSlot.zIndex });
-      }, undefined, "return");
-      tl.to(elFront, { x: backSlot.x, y: backSlot.y, z: backSlot.z, duration: config.durReturn, ease: config.ease }, "return");
-      tl.call(() => {
-        order.current = [...rest, front];
+        order.current = [back, ...rest];
       });
     };
 
+    const node = container.current;
     if (childArr.length > 1) {
-      swap();
-      intervalRef.current = window.setInterval(swap, delay);
+      swap("next");
+      intervalRef.current = window.setInterval(() => swap("next"), delay);
     }
 
-    if (pauseOnHover && container.current && childArr.length > 1) {
-      const node = container.current;
-      const pause = () => {
-        tlRef.current?.pause();
-        window.clearInterval(intervalRef.current);
-      };
-      const resume = () => {
-        tlRef.current?.play();
-        intervalRef.current = window.setInterval(swap, delay);
-      };
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) < 8) return;
+      e.preventDefault();
+      swap(e.deltaY > 0 ? "next" : "prev");
+      restartTimer();
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      swipeRef.current = { y: e.touches[0]?.clientY ?? 0, moved: false };
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const dy = (e.touches[0]?.clientY ?? 0) - swipeRef.current.y;
+      if (Math.abs(dy) > 12) {
+        swipeRef.current.moved = true;
+        e.preventDefault();
+      }
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      const dy = (e.changedTouches[0]?.clientY ?? swipeRef.current.y) - swipeRef.current.y;
+      if (Math.abs(dy) < 36) return;
+      swap(dy < 0 ? "next" : "prev");
+      restartTimer();
+    };
+
+    if (node && childArr.length > 1) {
+      node.addEventListener("wheel", onWheel, { passive: false });
+      node.addEventListener("touchstart", onTouchStart, { passive: true });
+      node.addEventListener("touchmove", onTouchMove, { passive: false });
+      node.addEventListener("touchend", onTouchEnd);
+    }
+
+    const pause = () => {
+      tlRef.current?.pause();
+      window.clearInterval(intervalRef.current);
+    };
+    const resume = () => {
+      tlRef.current?.play();
+      restartTimer();
+    };
+
+    if (pauseOnHover && node && childArr.length > 1) {
       node.addEventListener("mouseenter", pause);
       node.addEventListener("mouseleave", resume);
-      return () => {
-        node.removeEventListener("mouseenter", pause);
-        node.removeEventListener("mouseleave", resume);
-        window.clearInterval(intervalRef.current);
-        tlRef.current?.kill();
-      };
     }
 
     return () => {
+      if (node) {
+        node.removeEventListener("wheel", onWheel);
+        node.removeEventListener("touchstart", onTouchStart);
+        node.removeEventListener("touchmove", onTouchMove);
+        node.removeEventListener("touchend", onTouchEnd);
+        node.removeEventListener("mouseenter", pause);
+        node.removeEventListener("mouseleave", resume);
+      }
       window.clearInterval(intervalRef.current);
       tlRef.current?.kill();
+      lockedRef.current = false;
     };
   }, [cardDistance, verticalDistance, delay, pauseOnHover, skewAmount, easing, childArr.length]);
 
@@ -159,6 +240,10 @@ export default function CardSwap({
           ref: refs[i],
           style: { width, height, ...(child.props as CardProps).style },
           onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+            if (swipeRef.current.moved) {
+              swipeRef.current.moved = false;
+              return;
+            }
             (child.props as CardProps).onClick?.(e);
             onCardClick?.(i);
           },
@@ -167,7 +252,14 @@ export default function CardSwap({
   );
 
   return (
-    <div ref={container} className="card-swap-container" style={{ width, height }}>
+    <div
+      ref={container}
+      className="card-swap-container"
+      style={{ width, height }}
+      onPointerDown={() => {
+        swipeRef.current.moved = false;
+      }}
+    >
       {rendered}
     </div>
   );
