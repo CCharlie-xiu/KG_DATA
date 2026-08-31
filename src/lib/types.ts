@@ -12,6 +12,7 @@ export type CatalogItem = {
   updated: string;
   viewer: "ga-catalog" | "article";
   entry: string;
+  section?: string;
 };
 
 export type Catalog = {
@@ -24,7 +25,7 @@ export type Catalog = {
   };
   nav: { id: string; label: string; href: string }[];
   categories: { id: string; label: string }[];
-  collections: CatalogItem[];
+  collections: Array<CatalogItem & { section?: string }>;
 };
 
 export type GaEvent = {

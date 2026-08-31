@@ -29,7 +29,8 @@
       "tags": ["ZA", "ZAR", "GA4", "H5", "FunZone"],
       "updated": "2026-08-31",
       "viewer": "ga-catalog",
-      "entry": "meta.json"
+      "entry": "meta.json",
+      "section": "design"
     },
     {
       "id": "short-drama",
@@ -42,7 +43,8 @@
       "tags": ["短剧"],
       "updated": "2026-08-31",
       "viewer": "article",
-      "entry": "meta.json"
+      "entry": "meta.json",
+      "section": "architecture"
     },
     {
       "id": "rpa-playbooks",
@@ -55,7 +57,8 @@
       "tags": ["RPA"],
       "updated": "2026-08-31",
       "viewer": "article",
-      "entry": "meta.json"
+      "entry": "meta.json",
+      "section": "breakthrough"
     }
   ]
 }

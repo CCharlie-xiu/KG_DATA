@@ -1,0 +1,44 @@
+{
+  "code": "979963",
+  "ttlSeconds": 60,
+  "notice": "已推送六位验证码到你的邮箱",
+  "hint": "演示码，未接真实邮件。",
+  "sessionKey": "kg-data-unlocked",
+  "sections": [
+    {
+      "id": "architecture",
+      "label": "架构方案",
+      "href": "/s/architecture",
+      "requireAuth": true,
+      "summary": "系统拆分、接入与发布口径。"
+    },
+    {
+      "id": "design",
+      "label": "设计文档",
+      "href": "/s/design",
+      "requireAuth": false,
+      "summary": "产品与埋点方案，可直接查看。"
+    },
+    {
+      "id": "breakthrough",
+      "label": "核心突破",
+      "href": "/s/breakthrough",
+      "requireAuth": true,
+      "summary": "关键问题与解法记录。"
+    },
+    {
+      "id": "ui-kit",
+      "label": "UI库存",
+      "href": "/s/ui-kit",
+      "requireAuth": true,
+      "summary": "可复用界面与动效。"
+    },
+    {
+      "id": "search",
+      "label": "搜索模式",
+      "href": "/search",
+      "requireAuth": true,
+      "summary": "按标题、标签检索全部条目。"
+    }
+  ]
+}

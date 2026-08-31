@@ -74,7 +74,7 @@ select {
 .masthead-top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 16px;
   flex-wrap: wrap;
 }
@@ -108,6 +108,43 @@ select {
 .nav a:hover,
 .nav a.active {
   border-bottom-color: var(--ink);
+}
+
+.section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: 640px;
+}
+
+.section-link {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.section-link:hover,
+.section-link.on {
+  border-color: #ff9ffc;
+  color: #ff9ffc;
+}
+
+.section-link.locked {
+  opacity: 0.88;
+}
+
+.search-input {
+  width: min(100%, 420px);
+  margin-top: 16px;
+  background: #0b0b14;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 10px 12px;
+  font-size: 15px;
 }
 
 .issue-line {

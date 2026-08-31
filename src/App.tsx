@@ -1,9 +1,12 @@
 import { NavLink, Route, Routes } from "react-router-dom";
 import catalog from "../data/catalog.json";
+import SectionNav from "./components/SectionNav";
 import Home from "./pages/Home";
 import Archive from "./pages/Archive";
 import About from "./pages/About";
 import CollectionPage from "./pages/CollectionPage";
+import SectionPage from "./pages/SectionPage";
+import SearchPage from "./pages/SearchPage";
 
 export default function App() {
   return (
@@ -15,6 +18,9 @@ export default function App() {
               <div className="brand-kicker">{catalog.site.fullName}</div>
               <div className="brand">{catalog.site.name}</div>
             </div>
+            <SectionNav />
+          </div>
+          <div className="issue-line">
             <nav className="nav">
               {catalog.nav.map((item) => (
                 <NavLink key={item.id} to={item.href} end={item.href === "/"} className={({ isActive }) => (isActive ? "active" : "")}>
@@ -22,9 +28,6 @@ export default function App() {
                 </NavLink>
               ))}
             </nav>
-          </div>
-          <div className="issue-line">
-            <span>{catalog.site.tagline}</span>
             <span>Vol. 01 · 2026-08-31</span>
           </div>
         </div>
@@ -35,6 +38,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/about" element={<About />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/s/:id" element={<SectionPage />} />
           <Route path="/c/:id" element={<CollectionPage />} />
         </Routes>
       </main>
