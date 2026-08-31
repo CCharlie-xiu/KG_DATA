@@ -2,7 +2,9 @@
 
 内部知识与方案归档。首页是目录，可切换到任意条目。数据全部放在仓库 `data/` 里，GitHub Pages 静态发布。
 
-线上：https://ccharlie-xiu.github.io/KG_DATA/
+- 仓库：https://github.com/CCharlie-xiu/KG_DATA
+- 线上：https://ccharlie-xiu.github.io/KG_DATA/
+- 南非埋点：https://ccharlie-xiu.github.io/KG_DATA/#/c/safrica-funzone-ga
 
 ## 目录
 
@@ -42,3 +44,16 @@ npm run archive
 ```
 
 生成 `archives/YYYY-MM-DD/` 和 `archives/KG_DATA-YYYY-MM-DD.zip`。
+
+## 发布 Pages
+
+当前用 `gh-pages` 分支静态发布（OAuth 没有 `workflow` 权限，暂不走 Actions）。
+
+```bash
+# Windows PowerShell
+$env:VITE_BASE="/KG_DATA/"
+npm run build
+npx gh-pages -d dist -b gh-pages
+```
+
+若以后补上 `workflow` scope，可把 `.github/workflows/pages.yml` 推上 main，改为 Actions 自动发布。
