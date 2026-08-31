@@ -86,6 +86,7 @@ export default function CardSwap({
   const intervalRef = useRef(0);
   const container = useRef<HTMLDivElement>(null);
   const lockedRef = useRef(false);
+  const hoveredRef = useRef(false);
   const swipeRef = useRef({ y: 0, moved: false });
 
   useLayoutEffect(() => {
@@ -98,7 +99,8 @@ export default function CardSwap({
 
     const restartTimer = () => {
       window.clearInterval(intervalRef.current);
-      if (childArr.length > 1) intervalRef.current = window.setInterval(() => swap("next"), delay);
+      if (childArr.length < 2 || hoveredRef.current) return;
+      intervalRef.current = window.setInterval(() => swap("next"), delay);
     };
 
     const swap = (dir: "next" | "prev" = "next") => {
@@ -168,9 +170,10 @@ export default function CardSwap({
     };
 
     const node = container.current;
+    const stage = node?.closest(".section-stage") ?? node;
     if (childArr.length > 1) {
       swap("next");
-      intervalRef.current = window.setInterval(() => swap("next"), delay);
+      restartTimer();
     }
 
     const onWheel = (e: WheelEvent) => {
@@ -197,39 +200,42 @@ export default function CardSwap({
       restartTimer();
     };
 
-    if (node && childArr.length > 1) {
-      node.addEventListener("wheel", onWheel, { passive: false });
-      node.addEventListener("touchstart", onTouchStart, { passive: true });
-      node.addEventListener("touchmove", onTouchMove, { passive: false });
-      node.addEventListener("touchend", onTouchEnd);
+    if (stage && childArr.length > 1) {
+      stage.addEventListener("wheel", onWheel, { passive: false });
+      stage.addEventListener("touchstart", onTouchStart, { passive: true });
+      stage.addEventListener("touchmove", onTouchMove, { passive: false });
+      stage.addEventListener("touchend", onTouchEnd);
     }
 
-    const pause = () => {
-      tlRef.current?.pause();
+    const pauseAuto = () => {
+      hoveredRef.current = true;
       window.clearInterval(intervalRef.current);
     };
-    const resume = () => {
-      tlRef.current?.play();
+    const resumeAuto = () => {
+      hoveredRef.current = false;
       restartTimer();
     };
 
     if (pauseOnHover && node && childArr.length > 1) {
-      node.addEventListener("mouseenter", pause);
-      node.addEventListener("mouseleave", resume);
+      node.addEventListener("mouseenter", pauseAuto);
+      node.addEventListener("mouseleave", resumeAuto);
     }
 
     return () => {
+      if (stage) {
+        stage.removeEventListener("wheel", onWheel);
+        stage.removeEventListener("touchstart", onTouchStart);
+        stage.removeEventListener("touchmove", onTouchMove);
+        stage.removeEventListener("touchend", onTouchEnd);
+      }
       if (node) {
-        node.removeEventListener("wheel", onWheel);
-        node.removeEventListener("touchstart", onTouchStart);
-        node.removeEventListener("touchmove", onTouchMove);
-        node.removeEventListener("touchend", onTouchEnd);
-        node.removeEventListener("mouseenter", pause);
-        node.removeEventListener("mouseleave", resume);
+        node.removeEventListener("mouseenter", pauseAuto);
+        node.removeEventListener("mouseleave", resumeAuto);
       }
       window.clearInterval(intervalRef.current);
       tlRef.current?.kill();
       lockedRef.current = false;
+      hoveredRef.current = false;
     };
   }, [cardDistance, verticalDistance, delay, pauseOnHover, skewAmount, easing, childArr.length]);
 
