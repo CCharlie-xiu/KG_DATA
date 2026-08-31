@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import catalog from "../../data/catalog.json";
+import WebThreads from "../components/WebThreads";
 
 export default function Home() {
   const featured = catalog.collections.find((item) => item.featured && item.status === "published");
@@ -7,6 +8,32 @@ export default function Home() {
 
   return (
     <>
+      <div className="home-threads" aria-hidden="true">
+        <WebThreads
+          color1="#5227ff"
+          color2="#ff9ffc"
+          color3="#ffffff"
+          speed={0.2}
+          threadCount={6}
+          frequency={5}
+          spread={0.18}
+          taper={1}
+          position={0.5}
+          fanMode="center"
+          glow={0.02}
+          falloff={0.6}
+          thickness={1.1}
+          brightness={0.6}
+          opacity={1}
+          mirror={false}
+          shimmer={false}
+          grain
+          grainIntensity={0.05}
+          mouseInteraction
+          mouseStrength={0.3}
+        />
+      </div>
+
       <section className="hero">
         <h1>一份可以切换的知识目录。</h1>
         <p>{catalog.site.description}</p>
@@ -34,9 +61,7 @@ export default function Home() {
         <div className="side-stack">
           {rest.map((item) => (
             <article key={item.id} className={`side-card ${item.status === "planned" ? "planned" : ""}`}>
-              <div className="kicker">
-                {item.status === "planned" ? "即将收录" : item.category}
-              </div>
+              <div className="kicker">{item.status === "planned" ? "即将收录" : item.category}</div>
               <h3>{item.title}</h3>
               <p className="muted">{item.summary}</p>
               {item.status === "published" ? (

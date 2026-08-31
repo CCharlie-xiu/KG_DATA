@@ -7,7 +7,7 @@ import CollectionPage from "./pages/CollectionPage";
 
 export default function App() {
   return (
-    <div>
+    <div className="app">
       <header className="masthead">
         <div className="shell">
           <div className="masthead-top">
