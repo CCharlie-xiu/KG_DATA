@@ -10,7 +10,7 @@ export type CatalogItem = {
   summary: string;
   tags: string[];
   updated: string;
-  viewer: "ga-catalog" | "article";
+  viewer: "ga-catalog" | "article" | "arch-spec";
   entry: string;
   section?: string;
   cover?: string;

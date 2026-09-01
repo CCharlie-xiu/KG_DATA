@@ -1,0 +1,18 @@
+{
+  "id": "xmkf-rpa-response-delay",
+  "title": "工作流延迟返回",
+  "kicker": "RPA · Orchestrator · OpenAPI",
+  "summary": "工作流执行完成后立即落库；仅 OpenAPI sync 响应与 callbackUrl 按策略延迟投递。Dashboard 与 Webhook 保持实时。",
+  "notes": [
+    "延迟只作用于对外 API：sync HTTP 挂起、callbackUrl 推迟。",
+    "Dashboard 订阅与 WebhookEndpoint（含 run.started / 终态）全部实时。",
+    "配置可在工作流级设置，REST 请求可用 responseDelaySeconds 覆盖（0=强制关闭）。",
+    "到期由 BullMQ deliver-result 投递；每 30 分钟扫描逾期补录并标记已返回。"
+  ],
+  "stats": {
+    "boundaries": 6,
+    "newFields": 4,
+    "modules": 8,
+    "testCases": 10
+  }
+}

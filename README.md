@@ -57,7 +57,7 @@ npm run dev
 3. `status` 为 `published` 才能从首页点进去；`planned` 只占位
 4. 字段约定见 `data/schema/collection.schema.json` 与 `AGENTS.md`
 
-短剧、RPA 已占位，补数据即可。
+短剧、RPA 已占位，补数据即可。架构方案示例：`#/c/xmkf-rpa-response-delay`（工作流延迟返回）。
 
 ## 归档
 

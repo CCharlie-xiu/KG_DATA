@@ -1,0 +1,28 @@
+{
+  "groups": [
+    {
+      "id": "async",
+      "title": "Async 模式",
+      "note": "立即 202 queued；结果靠 callback / 轮询",
+      "steps": [
+        { "when": "POST mode=async", "action": "createWorkflowRun + enqueue", "note": "写入 responseDelaySeconds" },
+        { "when": "HTTP 响应", "action": "返回 taskId / queued", "note": "不阻塞" },
+        { "when": "Worker finishRun", "action": "落库 + Dashboard/Webhook 实时", "note": "跳过 callbackUrl" },
+        { "when": "delay 到期", "action": "deliver-result job", "note": "callbackUrl POST + resultDeliveredAt" },
+        { "when": "逾期未投递", "action": "30min cron 补录", "note": "force deliver + 标记成功" }
+      ]
+    },
+    {
+      "id": "sync",
+      "title": "Sync 模式",
+      "note": "RPA 侧任务可先结束；HTTP 继续挂起至延迟到期",
+      "steps": [
+        { "when": "POST mode=sync", "action": "create + enqueue", "note": "effectiveTimeout = syncTimeout + delay" },
+        { "when": "waitForRunResult", "action": "订阅 sync:run:{runId}", "note": "DB 终态但未投递时不 settle" },
+        { "when": "Worker finishRun", "action": "落库实时；不 publish sync", "note": "写 resultScheduledAt" },
+        { "when": "delay 到期", "action": "publish sync + callback", "note": "唤醒挂起的 HTTP 连接" },
+        { "when": "客户端断开", "action": "仅释放订阅", "note": "callback 仍由 deliver job / cron 投递" }
+      ]
+    }
+  ]
+}

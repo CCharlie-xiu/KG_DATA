@@ -35,6 +35,21 @@
       "cover": "covers/kg-default.jpg"
     },
     {
+      "id": "xmkf-rpa-response-delay",
+      "title": "工作流延迟返回",
+      "subtitle": "OpenAPI sync/async · 延迟边界 · 投递补偿",
+      "category": "rpa",
+      "status": "published",
+      "featured": true,
+      "summary": "工作流执行完成后立即落库；仅 OpenAPI sync 响应与 callbackUrl 按策略延迟投递。Dashboard 与 Webhook 实时。",
+      "tags": ["RPA", "Orchestrator", "OpenAPI", "延迟返回"],
+      "updated": "2026-09-01",
+      "viewer": "arch-spec",
+      "entry": "meta.json",
+      "section": "architecture",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
       "id": "short-drama",
       "title": "短剧内容与流程",
       "subtitle": "待收录",

@@ -1,0 +1,12 @@
+{
+  "modules": [
+    { "area": "prisma", "path": "schema.prisma + migration", "change": "新增 responseDelayConfig / 三字段", "type": "schema" },
+    { "area": "orchestrator", "path": "engine/response-delay.ts", "change": "解析延迟秒数", "type": "new" },
+    { "area": "orchestrator", "path": "engine/workflow-runner.ts", "change": "finishRun 延迟 gate", "type": "edit" },
+    { "area": "orchestrator", "path": "services/result-delivery.service.ts", "change": "统一对外投递", "type": "new" },
+    { "area": "orchestrator", "path": "services/result-delivery-scheduler.ts", "change": "30min 补偿", "type": "new" },
+    { "area": "orchestrator", "path": "routes/openapi/*.route.ts", "change": "覆盖参数 + sync 守卫 + resultPending", "type": "edit" },
+    { "area": "dashboard", "path": "ResponseDelayEditor + TaskList", "change": "工作流配置 UI", "type": "new" },
+    { "area": "kg-data", "path": "collections/xmkf-rpa-response-delay", "change": "本架构方案展示", "type": "new" }
+  ]
+}

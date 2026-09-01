@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import catalog from "../../data/catalog.json";
 import type { CatalogItem } from "../lib/types";
 import GaCatalog from "./GaCatalog";
+import ArchSpecCatalog from "./ArchSpecCatalog";
 import PlannedArticle from "./PlannedArticle";
 
 export default function CollectionPage() {
@@ -22,6 +23,10 @@ export default function CollectionPage() {
 
   if (item.viewer === "ga-catalog") {
     return <GaCatalog />;
+  }
+
+  if (item.viewer === "arch-spec") {
+    return <ArchSpecCatalog />;
   }
 
   return <PlannedArticle item={item} />;
