@@ -1,0 +1,28 @@
+{
+  "id": "kg-ingest-playbook",
+  "title": "跨项目知识回填约定",
+  "status": "published",
+  "sourceProject": "D:\\重要不可删除\\KG_DATA",
+  "notes": [
+    "验证可行的方案才入库；半成品与密钥不写。",
+    "双轴：section（看板）+ category（领域）。"
+  ],
+  "sections": [
+    {
+      "heading": "背景",
+      "body": "在其他项目专注设计与功能时，需要把已跑通的方案按统一分类记入本库，避免知识散落在聊天记录里。"
+    },
+    {
+      "heading": "可行方案",
+      "body": "使用 Cursor 用户规则「KG_DATA 知识回填」触发 Skill `kg-ingest`：在 `data/collections/<id>/` 写 `meta.json`，并登记 `data/catalog.json`。查看器 `viewer: article` 会渲染 `body` 或 `sections[]`。"
+    },
+    {
+      "heading": "关键步骤",
+      "body": "1. 选定 `id`（`项目简写-主题-YYYYMM`）与双轴分类\n2. 写 `meta.json`（背景 → 方案 → 步骤 → 坑与验证）\n3. 在 catalog 追加条目，`status: published`，`section` 对齐 gates\n4. 本地 `#/c/<id>` 与 `/s/<section>` 可见即成功"
+    },
+    {
+      "heading": "坑与验证",
+      "body": "- 勿改 `archives/`\n- 勿新增第二套 `ga-catalog` 而不改 `GaCatalog.tsx`\n- `_templates/` 下的模板不要登记进 catalog\n- 本页即 article 通路自检样例"
+    }
+  ]
+}

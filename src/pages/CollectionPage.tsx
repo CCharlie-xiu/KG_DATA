@@ -1,11 +1,12 @@
 import { Link, useParams } from "react-router-dom";
 import catalog from "../../data/catalog.json";
+import type { CatalogItem } from "../lib/types";
 import GaCatalog from "./GaCatalog";
 import PlannedArticle from "./PlannedArticle";
 
 export default function CollectionPage() {
   const { id } = useParams();
-  const item = catalog.collections.find((c) => c.id === id);
+  const item = catalog.collections.find((c) => c.id === id) as CatalogItem | undefined;
 
   if (!item) {
     return (
@@ -23,5 +24,5 @@ export default function CollectionPage() {
     return <GaCatalog />;
   }
 
-  return <PlannedArticle title={item.title} summary={item.summary} />;
+  return <PlannedArticle item={item} />;
 }

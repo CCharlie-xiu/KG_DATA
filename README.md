@@ -11,14 +11,35 @@
 ```
 data/
   catalog.json                 # 首页目录（唯一登记处）
+  gates.json                   # section 与门禁
   schema/collection.schema.json
   collections/
     safrica-funzone-ga/        # 南非 FunZone GA4 埋点
+    kg-ingest-playbook/        # 跨项目回填约定（article 样例）
     short-drama/               # 短剧（占位）
     rpa-playbooks/             # RPA（占位）
+    _templates/                # meta 模板（不登记 catalog）
 archives/                      # 按日归档
 src/                           # React 查看器
+AGENTS.md                      # Agent 维护约定
 ```
+
+## 分类地图
+
+**领域 `category`：** `analytics`（埋点/分析）· `drama`（短剧）· `rpa` · `ops`（运营）· `other`
+
+**看板 `section`（`gates.json`）：**
+
+| id | 标签 | 鉴权 |
+|---|---|---|
+| architecture | 架构方案 | 要 |
+| design | 设计文档 | 否 |
+| breakthrough | 核心突破 | 要 |
+| ui-kit | UI库存 | 要 |
+
+启发式：架构接入→`architecture`；产品/埋点→`design`；踩坑解法→`breakthrough`；可复用 UI→`ui-kit`。
+
+跨项目归档用 Cursor Skill `kg-ingest`（写入本仓库 `data/`）。
 
 ## 本地
 
@@ -31,9 +52,10 @@ npm run dev
 
 ## 新增一条知识
 
-1. 建 `data/collections/<id>/`，至少放 `meta.json`
-2. 在 `data/catalog.json` 的 `collections` 里登记同一 `id`
+1. 建 `data/collections/<id>/`，至少放 `meta.json`（article 用 `body` 或 `sections[]`）
+2. 在 `data/catalog.json` 的 `collections` 里登记同一 `id`，并填 `category` + `section`
 3. `status` 为 `published` 才能从首页点进去；`planned` 只占位
+4. 字段约定见 `data/schema/collection.schema.json` 与 `AGENTS.md`
 
 短剧、RPA 已占位，补数据即可。
 

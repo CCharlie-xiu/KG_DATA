@@ -1,0 +1,13 @@
+{
+  "id": "_template-article",
+  "title": "Article 模板（勿登记 catalog）",
+  "status": "planned",
+  "sourceProject": "",
+  "notes": ["复制本文件到 data/collections/<id>/meta.json 后改 id/title"],
+  "sections": [
+    { "heading": "背景", "body": "问题与上下文。" },
+    { "heading": "可行方案", "body": "已验证做法。" },
+    { "heading": "关键步骤", "body": "1. \n2. " },
+    { "heading": "坑与验证", "body": "- \n- " }
+  ]
+}

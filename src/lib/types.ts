@@ -45,3 +45,21 @@ export type GaGroup = {
   note?: string;
   events: GaEvent[];
 };
+
+export type ArticleSection = {
+  heading?: string;
+  body: string;
+};
+
+/** collections/<id>/meta.json（viewer: article） */
+export type ArticleMeta = {
+  id: string;
+  title: string;
+  status?: CollectionStatus;
+  sourceProject?: string;
+  notes?: string[];
+  /** 轻量 Markdown 正文 */
+  body?: string;
+  /** 分段正文；与 body 二选一，优先 sections */
+  sections?: ArticleSection[];
+};

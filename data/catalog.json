@@ -63,6 +63,21 @@
       "entry": "meta.json",
       "section": "breakthrough",
       "cover": "covers/kg-default.jpg"
+    },
+    {
+      "id": "kg-ingest-playbook",
+      "title": "跨项目知识回填约定",
+      "subtitle": "Skill kg-ingest · 双轴分类",
+      "category": "other",
+      "status": "published",
+      "featured": false,
+      "summary": "在其他项目验证可行的方案如何按 section/category 记入本库；本条目同时作为 article 查看器自检。",
+      "tags": ["KG_DATA", "Cursor", "Skill", "归档"],
+      "updated": "2026-09-01",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "breakthrough",
+      "cover": "covers/kg-default.jpg"
     }
   ]
 }

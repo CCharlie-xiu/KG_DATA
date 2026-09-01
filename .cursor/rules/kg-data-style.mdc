@@ -1,0 +1,20 @@
+---
+description: KG_DATA 前端视觉 tokens 与组件母题
+globs: src/**/*.{tsx,css}
+alwaysApply: false
+---
+
+# 视觉契约
+
+Tokens 在 `src/styles/global.css` `:root`：
+
+- 底：`--paper` `#07070d`、`--paper-2` `#12121c`
+- 字：`--ink` `#f4f1ff`、`--ink-soft` `#b8b0d0`
+- 强调：`--ochre` `#ff9ffc`、`--ochre-deep` `#5227ff`（同 WebThreads）
+- 标题字体：`--song`（Noto Serif SC）；正文 Outfit + 中文系统无衬线
+
+母题：
+
+- 浏览：`BoardScreen` + `DriftWall`；全站 `WebThreads` 背景
+- 阅读：毛玻璃 `.article` / `.reading-sheet`
+- 动效：`useAppMotion`（GSAP）；勿新引入未接线的 `CardSwap` 作主路径

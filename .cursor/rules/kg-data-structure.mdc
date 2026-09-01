@@ -1,0 +1,13 @@
+---
+description: KG_DATA 入库结构与双轴分类（维护本库时始终遵循）
+alwaysApply: true
+---
+
+# KG_DATA 结构
+
+- 内容只写 `data/`；`catalog.json` 是唯一登记处；`archives/` 勿手改。
+- 每条知识：`data/collections/<id>/` + catalog 同 `id`；`id` = `^[a-z0-9-]+$`。
+- **双轴必填**：`category`（analytics|drama|rpa|ops|other）+ `section`（architecture|design|breakthrough|ui-kit）。
+- `status: published` 才进 `/c/:id`；`planned`/`draft` 只出现在 section 磁贴。
+- `viewer: article` 读 `meta.json` 的 `body` 或 `sections[]`；`ga-catalog` 仅现有南非埋点，勿只加 JSON 冒充第二套。
+- 跨项目已验证方案入库：遵循 skill `kg-ingest`。
