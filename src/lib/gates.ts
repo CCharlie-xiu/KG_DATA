@@ -11,6 +11,7 @@ export type GateSection = {
 export const gateConfig = gates as {
   code: string;
   ttlSeconds: number;
+  emailMask: string;
   notice: string;
   hint: string;
   sessionKey: string;

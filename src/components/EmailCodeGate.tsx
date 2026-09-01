@@ -13,29 +13,56 @@ type Props = {
   onVerified: () => void;
 };
 
+type SendPhase = "sending" | "sent";
+
 export default function EmailCodeGate({ open, title, onClose, onVerified }: Props) {
   const [code, setCode] = useState("");
   const [left, setLeft] = useState(gateConfig.ttlSeconds);
   const [error, setError] = useState("");
+  const [flash, setFlash] = useState("");
+  const [phase, setPhase] = useState<SendPhase>("sending");
   const [sentAt, setSentAt] = useState(0);
   const maskRef = useRef<HTMLDivElement>(null);
+  const sendTimer = useRef<number>(0);
+
+  const startSend = (isResend: boolean) => {
+    window.clearTimeout(sendTimer.current);
+    setPhase("sending");
+    setError("");
+    setFlash("");
+    setCode("");
+    sendTimer.current = window.setTimeout(() => {
+      setPhase("sent");
+      setSentAt(Date.now());
+      setLeft(gateConfig.ttlSeconds);
+      setFlash(isResend ? "验证码已重新发送" : "");
+    }, isResend ? 900 : 720);
+  };
 
   useEffect(() => {
-    if (!open) return;
-    setCode("");
-    setError("");
-    setSentAt(Date.now());
-    setLeft(gateConfig.ttlSeconds);
+    if (!open) {
+      window.clearTimeout(sendTimer.current);
+      return;
+    }
+    startSend(false);
+    return () => window.clearTimeout(sendTimer.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on open
   }, [open]);
 
   useEffect(() => {
-    if (!open || left <= 0) return;
+    if (!open || phase !== "sent" || left <= 0) return;
     const timer = window.setInterval(() => {
       const next = Math.max(0, gateConfig.ttlSeconds - Math.floor((Date.now() - sentAt) / 1000));
       setLeft(next);
     }, 250);
     return () => window.clearInterval(timer);
-  }, [open, sentAt, left]);
+  }, [open, sentAt, left, phase]);
+
+  useEffect(() => {
+    if (!flash) return;
+    const t = window.setTimeout(() => setFlash(""), 2600);
+    return () => window.clearTimeout(t);
+  }, [flash]);
 
   useGSAP(
     () => {
@@ -54,8 +81,9 @@ export default function EmailCodeGate({ open, title, onClose, onVerified }: Prop
   if (!open) return null;
 
   const submit = () => {
+    if (phase !== "sent") return;
     if (!verifyCode(code)) {
-      setError("验证码不正确");
+      setError("验证码不正确或已失效，请重试");
       return;
     }
     unlockSession();
@@ -63,11 +91,8 @@ export default function EmailCodeGate({ open, title, onClose, onVerified }: Prop
   };
 
   const resend = () => {
-    if (left > 0) return;
-    setSentAt(Date.now());
-    setLeft(gateConfig.ttlSeconds);
-    setError("");
-    setCode("");
+    if (left > 0 || phase === "sending") return;
+    startSend(true);
   };
 
   return (
@@ -81,28 +106,55 @@ export default function EmailCodeGate({ open, title, onClose, onVerified }: Prop
       >
         <div className="gate-kicker">邮箱验证</div>
         <h2 id="gate-title">{title}</h2>
-        <p className="gate-notice">{gateConfig.notice}</p>
+
+        {phase === "sending" ? (
+          <p className="gate-notice gate-notice--pulse">正在发送验证码…</p>
+        ) : (
+          <>
+            <p className="gate-notice">{gateConfig.notice}</p>
+            <p className="gate-email">
+              发送至 <span>{gateConfig.emailMask}</span>
+            </p>
+          </>
+        )}
+
         <p className="gate-hint">{gateConfig.hint}</p>
+        {flash ? <p className="gate-flash">{flash}</p> : null}
+
         <input
           className="gate-input"
           inputMode="numeric"
           autoComplete="one-time-code"
           maxLength={6}
-          placeholder="000000"
-          autoFocus
+          placeholder="······"
+          autoFocus={phase === "sent"}
+          disabled={phase !== "sent"}
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+          onChange={(e) => {
+            setError("");
+            setCode(e.target.value.replace(/\D/g, "").slice(0, 6));
+          }}
           onKeyDown={(e) => {
             if (e.key === "Enter") submit();
           }}
         />
         {error ? <p className="gate-error">{error}</p> : null}
         <div className="gate-actions">
-          <button type="button" className="gate-go" onClick={submit} disabled={code.length !== 6}>
+          <button
+            type="button"
+            className="gate-go"
+            onClick={submit}
+            disabled={phase !== "sent" || code.length !== 6}
+          >
             确认进入
           </button>
-          <button type="button" className="gate-resend" onClick={resend} disabled={left > 0}>
-            {left > 0 ? `${left}s 后可重发` : "重新获取"}
+          <button
+            type="button"
+            className="gate-resend"
+            onClick={resend}
+            disabled={phase === "sending" || left > 0}
+          >
+            {phase === "sending" ? "发送中…" : left > 0 ? `${left}s 后可重发` : "重新获取"}
           </button>
         </div>
         <button type="button" className="gate-close" onClick={onClose}>

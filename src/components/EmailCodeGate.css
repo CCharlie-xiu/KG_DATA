@@ -40,16 +40,53 @@
   color: rgba(244, 241, 255, 0.88);
 }
 
+.gate-notice--pulse {
+  animation: gate-pulse 1.1s ease-in-out infinite;
+}
+
+.gate-email {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: rgba(244, 241, 255, 0.55);
+  letter-spacing: 0.02em;
+}
+
+.gate-email span {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  color: rgba(255, 159, 252, 0.92);
+}
+
 .gate-hint,
-.gate-error {
+.gate-error,
+.gate-flash {
   margin: 0 0 18px;
   color: rgba(244, 241, 255, 0.48);
   font-size: 13px;
 }
 
+.gate-flash {
+  color: #8ee4c2;
+  margin-top: -10px;
+}
+
 .gate-error {
   color: #ff8a8a;
   margin-top: -8px;
+}
+
+.gate-input:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+
+@keyframes gate-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .gate-input {

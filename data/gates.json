@@ -1,8 +1,9 @@
 {
   "code": "979963",
   "ttlSeconds": 60,
-  "notice": "已推送六位验证码到你的邮箱",
-  "hint": "演示码，未接真实邮件。",
+  "emailMask": "c***@outlook.com",
+  "notice": "验证码已发送至你的邮箱，请查收后填写。",
+  "hint": "未收到？请检查垃圾邮件，或等待倒计时结束后重发。",
   "sessionKey": "kg-data-unlocked",
   "sections": [
     {
