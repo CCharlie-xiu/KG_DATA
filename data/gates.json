@@ -10,7 +10,7 @@
       "id": "architecture",
       "label": "架构方案",
       "href": "/s/architecture",
-      "requireAuth": true,
+      "requireAuth": false,
       "summary": "系统拆分、接入与发布口径。"
     },
     {
@@ -24,14 +24,14 @@
       "id": "breakthrough",
       "label": "核心突破",
       "href": "/s/breakthrough",
-      "requireAuth": true,
+      "requireAuth": false,
       "summary": "关键问题与解法记录。"
     },
     {
       "id": "ui-kit",
       "label": "UI库存",
       "href": "/s/ui-kit",
-      "requireAuth": true,
+      "requireAuth": false,
       "summary": "可复用界面与动效。"
     },
     {
