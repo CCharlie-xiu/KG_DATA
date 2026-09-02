@@ -30,6 +30,8 @@ type DriftWallProps = {
   fade?: number;
   dim?: number;
   overlayColor?: string;
+  /** 平面水平偏移（相对 -50% 居中，负值靠左） */
+  shiftX?: number;
   className?: string;
   style?: CSSProperties;
 };
@@ -68,6 +70,7 @@ export default function DriftWall({
   fade = 0.45,
   dim = 0.72,
   overlayColor = "#05050a",
+  shiftX = 0,
   className = "",
   style,
 }: DriftWallProps) {
@@ -138,11 +141,11 @@ export default function DriftWall({
       const plane = planeRef.current;
       if (!plane) return;
       plane.style.transform =
-        `translate(-50%, -50%) scale(1.18) ` +
+        `translate(calc(-50% + ${shiftX}%), -50%) scale(1.18) ` +
         `rotateX(${tilt + py}deg) rotateY(${turn + px}deg) rotateZ(${roll}deg) ` +
         `translateZ(${-depth}px)`;
     },
-    [tilt, turn, roll, depth],
+    [tilt, turn, roll, depth, shiftX],
   );
 
   useEffect(() => {

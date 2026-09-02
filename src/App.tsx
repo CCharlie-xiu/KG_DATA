@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import catalog from "../data/catalog.json";
+import BrandBot from "./components/BrandBot";
 import SectionNav from "./components/SectionNav";
 import WebThreads from "./components/WebThreads";
 import { useAppMotion } from "./hooks/useAppMotion";
@@ -51,9 +52,12 @@ export default function App() {
 
       <header className="topbar">
         <div className="shell topbar-inner">
-          <Link className="logo" to="/">
-            KG_DATA<span>.</span>
-          </Link>
+          <div className="brand">
+            <Link className="logo" to="/">
+              KG_DATA<span>.</span>
+            </Link>
+            <BrandBot />
+          </div>
           <SectionNav />
         </div>
       </header>

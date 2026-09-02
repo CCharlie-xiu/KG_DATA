@@ -54,6 +54,8 @@ body {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 2;
 }
 
 .app--home .topbar {
@@ -202,6 +204,29 @@ select {
 
 .logo span {
   color: #ff9ffc;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-bot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.brand-bot svg {
+  display: block;
+  width: 72px;
+  height: 72px;
 }
 
 .topbar-right {
