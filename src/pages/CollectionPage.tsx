@@ -13,7 +13,7 @@ export default function CollectionPage() {
     return (
       <section className="article">
         <Link className="back" to="/">
-          ← 返回目录
+          返回目录 →
         </Link>
         <h1>没有这条目录</h1>
         <p className="muted">id={id} 未在 catalog.json 登记。</p>

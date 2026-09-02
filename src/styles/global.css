@@ -160,7 +160,7 @@ select {
 .app--read .article {
   background: rgba(8, 7, 14, 0.84);
   backdrop-filter: blur(24px) saturate(0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 0;
   border-radius: 32px;
   padding: 28px 32px 40px;
   margin: 12px 0 32px;
@@ -181,6 +181,81 @@ select {
   position: relative;
   z-index: 3;
   padding: 22px 0 8px;
+}
+
+.app--read .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: 16px 0 10px;
+  transition: padding 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.app--read .topbar--compact {
+  padding: 8px 0;
+  background: linear-gradient(180deg, rgba(5, 5, 10, 0.72) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.app--read .topbar .topbar-inner {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.35s ease,
+    border-radius 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.app--read .topbar--compact .topbar-inner {
+  pointer-events: auto;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  height: 48px;
+  margin: 0 auto;
+  padding: 0 14px 0 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  border-radius: 999px;
+  background: rgba(14, 12, 24, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(18px) saturate(1.05);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+  transform: translateY(0);
+}
+
+/* 收起时右侧整块移出布局，避免 0 宽换行把胶囊撑成竖条 */
+.app--read .topbar--compact .topbar-right {
+  display: none;
+}
+
+.app--read .topbar--compact .logo {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.app--read .topbar--compact .brand {
+  gap: 4px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.app--read .topbar--compact .brand-bot {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.app--read .topbar--compact .brand-bot svg {
+  width: 40px;
+  height: 40px;
+}
+
+.brand-bot,
+.brand-bot svg {
+  transition: width 0.3s ease, height 0.3s ease;
 }
 
 .topbar-inner,
@@ -279,6 +354,52 @@ select {
 .icon-round {
   border: 0;
   cursor: pointer;
+}
+
+.search-expand {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 36px;
+  border-radius: 999px;
+  background: #fff;
+  overflow: hidden;
+  width: 36px;
+  transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.search-expand.is-open {
+  width: min(42vw, 280px);
+}
+
+.search-expand .icon-round {
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.search-expand__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #111;
+  font-family: Outfit, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  padding: 0 14px 0 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.search-expand.is-open .search-expand__input {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.search-expand__input::placeholder {
+  color: rgba(17, 17, 17, 0.42);
 }
 
 .menu-wrap {
@@ -383,6 +504,47 @@ select {
   min-height: 0;
   height: auto;
   margin: 0;
+}
+
+.search-screen {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.search-screen::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-screen::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.search-screen::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.search-screen::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.search-masonry {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  width: 100%;
+  padding: 4px 0 48px;
+  overflow: hidden;
+}
+
+.search-empty {
+  margin: 24px 0 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: Outfit, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.04em;
 }
 
 .board {
@@ -892,11 +1054,14 @@ code,
 }
 
 .back {
-  display: inline-block;
-  margin: 22px 0 8px;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 12px;
-  color: var(--ochre);
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 0 0 12px;
+  font-family: var(--song);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .filter-row {

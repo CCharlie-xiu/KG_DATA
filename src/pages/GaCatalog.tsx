@@ -25,7 +25,7 @@ export default function GaCatalog() {
   return (
     <article className="reading-sheet ga-page">
       <Link className="back" to="/">
-        ← 返回目录
+        返回目录 →
       </Link>
 
       <header className="ga-mast">

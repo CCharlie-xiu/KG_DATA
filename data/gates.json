@@ -36,10 +36,10 @@
     },
     {
       "id": "search",
-      "label": "搜索模式",
+      "label": "搜索",
       "href": "/search",
-      "requireAuth": true,
-      "summary": "按标题、标签检索全部条目。"
+      "requireAuth": false,
+      "summary": "检索全部条目的标题、标签与正文。"
     }
   ]
 }

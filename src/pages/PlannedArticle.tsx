@@ -15,7 +15,7 @@ export default function PlannedArticle({ item }: Props) {
   return (
     <section className="article">
       <Link className="back" to="/">
-        ← 返回目录
+        返回目录 →
       </Link>
       {isPlanned ? <div className="kicker">即将收录</div> : null}
       {meta?.sourceProject ? <div className="kicker muted">来源 · {meta.sourceProject}</div> : null}

@@ -10,7 +10,7 @@
   "nav": [
     { "id": "home", "label": "目录", "href": "/" },
     { "id": "archive", "label": "归档", "href": "/archive" },
-    { "id": "about", "label": "体例", "href": "/about" }
+    { "id": "about", "label": "约定", "href": "/about" }
   ],
   "categories": [
     { "id": "analytics", "label": "埋点 / 分析" },
