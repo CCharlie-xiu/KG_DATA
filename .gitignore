@@ -1,5 +1,6 @@
 node_modules
 dist
+.gh-pages-tmp
 .DS_Store
 *.local
 .vscode

@@ -10,4 +10,4 @@ alwaysApply: true
 - **双轴必填**：`category`（analytics|drama|rpa|ops|other）+ `section`（architecture|design|breakthrough|ui-kit）。
 - `status: published` 才进 `/c/:id`；`planned`/`draft` 只出现在 section 磁贴。
 - `viewer: article` 读 `meta.json` 的 `body` 或 `sections[]`；`ga-catalog` 仅现有南非埋点，勿只加 JSON 冒充第二套。
-- 跨项目已验证方案入库：遵循 skill `kg-ingest`。
+- 跨项目已验证方案入库：遵循 skill `kg-ingest`（**无需 @**；入库后默认 commit + 更新 Pages）。

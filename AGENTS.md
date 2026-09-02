@@ -1,6 +1,8 @@
 # KG_DATA — Agent 指南
 
-静态知识站：`data/` 是唯一内容源，`src/` 是 React 查看器。跨项目归档请遵循用户 Skill `kg-ingest`。
+静态知识站：`data/` 是唯一内容源，`src/` 是 React 查看器。
+
+跨项目归档遵循用户 Skill `kg-ingest`（路径 `C:\Users\lin\.cursor\skills\kg-ingest`）。**无需用户 @ Skill**：方案在业务项目已验证可行，或用户要求归档/记笔记/回填时，Agent 自行读取 Skill 写入本库；写完后默认 commit，并更新 GitHub Pages（`gh-pages`）。用户说「先别入库 / 先别发布」则跳过。
 
 ## 目录地图
 
