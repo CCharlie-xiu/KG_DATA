@@ -1,23 +1,24 @@
 {
   "lookLegend": [
     { "id": "realtime", "label": "实时" },
-    { "id": "delayed", "label": "延迟" }
+    { "id": "delayed", "label": "终态延迟" },
+    { "id": "waiting", "label": "中间态延迟" }
   ],
   "groups": [
     {
       "id": "realtime",
       "title": "实时通道（不延迟）",
-      "note": "工作流一结束立即发生",
+      "note": "状态一落库立即发生",
       "rows": [
         {
           "channel": "DB status / stepRunout",
-          "afterComplete": "立即写入",
+          "afterComplete": "立即写入（含 WAITING）",
           "afterDue": "—",
           "timing": "realtime"
         },
         {
           "channel": "Dashboard Subscription / 监控页",
-          "afterComplete": "立即更新终态",
+          "afterComplete": "立即更新（含 waiting）",
           "afterDue": "—",
           "timing": "realtime"
         },
@@ -31,8 +32,8 @@
     },
     {
       "id": "delayed",
-      "title": "延迟通道（对外 API）",
-      "note": "仅当 responseDelaySeconds > 0 且终态为 success/failed/aborted",
+      "title": "终态延迟（对外 API）",
+      "note": "responseDelayConfig.enabled + delaySeconds；仅 success/failed/aborted",
       "rows": [
         {
           "channel": "OpenAPI sync HTTP",
@@ -41,9 +42,9 @@
           "timing": "delayed"
         },
         {
-          "channel": "callbackUrl / notifyUrl",
+          "channel": "callbackUrl / notifyUrl（终态）",
           "afterComplete": "不调用",
-          "afterDue": "POST 回调并标记 callbackSent",
+          "afterDue": "POST 回调并标记 resultDeliveredAt",
           "timing": "delayed"
         },
         {
@@ -51,6 +52,31 @@
           "afterComplete": "resultPending=true，隐藏 stepRunout",
           "afterDue": "返回完整结果",
           "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "waiting",
+      "title": "中间态延迟（run.waiting）",
+      "note": "waitingEnabled + waitingDelaySeconds；与终态开关独立",
+      "rows": [
+        {
+          "channel": "OpenAPI sync（waiting）",
+          "afterComplete": "落库 WAITING 但未投递 → 继续挂起",
+          "afterDue": "publish sync:run → status=waiting",
+          "timing": "waiting"
+        },
+        {
+          "channel": "callbackUrl run.waiting",
+          "afterComplete": "不调用",
+          "afterDue": "deliver-waiting-notify POST",
+          "timing": "waiting"
+        },
+        {
+          "channel": "同任务 submit / signal",
+          "afterComplete": "409 FAIL_STILL_PENDING（延时窗口内）",
+          "afterDue": "窗口结束后允许 submit",
+          "timing": "waiting"
         }
       ]
     }

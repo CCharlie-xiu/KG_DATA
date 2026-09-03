@@ -2,17 +2,20 @@
   "id": "xmkf-rpa-response-delay",
   "title": "工作流延迟返回",
   "kicker": "RPA · Orchestrator · OpenAPI",
-  "summary": "工作流执行完成后立即落库；仅 OpenAPI sync 响应与 callbackUrl 按策略延迟投递。Dashboard 与 Webhook 保持实时。",
+  "summary": "终态与中间态（waiting）延迟可独立配置。落库/Dashboard 实时；仅 OpenAPI sync 与 callbackUrl 按策略推迟。中间态延时期间同任务 submit 返回 fail still pending。",
+  "sourceProject": "D:\\重要不可删除\\RPA应用平台\\xmkf-rpa-platform\\xmkf-rpa-platform",
   "notes": [
-    "延迟只作用于对外 API：sync HTTP 挂起、callbackUrl 推迟。",
-    "Dashboard 订阅与 WebhookEndpoint（含 run.started / 终态）全部实时。",
-    "配置可在工作流级设置，REST 请求可用 responseDelaySeconds 覆盖（0=强制关闭）。",
-    "到期由 BullMQ deliver-result 投递；每 30 分钟扫描逾期补录并标记已返回。"
+    "卡片标题开关 = 终态延迟；卡片内「中间态延时」可单独开启（终态关闭时仍可只开 waiting）。",
+    "终态延迟：success/failed/aborted → deliver-result；Dashboard 订阅与 WebhookEndpoint 实时。",
+    "中间态延迟：wait-signal 落库 WAITING 后写 input.__waitingNotify，到期 deliver-waiting-notify 再 publish sync / callbackUrl（run.waiting）。",
+    "延时窗口内同任务 submit → 409 FAIL_STILL_PENDING（fail still pending）。",
+    "REST 可用 responseDelaySeconds 覆盖终态（0=强制关闭）；中间态仅读工作流 waitingEnabled。",
+    "终态逾期由 30min cron 补投；中间态靠 BullMQ job（jobId 幂等）。"
   ],
   "stats": {
-    "boundaries": 6,
+    "boundaries": 9,
     "newFields": 4,
-    "modules": 8,
-    "testCases": 10
+    "modules": 11,
+    "testCases": 11
   }
 }

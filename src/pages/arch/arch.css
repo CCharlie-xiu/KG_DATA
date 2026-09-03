@@ -8,12 +8,21 @@
   color: #fbbf24;
 }
 
+.look.look-waiting {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+}
+
 .ga-ledger tr.look-realtime {
   border-left-color: #6ee7b7;
 }
 
 .ga-ledger tr.look-delayed {
   border-left-color: #fbbf24;
+}
+
+.ga-ledger tr.look-waiting {
+  border-left-color: #38bdf8;
 }
 
 .arch-code-block {

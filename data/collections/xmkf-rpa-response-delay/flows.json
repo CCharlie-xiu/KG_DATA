@@ -2,8 +2,8 @@
   "groups": [
     {
       "id": "async",
-      "title": "Async 模式",
-      "note": "立即 202 queued；结果靠 callback / 轮询",
+      "title": "Async 模式（终态）",
+      "note": "立即 202 queued；终态结果靠 callback / 轮询",
       "steps": [
         { "when": "POST mode=async", "action": "createWorkflowRun + enqueue", "note": "写入 responseDelaySeconds" },
         { "when": "HTTP 响应", "action": "返回 taskId / queued", "note": "不阻塞" },
@@ -14,7 +14,7 @@
     },
     {
       "id": "sync",
-      "title": "Sync 模式",
+      "title": "Sync 模式（终态）",
       "note": "RPA 侧任务可先结束；HTTP 继续挂起至延迟到期",
       "steps": [
         { "when": "POST mode=sync", "action": "create + enqueue", "note": "effectiveTimeout = syncTimeout + delay" },
@@ -22,6 +22,18 @@
         { "when": "Worker finishRun", "action": "落库实时；不 publish sync", "note": "写 resultScheduledAt" },
         { "when": "delay 到期", "action": "publish sync + callback", "note": "唤醒挂起的 HTTP 连接" },
         { "when": "客户端断开", "action": "仅释放订阅", "note": "callback 仍由 deliver job / cron 投递" }
+      ]
+    },
+    {
+      "id": "waiting",
+      "title": "中间态 waiting 延时",
+      "note": "getcode 等到信号；与终态 delay 独立",
+      "steps": [
+        { "when": "wait-signal", "action": "落库 WAITING + __waitingNotify", "note": "Dashboard 立即可见 waiting" },
+        { "when": "延时窗口内", "action": "不 publish sync / 不 callbackUrl", "note": "sync 侧 shouldHoldSyncForWaitingNotify" },
+        { "when": "同任务 submit", "action": "409 FAIL_STILL_PENDING", "note": "message: fail still pending" },
+        { "when": "delay 到期", "action": "deliver-waiting-notify", "note": "publish waiting + callbackUrl run.waiting + deliveredAtMs" },
+        { "when": "窗口结束", "action": "允许 submit 写信号", "note": "续跑后续节点" }
       ]
     }
   ]

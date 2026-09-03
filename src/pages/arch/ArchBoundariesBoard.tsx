@@ -3,7 +3,8 @@ import data from "../../../data/collections/xmkf-rpa-response-delay/boundaries.j
 
 const LABELS: Record<string, string> = {
   realtime: "实时",
-  delayed: "延迟",
+  delayed: "终态延迟",
+  waiting: "中间态延迟",
 };
 
 export default function ArchBoundariesBoard() {

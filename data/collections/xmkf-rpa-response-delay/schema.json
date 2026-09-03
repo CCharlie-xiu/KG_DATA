@@ -4,7 +4,7 @@
       "name": "responseDelayConfig",
       "type": "Json?",
       "model": "Workflow",
-      "desc": "工作流级默认策略：enabled / delaySeconds / 可选随机区间"
+      "desc": "终态：enabled/delaySeconds/随机区间；中间态：waitingEnabled/waitingDelaySeconds（可独立于 enabled）"
     }
   ],
   "runFields": [
@@ -12,33 +12,43 @@
       "name": "responseDelaySeconds",
       "type": "Int?",
       "model": "WorkflowRun",
-      "desc": "本次 run 实际生效延迟秒数；null=不延迟"
+      "desc": "本次 run 终态生效延迟秒数；null=不延迟"
     },
     {
       "name": "resultScheduledAt",
       "type": "DateTime?",
       "model": "WorkflowRun",
-      "desc": "计划对外投递时间（finishRun 写入）"
+      "desc": "终态计划对外投递时间（finishRun 写入）"
     },
     {
       "name": "resultDeliveredAt",
       "type": "DateTime?",
       "model": "WorkflowRun",
-      "desc": "实际投递时间；null=尚未对外返回"
+      "desc": "终态实际投递时间；null=尚未对外返回"
+    },
+    {
+      "name": "input.__waitingNotify",
+      "type": "Json（运行时）",
+      "model": "WorkflowRun.input",
+      "desc": "中间态：{ scheduledAtMs, delaySeconds, signalName, deliveredAtMs? }；无新 Prisma 列"
     }
   ],
   "configExample": {
     "enabled": true,
     "delaySeconds": 30,
     "delaySecondsMin": 10,
-    "delaySecondsMax": 60
+    "delaySecondsMax": 60,
+    "waitingEnabled": true,
+    "waitingDelaySeconds": 15
   },
   "requestOverride": {
     "field": "responseDelaySeconds",
     "rules": [
-      "0 = 强制关闭延迟",
-      ">0 = 覆盖工作流配置",
-      "省略 = 读工作流 responseDelayConfig"
+      "仅覆盖终态延迟",
+      "0 = 强制关闭终态延迟",
+      ">0 = 覆盖工作流终态配置",
+      "省略 = 读工作流 responseDelayConfig.enabled",
+      "中间态只认 waitingEnabled，不走此覆盖"
     ]
   }
 }

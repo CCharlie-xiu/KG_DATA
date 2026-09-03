@@ -1,12 +1,15 @@
 {
   "modules": [
-    { "area": "prisma", "path": "schema.prisma + migration", "change": "新增 responseDelayConfig / 三字段", "type": "schema" },
-    { "area": "orchestrator", "path": "engine/response-delay.ts", "change": "解析延迟秒数", "type": "new" },
-    { "area": "orchestrator", "path": "engine/workflow-runner.ts", "change": "finishRun 延迟 gate", "type": "edit" },
-    { "area": "orchestrator", "path": "services/result-delivery.service.ts", "change": "统一对外投递", "type": "new" },
-    { "area": "orchestrator", "path": "services/result-delivery-scheduler.ts", "change": "30min 补偿", "type": "new" },
-    { "area": "orchestrator", "path": "routes/openapi/*.route.ts", "change": "覆盖参数 + sync 守卫 + resultPending", "type": "edit" },
-    { "area": "dashboard", "path": "ResponseDelayEditor + TaskList", "change": "工作流配置 UI", "type": "new" },
-    { "area": "kg-data", "path": "collections/xmkf-rpa-response-delay", "change": "本架构方案展示", "type": "new" }
+    { "area": "prisma", "path": "schema.prisma + migration", "change": "responseDelayConfig / 终态三字段", "type": "schema" },
+    { "area": "orchestrator", "path": "engine/response-delay.ts", "change": "终态解析 + waiting 解析/pending 判定", "type": "edit" },
+    { "area": "orchestrator", "path": "engine/workflow-runner.ts", "change": "finishRun 终态延迟 gate", "type": "edit" },
+    { "area": "orchestrator", "path": "agents/signal/actions/wait-signal.ts", "change": "中间态延时落库 + 入队", "type": "edit" },
+    { "area": "orchestrator", "path": "services/result-delivery.service.ts", "change": "deliver-result + deliver-waiting-notify", "type": "edit" },
+    { "area": "orchestrator", "path": "services/result-delivery-scheduler.ts", "change": "30min 终态补偿", "type": "new" },
+    { "area": "orchestrator", "path": "worker.ts", "change": "消费 deliver-waiting-notify", "type": "edit" },
+    { "area": "orchestrator", "path": "routes/openapi/*.route.ts", "change": "终态守卫 + waiting hold + submit 409", "type": "edit" },
+    { "area": "dashboard", "path": "ResponseDelayEditor + TaskList", "change": "终态开关 + 中间态独立开关 UI", "type": "edit" },
+    { "area": "tests", "path": "tests/unit/engine/response-delay.test.ts", "change": "waiting 解析与 pending", "type": "edit" },
+    { "area": "kg-data", "path": "collections/xmkf-rpa-response-delay", "change": "本架构方案展示", "type": "edit" }
   ]
 }
