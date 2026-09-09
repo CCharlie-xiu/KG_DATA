@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "id": "nightly",
+      "title": "夜间归档一轮",
+      "note": "API Server cron；默认每天 01:30 Asia/Shanghai",
+      "steps": [
+        { "when": "cron tick", "action": "maybeRunWorkflowRunArchive", "note": "先过水位闸门" },
+        { "when": "抢锁", "action": "lock:workflow-run:archive", "note": "TTL 1h；未抢到则 skip" },
+        { "when": "水线", "action": "resolveHotKeepWatermark(N)", "note": "第 N 新行的 (startedAt, id)" },
+        { "when": "分批", "action": "findArchiveCandidateHeaders", "note": "终态 + 老于水线；take=BATCH_SIZE" },
+        { "when": "搬迁", "action": "INSERT SELECT + deleteMany", "note": "Run/Log/Delivery；批间 PAUSE_MS" },
+        { "when": "限流", "action": "MAX_BATCHES ∩ MAX_ROWS", "note": "生产约 25×2000 ≤ 5 万/晚" }
+      ]
+    },
+    {
+      "id": "read",
+      "title": "读写路由",
+      "note": "热优先；冷只读历史",
+      "steps": [
+        { "when": "创建/更新", "action": "只写热表", "note": "Worker / abort / retry / OpenAPI" },
+        { "when": "执行监控默认列表", "action": "只读热表", "note": "行数 ≈ HOT_KEEP_COUNT" },
+        { "when": "默认 Tab 计数", "action": "热表 + Redis 增量", "note": "归档后 applyDefaultMonitorTabCountDelta" },
+        { "when": "详情 / logs / OpenAPI id", "action": "findHotOrArchived*", "note": "热未命中再查 Archive" },
+        { "when": "执行记录页", "action": "workflowRunArchiveSummaries", "note": "冷表只读列表" }
+      ]
+    },
+    {
+      "id": "safety",
+      "title": "安全约束",
+      "note": "丢历史不可接受",
+      "steps": [
+        { "when": "冷拷不齐", "action": "抛错拒绝删热", "note": "事务回滚" },
+        { "when": "非终态溢出", "action": "本轮可 archived=0", "note": "热表可略大于 N" },
+        { "when": "schema 变更", "action": "prisma migrate", "note": "禁止 db push" }
+      ]
+    }
+  ]
+}

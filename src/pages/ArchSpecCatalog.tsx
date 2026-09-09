@@ -1,6 +1,18 @@
+import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import meta from "../../data/collections/xmkf-rpa-response-delay/meta.json";
+
+import delayMeta from "../../data/collections/xmkf-rpa-response-delay/meta.json";
+import delayBoundaries from "../../data/collections/xmkf-rpa-response-delay/boundaries.json";
+import delaySchema from "../../data/collections/xmkf-rpa-response-delay/schema.json";
+import delayFlows from "../../data/collections/xmkf-rpa-response-delay/flows.json";
+import delayImpl from "../../data/collections/xmkf-rpa-response-delay/implementation.json";
+
+import hotColdMeta from "../../data/collections/xmkf-rpa-workflow-run-hot-cold-202609/meta.json";
+import hotColdBoundaries from "../../data/collections/xmkf-rpa-workflow-run-hot-cold-202609/boundaries.json";
+import hotColdSchema from "../../data/collections/xmkf-rpa-workflow-run-hot-cold-202609/schema.json";
+import hotColdFlows from "../../data/collections/xmkf-rpa-workflow-run-hot-cold-202609/flows.json";
+import hotColdImpl from "../../data/collections/xmkf-rpa-workflow-run-hot-cold-202609/implementation.json";
+
 import ArchBoundariesBoard from "./arch/ArchBoundariesBoard";
 import ArchSchemaBoard from "./arch/ArchSchemaBoard";
 import ArchFlowsBoard from "./arch/ArchFlowsBoard";
@@ -10,15 +22,72 @@ import "./arch/arch.css";
 
 type Tab = "boundaries" | "schema" | "flows" | "impl";
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: "boundaries", label: "延迟边界" },
+type ArchSpecBundle = {
+  meta: {
+    kicker: string;
+    title: string;
+    summary: string;
+    notes: string[];
+    stats: { boundaries: number; newFields: number; modules: number; testCases: number };
+    tabs?: { id: Tab; label: string }[];
+  };
+  boundaries: React.ComponentProps<typeof ArchBoundariesBoard>["data"];
+  schema: React.ComponentProps<typeof ArchSchemaBoard>["data"];
+  flows: React.ComponentProps<typeof ArchFlowsBoard>["data"];
+  impl: React.ComponentProps<typeof ArchImplBoard>["data"];
+};
+
+const DEFAULT_TABS: { id: Tab; label: string }[] = [
+  { id: "boundaries", label: "边界" },
   { id: "schema", label: "数据模型" },
   { id: "flows", label: "执行流程" },
   { id: "impl", label: "实现清单" },
 ];
 
+const SPECS: Record<string, ArchSpecBundle> = {
+  "xmkf-rpa-response-delay": {
+    meta: {
+      ...delayMeta,
+      tabs: [
+        { id: "boundaries", label: "延迟边界" },
+        { id: "schema", label: "数据模型" },
+        { id: "flows", label: "执行流程" },
+        { id: "impl", label: "实现清单" },
+      ],
+    },
+    boundaries: delayBoundaries,
+    schema: delaySchema,
+    flows: delayFlows,
+    impl: delayImpl,
+  },
+  "xmkf-rpa-workflow-run-hot-cold-202609": {
+    meta: hotColdMeta as ArchSpecBundle["meta"],
+    boundaries: hotColdBoundaries,
+    schema: hotColdSchema,
+    flows: hotColdFlows,
+    impl: hotColdImpl,
+  },
+};
+
 export default function ArchSpecCatalog() {
+  const { id } = useParams();
+  const bundle = id ? SPECS[id] : undefined;
   const [tab, setTab] = useState<Tab>("boundaries");
+
+  if (!bundle) {
+    return (
+      <section className="article">
+        <Link className="back" to="/">
+          返回目录 →
+        </Link>
+        <h1>架构方案未接入</h1>
+        <p className="muted">id={id} 尚未登记到 ArchSpecCatalog。SPECS。</p>
+      </section>
+    );
+  }
+
+  const { meta, boundaries, schema, flows, impl } = bundle;
+  const tabs = meta.tabs?.length ? meta.tabs : DEFAULT_TABS;
 
   return (
     <article className="reading-sheet ga-page">
@@ -59,7 +128,7 @@ export default function ArchSpecCatalog() {
       </ul>
 
       <nav className="ga-switch" aria-label="方案分册">
-        {TABS.map((item) => (
+        {tabs.map((item) => (
           <button
             key={item.id}
             type="button"
@@ -71,10 +140,10 @@ export default function ArchSpecCatalog() {
         ))}
       </nav>
 
-      {tab === "boundaries" ? <ArchBoundariesBoard /> : null}
-      {tab === "schema" ? <ArchSchemaBoard /> : null}
-      {tab === "flows" ? <ArchFlowsBoard /> : null}
-      {tab === "impl" ? <ArchImplBoard /> : null}
+      {tab === "boundaries" ? <ArchBoundariesBoard data={boundaries} /> : null}
+      {tab === "schema" ? <ArchSchemaBoard data={schema} /> : null}
+      {tab === "flows" ? <ArchFlowsBoard data={flows} /> : null}
+      {tab === "impl" ? <ArchImplBoard data={impl} /> : null}
     </article>
   );
 }

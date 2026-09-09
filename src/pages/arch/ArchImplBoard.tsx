@@ -1,12 +1,17 @@
 import { useMemo, useState } from "react";
-import data from "../../../data/collections/xmkf-rpa-response-delay/implementation.json";
 
-export default function ArchImplBoard() {
+export type ImplData = {
+  modules: { area: string; path: string; change: string; type: string }[];
+};
+
+type Props = { data: ImplData };
+
+export default function ArchImplBoard({ data }: Props) {
   const [area, setArea] = useState("all");
-  const areas = useMemo(() => [...new Set(data.modules.map((m) => m.area))], []);
+  const areas = useMemo(() => [...new Set(data.modules.map((m) => m.area))], [data.modules]);
   const shown = useMemo(
     () => (area === "all" ? data.modules : data.modules.filter((m) => m.area === area)),
-    [area],
+    [area, data.modules],
   );
 
   return (

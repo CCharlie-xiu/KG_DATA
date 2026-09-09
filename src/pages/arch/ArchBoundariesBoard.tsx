@@ -1,15 +1,29 @@
 import { useMemo, useState } from "react";
-import data from "../../../data/collections/xmkf-rpa-response-delay/boundaries.json";
 
-const LABELS: Record<string, string> = {
-  realtime: "实时",
-  delayed: "终态延迟",
-  waiting: "中间态延迟",
+export type BoundariesData = {
+  lookLegend: { id: string; label: string }[];
+  groups: {
+    id: string;
+    title: string;
+    note?: string;
+    rows: {
+      channel: string;
+      afterComplete: string;
+      afterDue: string;
+      timing: string;
+    }[];
+  }[];
 };
 
-export default function ArchBoundariesBoard() {
+type Props = { data: BoundariesData };
+
+export default function ArchBoundariesBoard({ data }: Props) {
   const [groupId, setGroupId] = useState("all");
   const groups = data.groups;
+  const legendMap = useMemo(
+    () => Object.fromEntries(data.lookLegend.map((item) => [item.id, item.label])),
+    [data.lookLegend],
+  );
   const shown = useMemo(
     () => (groupId === "all" ? groups : groups.filter((g) => g.id === groupId)),
     [groupId, groups],
@@ -36,7 +50,7 @@ export default function ArchBoundariesBoard() {
       </nav>
 
       <div className="ga-looks">
-        <span className="hint">时序</span>
+        <span className="hint">图例</span>
         {data.lookLegend.map((item) => (
           <span key={item.id} className={`look look-${item.id}`}>
             {item.label}
@@ -70,7 +84,9 @@ export default function ArchBoundariesBoard() {
                     <td>{row.afterComplete}</td>
                     <td>{row.afterDue}</td>
                     <td>
-                      <span className={`look look-${row.timing}`}>{LABELS[row.timing] ?? row.timing}</span>
+                      <span className={`look look-${row.timing}`}>
+                        {legendMap[row.timing] ?? row.timing}
+                      </span>
                     </td>
                   </tr>
                 ))}

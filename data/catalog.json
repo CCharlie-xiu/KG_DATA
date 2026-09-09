@@ -59,7 +59,7 @@
       "summary": "热表保留最新 N 条 WorkflowRun，超出且终态迁入 Archive；API Server 每晚 01:30 分批 INSERT SELECT，集群水位闸门与 Redis 锁串行。",
       "tags": ["RPA", "Orchestrator", "WorkflowRun", "冷热表", "归档"],
       "updated": "2026-09-09",
-      "viewer": "article",
+      "viewer": "arch-spec",
       "entry": "meta.json",
       "section": "architecture",
       "cover": "covers/kg-default.jpg"

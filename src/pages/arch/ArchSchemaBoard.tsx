@@ -1,11 +1,25 @@
-import data from "../../../data/collections/xmkf-rpa-response-delay/schema.json";
+export type SchemaData = {
+  workflowFields: { name: string; type: string; model: string; desc: string }[];
+  runFields: { name: string; type: string; model: string; desc: string }[];
+  configExample: unknown;
+  requestOverride?: { field: string; rules: string[] };
+  sectionTitles?: { workflow?: string; run?: string; config?: string };
+};
 
-export default function ArchSchemaBoard() {
+type Props = { data: SchemaData };
+
+export default function ArchSchemaBoard({ data }: Props) {
+  const titles = {
+    workflow: data.sectionTitles?.workflow ?? "Workflow 字段",
+    run: data.sectionTitles?.run ?? "WorkflowRun 字段",
+    config: data.sectionTitles?.config ?? "配置示例",
+  };
+
   return (
     <div>
       <section className="ga-cluster">
         <header>
-          <h3>Workflow 字段</h3>
+          <h3>{titles.workflow}</h3>
           <span>{data.workflowFields.length} 条</span>
         </header>
         <div className="ga-wrap">
@@ -36,7 +50,7 @@ export default function ArchSchemaBoard() {
 
       <section className="ga-cluster">
         <header>
-          <h3>WorkflowRun 字段</h3>
+          <h3>{titles.run}</h3>
           <span>{data.runFields.length} 条</span>
         </header>
         <div className="ga-wrap">
@@ -67,12 +81,14 @@ export default function ArchSchemaBoard() {
 
       <section className="ga-cluster">
         <header>
-          <h3>配置示例</h3>
+          <h3>{titles.config}</h3>
         </header>
         <pre className="arch-code-block">{JSON.stringify(data.configExample, null, 2)}</pre>
-        <p className="muted" style={{ marginTop: 12 }}>
-          REST 覆盖字段 <code>{data.requestOverride.field}</code>：{data.requestOverride.rules.join("；")}
-        </p>
+        {data.requestOverride ? (
+          <p className="muted" style={{ marginTop: 12 }}>
+            <code>{data.requestOverride.field}</code>：{data.requestOverride.rules.join("；")}
+          </p>
+        ) : null}
       </section>
     </div>
   );

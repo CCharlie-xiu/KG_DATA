@@ -1,0 +1,66 @@
+{
+  "workflowFields": [
+    {
+      "name": "WORKFLOW_RUN_HOT_KEEP_COUNT",
+      "type": "env Int",
+      "model": "ConfigMap / .env",
+      "desc": "热表保留最新 N 条；生产 100000，测试 100，代码默认 50000"
+    },
+    {
+      "name": "WORKFLOW_RUN_ARCHIVE_CRON",
+      "type": "env cron",
+      "model": "ConfigMap / .env",
+      "desc": "默认 30 1 * * *；配合 WORKFLOW_RUN_ARCHIVE_TZ=Asia/Shanghai"
+    },
+    {
+      "name": "WORKFLOW_RUN_ARCHIVE_MAX_ROWS",
+      "type": "env Int",
+      "model": "ConfigMap / .env",
+      "desc": "单次触发最多搬迁行数；生产 50000（与 MAX_BATCHES×BATCH_SIZE 共同限流）"
+    }
+  ],
+  "runFields": [
+    {
+      "name": "WorkflowRunArchive",
+      "type": "table",
+      "model": "冷表",
+      "desc": "镜像热表字段 + archivedAt；主键 id 与热表同值"
+    },
+    {
+      "name": "NodeLogArchive",
+      "type": "table",
+      "model": "冷表",
+      "desc": "随 Run 搬迁；@@index([runId, nodeIndex])"
+    },
+    {
+      "name": "CallbackDeliveryArchive",
+      "type": "table",
+      "model": "冷表",
+      "desc": "随 Run 搬迁；无强 FK 到 Workflow/Config"
+    }
+  ],
+  "configExample": {
+    "WORKFLOW_RUN_HOT_KEEP_COUNT": "100000",
+    "WORKFLOW_RUN_ARCHIVE_ENABLED": "true",
+    "WORKFLOW_RUN_ARCHIVE_CRON": "30 1 * * *",
+    "WORKFLOW_RUN_ARCHIVE_TZ": "Asia/Shanghai",
+    "WORKFLOW_RUN_ARCHIVE_MAX_WATERMARK_PERCENT": "50",
+    "WORKFLOW_RUN_ARCHIVE_BATCH_SIZE": "2000",
+    "WORKFLOW_RUN_ARCHIVE_MAX_BATCHES": "25",
+    "WORKFLOW_RUN_ARCHIVE_MAX_ROWS": "50000",
+    "WORKFLOW_RUN_ARCHIVE_BATCH_PAUSE_MS": "100"
+  },
+  "requestOverride": {
+    "field": "k8s/prod/configmap.yaml",
+    "rules": [
+      "热表 N 与每晚搬迁上限独立：增大 N 通常减少当晚归档量",
+      "BATCH_SIZE 上限代码钳制为 2000；MAX_ROWS 上限 50000",
+      "水位与看板「集群整体水位线」同口径：Σ memoryMb / Σ memoryLimitMb"
+    ]
+  },
+  "sectionTitles": {
+    "workflow": "环境旋钮",
+    "run": "冷表模型",
+    "config": "生产 ConfigMap 示例"
+  }
+}

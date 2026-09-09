@@ -1,0 +1,84 @@
+{
+  "lookLegend": [
+    { "id": "realtime", "label": "热表" },
+    { "id": "delayed", "label": "归档搬迁" },
+    { "id": "waiting", "label": "跳过/闸门" }
+  ],
+  "groups": [
+    {
+      "id": "hot",
+      "title": "热表驻留",
+      "note": "监控默认路径与全部写路径",
+      "rows": [
+        {
+          "channel": "最新 N 条（startedAt DESC）",
+          "afterComplete": "留在 WorkflowRun",
+          "afterDue": "—",
+          "timing": "realtime"
+        },
+        {
+          "channel": "非终态（pending/running/waiting/…）",
+          "afterComplete": "即使超出 N 也不归档",
+          "afterDue": "—",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Worker / abort / OpenAPI 写",
+          "afterComplete": "只写热表",
+          "afterDue": "—",
+          "timing": "realtime"
+        }
+      ]
+    },
+    {
+      "id": "archive",
+      "title": "可归档（迁入冷表）",
+      "note": "严格老于水线 + 终态；最老优先",
+      "rows": [
+        {
+          "channel": "success / failed / aborted",
+          "afterComplete": "排名超出 N 后成为候选",
+          "afterDue": "INSERT Archive → 删热表",
+          "timing": "delayed"
+        },
+        {
+          "channel": "NodeLog / CallbackDelivery",
+          "afterComplete": "随 Run 一并搬迁",
+          "afterDue": "同事务校验齐全才删热",
+          "timing": "delayed"
+        },
+        {
+          "channel": "详情 / OpenAPI 按 id",
+          "afterComplete": "热未命中",
+          "afterDue": "冷表回退（同 id）",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "gates",
+      "title": "本轮跳过",
+      "note": "maybeRunWorkflowRunArchive 前置闸门",
+      "rows": [
+        {
+          "channel": "WORKFLOW_RUN_ARCHIVE_ENABLED=false",
+          "afterComplete": "—",
+          "afterDue": "skipped: disabled",
+          "timing": "waiting"
+        },
+        {
+          "channel": "集群水位 > MAX_WATERMARK%",
+          "afterComplete": "—",
+          "afterDue": "skipped: high_load",
+          "timing": "waiting"
+        },
+        {
+          "channel": "无 Worker / 水位未知 / 锁占用",
+          "afterComplete": "—",
+          "afterDue": "skipped: no_workers | watermark_unknown | lock_held",
+          "timing": "waiting"
+        }
+      ]
+    }
+  ]
+}

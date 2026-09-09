@@ -1,0 +1,14 @@
+{
+  "modules": [
+    { "area": "prisma", "path": "schema.prisma + migrations/*archive*", "change": "WorkflowRunArchive / NodeLogArchive / CallbackDeliveryArchive", "type": "schema" },
+    { "area": "orchestrator", "path": "runs/hot-keep-count.ts", "change": "全部归档 env 读取与默认值", "type": "new" },
+    { "area": "orchestrator", "path": "runs/archive-scheduler.ts", "change": "nightly cron + 集群水位闸门", "type": "new" },
+    { "area": "orchestrator", "path": "runs/archive-workflow-runs.ts", "change": "分批搬迁 + 事务删热", "type": "new" },
+    { "area": "orchestrator", "path": "runs/archive-mapping.ts", "change": "水线 + 候选 where + Redis 锁键", "type": "new" },
+    { "area": "orchestrator", "path": "runs/archive-sql.ts", "change": "INSERT…SELECT 冷拷 SQL", "type": "new" },
+    { "area": "orchestrator", "path": "runs/run-store.ts", "change": "热冷统一查找", "type": "new" },
+    { "area": "orchestrator", "path": "server.ts", "change": "挂载 startWorkflowRunArchiveScheduler", "type": "edit" },
+    { "area": "dashboard", "path": "ExecutionRecordsPage + archive GraphQL", "change": "冷表只读执行记录", "type": "edit" },
+    { "area": "k8s", "path": "prod|test/configmap.yaml", "change": "HOT_KEEP / BATCH / MAX_ROWS 等", "type": "edit" }
+  ]
+}

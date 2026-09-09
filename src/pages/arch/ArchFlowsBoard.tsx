@@ -1,7 +1,17 @@
 import { useMemo, useState } from "react";
-import data from "../../../data/collections/xmkf-rpa-response-delay/flows.json";
 
-export default function ArchFlowsBoard() {
+export type FlowsData = {
+  groups: {
+    id: string;
+    title: string;
+    note?: string;
+    steps: { when: string; action: string; note: string }[];
+  }[];
+};
+
+type Props = { data: FlowsData };
+
+export default function ArchFlowsBoard({ data }: Props) {
   const [groupId, setGroupId] = useState("all");
   const groups = data.groups;
   const shown = useMemo(
