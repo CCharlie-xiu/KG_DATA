@@ -50,6 +50,21 @@
       "cover": "covers/kg-default.jpg"
     },
     {
+      "id": "xmkf-rpa-workflow-run-hot-cold-202609",
+      "title": "WorkflowRun 冷热表拆分",
+      "subtitle": "按数量保留热表 · 夜间归档 · 终态保护",
+      "category": "rpa",
+      "status": "published",
+      "featured": true,
+      "summary": "热表保留最新 N 条 WorkflowRun，超出且终态迁入 Archive；API Server 每晚 01:30 分批 INSERT SELECT，集群水位闸门与 Redis 锁串行。",
+      "tags": ["RPA", "Orchestrator", "WorkflowRun", "冷热表", "归档"],
+      "updated": "2026-09-09",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "architecture",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
       "id": "short-drama",
       "title": "短剧内容与流程",
       "subtitle": "待收录",

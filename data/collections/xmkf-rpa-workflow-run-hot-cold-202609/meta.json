@@ -1,0 +1,29 @@
+{
+  "id": "xmkf-rpa-workflow-run-hot-cold-202609",
+  "title": "WorkflowRun 冷热表拆分",
+  "status": "published",
+  "sourceProject": "D:\\重要不可删除\\RPA应用平台\\xmkf-rpa-platform\\xmkf-rpa-platform",
+  "notes": [
+    "按数量保留最新 N 条热表，超出且终态迁入 WorkflowRunArchive；非终态永不归档。",
+    "API Server nightly cron（默认 01:30 Asia/Shanghai），不挂 Worker；Redis 锁串行。",
+    "生产热表 N=100000；每晚最多搬 5 万（2000/批 × 25 批）；集群内存水位 >50% skip。"
+  ],
+  "sections": [
+    {
+      "heading": "背景",
+      "body": "执行监控对单表 `WorkflowRun` 高频列表/count，行数膨胀会拖慢监控读与 Worker 写。按「天数」划冷热不可靠（尖峰一周百万、低谷几乎为空），因此冷热边界改为**按数量保留最新 N 条**。设计文档：`docs/superpowers/specs/2026-08-11-workflow-run-hot-cold-split-design.md`；实现已在生产跑通（分支含 `master-0910` 等）。"
+    },
+    {
+      "heading": "可行方案",
+      "body": "**双表 + 按数量归档（选定）**\n\n- **热表**：现有 `WorkflowRun` / `NodeLog` / `CallbackDelivery`；监控默认列表与 Tab 计数只扫热表。\n- **冷表**：`WorkflowRunArchive` / `NodeLogArchive` / `CallbackDeliveryArchive`；主键与热表同 id，详情「先热后冷」。\n- **可归档条件**：排名超出 N（`startedAt DESC, id DESC`）**且**终态（success/failed/aborted…）；pending/running/waiting/retry/warming **永不归档**。\n- **搬迁**：库内 `INSERT…SELECT` 复制大 JSON（不进 Node）→ 校验冷表齐全 → 事务内删热表；失败则拒绝删热。\n- **读写**：写路径只写热表；`findHotOrArchivedRun` / 执行记录页冷表只读列表；OpenAPI 按 id 热优先冷回退。\n\n不采用：时间 RANGE 分区、只删不归档、首期按 workflow 各自 N。"
+    },
+    {
+      "heading": "关键步骤/配置",
+      "body": "### 触发与闸门\n\n1. API Server 启动 `startWorkflowRunArchiveScheduler`（`archive-scheduler.ts`）\n2. Cron 默认 `30 1 * * *`，时区 `Asia/Shanghai`（`WORKFLOW_RUN_ARCHIVE_CRON` / `_TZ`）\n3. 每轮：集群水位（Σmemory/Σlimit）≤ `MAX_WATERMARK_PERCENT`（默认 50）才继续；否则 skip\n4. Redis 锁 `lock:workflow-run:archive`（TTL 1h）内调用 `runArchiveBatches`\n\n### 水线与分批\n\n1. `resolveHotKeepWatermark(keepCount)`：取第 N 新行的 `(startedAt, id)`\n2. 候选：严格老于水线 + 终态，最老优先，`findArchiveCandidateHeaders`\n3. 每批 `BATCH_SIZE`，批间 `BATCH_PAUSE_MS`；单次触发受 `MAX_BATCHES` 与 `MAX_ROWS` 共同限流\n\n### 环境变量（代码默认 → 生产 ConfigMap）\n\n| 变量 | 默认 | 生产（k8s/prod/configmap） |\n|---|---|---|\n| `WORKFLOW_RUN_HOT_KEEP_COUNT` | 50000 | **100000** |\n| `WORKFLOW_RUN_ARCHIVE_ENABLED` | true | true |\n| `WORKFLOW_RUN_ARCHIVE_CRON` | `30 1 * * *` | 同 |\n| `WORKFLOW_RUN_ARCHIVE_TZ` | Asia/Shanghai | 同 |\n| `WORKFLOW_RUN_ARCHIVE_MAX_WATERMARK_PERCENT` | 50 | 50 |\n| `WORKFLOW_RUN_ARCHIVE_BATCH_SIZE` | 500（上限 2000） | **2000** |\n| `WORKFLOW_RUN_ARCHIVE_MAX_BATCHES` | 10（上限 50） | **25** |\n| `WORKFLOW_RUN_ARCHIVE_MAX_ROWS` | 2000（上限 5 万） | **50000** |\n| `WORKFLOW_RUN_ARCHIVE_BATCH_PAUSE_MS` | 100 | （默认） |\n\n测试环境热表 N=100，便于立刻验证。\n\n### 核心代码路径\n\n- `packages/orchestrator/src/runs/hot-keep-count.ts` — 配置读取\n- `archive-scheduler.ts` / `archive-workflow-runs.ts` / `archive-mapping.ts` / `archive-sql.ts`\n- `runs/run-store.ts` — 热冷统一查找\n- `server.ts` — 挂载 nightly cron"
+    },
+    {
+      "heading": "坑与验证",
+      "body": "- **非终态保护**：溢出若全是飞行中任务，本轮可搬 0 条；热表实际行数可能略大于 N。\n- **锁表担忧**：InnoDB 行锁，按 `id IN (...)` 分批；不是 `LOCK TABLES`。增大 N 通常**减少**归档量；更需关注热表变大后列表/`OFFSET` 取水线的读性能。\n- **事务**：单批 INSERT+校验+DELETE，超时 60s；冷拷不齐则拒绝删热，避免丢历史。\n- **水位闸门**：无 Worker / 水位未知 / 超 50% → skip，避免高峰搬迁。\n- **schema**：冷表用 `prisma migrate`，禁止 `db push`。\n- **验证**：测环境把 `HOT_KEEP_COUNT` 调到很小；看日志 `[ArchiveWorkflowRuns] archived terminal runs`；详情用旧 runId 确认热未命中走冷表；监控默认列表行数贴近 N。"
+    }
+  ]
+}
