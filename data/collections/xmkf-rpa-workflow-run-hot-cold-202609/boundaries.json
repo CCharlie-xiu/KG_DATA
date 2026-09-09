@@ -17,6 +17,12 @@
           "timing": "realtime"
         },
         {
+          "channel": "近 MIN_AGE_DAYS 天（默认 7）",
+          "afterComplete": "即使超出 N 也不归档",
+          "afterDue": "满龄后才可成候选",
+          "timing": "realtime"
+        },
+        {
           "channel": "非终态（pending/running/waiting/…）",
           "afterComplete": "即使超出 N 也不归档",
           "afterDue": "—",
@@ -33,11 +39,11 @@
     {
       "id": "archive",
       "title": "可归档（迁入冷表）",
-      "note": "严格老于水线 + 终态；最老优先",
+      "note": "老于水线 + 终态 + startedAt 早于「今天−MIN_AGE」；最老优先",
       "rows": [
         {
           "channel": "success / failed / aborted",
-          "afterComplete": "排名超出 N 后成为候选",
+          "afterComplete": "排名超出 N 且已满龄",
           "afterDue": "INSERT Archive → 删热表",
           "timing": "delayed"
         },

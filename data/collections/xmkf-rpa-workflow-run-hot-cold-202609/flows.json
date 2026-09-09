@@ -8,7 +8,8 @@
         { "when": "cron tick", "action": "maybeRunWorkflowRunArchive", "note": "先过水位闸门" },
         { "when": "抢锁", "action": "lock:workflow-run:archive", "note": "TTL 1h；未抢到则 skip" },
         { "when": "水线", "action": "resolveHotKeepWatermark(N)", "note": "第 N 新行的 (startedAt, id)" },
-        { "when": "分批", "action": "findArchiveCandidateHeaders", "note": "终态 + 老于水线；take=BATCH_SIZE" },
+        { "when": "年龄门槛", "action": "resolveArchiveMinStartedAt(MIN_AGE)", "note": "默认 7 天；+8h 对齐 DB" },
+        { "when": "分批", "action": "findArchiveCandidateHeaders", "note": "终态 + 老于水线 + 满龄；take=BATCH_SIZE" },
         { "when": "搬迁", "action": "INSERT SELECT + deleteMany", "note": "Run/Log/Delivery；批间 PAUSE_MS" },
         { "when": "限流", "action": "MAX_BATCHES ∩ MAX_ROWS", "note": "生产约 25×2000 ≤ 5 万/晚" }
       ]
@@ -32,6 +33,7 @@
       "steps": [
         { "when": "冷拷不齐", "action": "抛错拒绝删热", "note": "事务回滚" },
         { "when": "非终态溢出", "action": "本轮可 archived=0", "note": "热表可略大于 N" },
+        { "when": "近 MIN_AGE 天", "action": "不进候选", "note": "与数量水线 AND；尖峰热表可 > N" },
         { "when": "schema 变更", "action": "prisma migrate", "note": "禁止 db push" }
       ]
     }

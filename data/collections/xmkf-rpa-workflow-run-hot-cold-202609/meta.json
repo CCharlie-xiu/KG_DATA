@@ -2,21 +2,21 @@
   "id": "xmkf-rpa-workflow-run-hot-cold-202609",
   "title": "WorkflowRun 冷热表拆分",
   "kicker": "RPA · Orchestrator · 执行监控",
-  "summary": "热表按数量保留最新 N 条；超出且终态迁入 Archive。监控默认只扫热表，详情/OpenAPI 先热后冷。API Server 每晚归档，不挂 Worker。",
+  "summary": "热表按数量保留最新 N 条，且近 M 天（默认 7）不进冷表；超出且终态才迁入 Archive。监控默认只扫热表，详情/OpenAPI 先热后冷。API Server 每晚归档。",
   "sourceProject": "D:\\重要不可删除\\RPA应用平台\\xmkf-rpa-platform\\xmkf-rpa-platform",
   "notes": [
-    "冷热边界按数量，不按天数：N = WORKFLOW_RUN_HOT_KEEP_COUNT（生产 10 万）。",
-    "可归档 = 排名超出 N + 终态；pending/running/waiting/retry/warming 永不进冷表。",
+    "数量水线：N = WORKFLOW_RUN_HOT_KEEP_COUNT（生产 10 万）。",
+    "时间门槛：WORKFLOW_RUN_ARCHIVE_MIN_AGE_DAYS（默认 7）；近 N 天 startedAt 不进冷表，与水线 AND；0=关闭。",
+    "可归档 = 排名超出 N + 终态 + 早于「今天−MIN_AGE」；pending/running/waiting/retry/warming 永不进冷表。",
     "搬迁：库内 INSERT…SELECT（Run + NodeLog + CallbackDelivery）→ 校验齐全 → 再删热表。",
     "触发：API Server cron 默认 01:30 Asia/Shanghai；Redis 锁 lock:workflow-run:archive。",
-    "闸门：集群内存水位（Σmemory/Σlimit）> 50% 则本轮 skip；无 Worker / 水位未知亦 skip。",
-    "生产每晚上限约 5 万条（2000/批 × 25 批）；热表变大主要影响读性能，非表级锁。"
+    "闸门：集群内存水位 > 50% skip；近 7 天保护会使热表在尖峰期可能略大于 N。"
   ],
   "stats": {
-    "boundaries": 9,
-    "newFields": 6,
+    "boundaries": 10,
+    "newFields": 7,
     "modules": 10,
-    "testCases": 4
+    "testCases": 8
   },
   "tabs": [
     { "id": "boundaries", "label": "冷热边界" },

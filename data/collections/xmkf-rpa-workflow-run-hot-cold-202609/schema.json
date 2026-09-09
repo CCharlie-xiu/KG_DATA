@@ -7,6 +7,12 @@
       "desc": "热表保留最新 N 条；生产 100000，测试 100，代码默认 50000"
     },
     {
+      "name": "WORKFLOW_RUN_ARCHIVE_MIN_AGE_DAYS",
+      "type": "env Int",
+      "model": "ConfigMap / .env",
+      "desc": "近 N 天（startedAt）不进冷表；默认 7；0=关闭；WHERE 含 DB +8h"
+    },
+    {
       "name": "WORKFLOW_RUN_ARCHIVE_CRON",
       "type": "env cron",
       "model": "ConfigMap / .env",
@@ -48,14 +54,15 @@
     "WORKFLOW_RUN_ARCHIVE_BATCH_SIZE": "2000",
     "WORKFLOW_RUN_ARCHIVE_MAX_BATCHES": "25",
     "WORKFLOW_RUN_ARCHIVE_MAX_ROWS": "50000",
+    "WORKFLOW_RUN_ARCHIVE_MIN_AGE_DAYS": "7",
     "WORKFLOW_RUN_ARCHIVE_BATCH_PAUSE_MS": "100"
   },
   "requestOverride": {
     "field": "k8s/prod/configmap.yaml",
     "rules": [
-      "热表 N 与每晚搬迁上限独立：增大 N 通常减少当晚归档量",
-      "BATCH_SIZE 上限代码钳制为 2000；MAX_ROWS 上限 50000",
-      "水位与看板「集群整体水位线」同口径：Σ memoryMb / Σ memoryLimitMb"
+      "可归档 = 超出 N ∧ 终态 ∧ startedAt < now−MIN_AGE（+8h）",
+      "近 7 天保护会使尖峰期热表略大于 N——预期取舍",
+      "BATCH_SIZE 上限 2000；MAX_ROWS 上限 50000；MIN_AGE 上限 365"
     ]
   },
   "sectionTitles": {
