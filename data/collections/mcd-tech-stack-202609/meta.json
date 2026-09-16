@@ -1,0 +1,28 @@
+{
+  "id": "mcd-tech-stack-202609",
+  "title": "移动端日历导演台 · 技术栈与工程约定",
+  "status": "published",
+  "sourceProject": "D:\\重要不可删除\\移动端设备",
+  "notes": [
+    "主栈：React Native + Expo（不选 Flutter / 裸 RN）。",
+    "后续架构、开发过程、踩坑在验证后按 kg-ingest 续写或新建条目。"
+  ],
+  "sections": [
+    {
+      "heading": "背景",
+      "body": "产品为移动端「日历导演台」。仓库已落在 `D:\\重要不可删除\\移动端设备`，GitHub 私有仓 `CCharlie-xiu/mobile-calendar-director`。选型参考会话 `013715ee-a059-4e77-8cdd-f588bafbb0fb`（Expo vs 裸 RN vs Flutter），并结合本机建仓与推送验证。"
+    },
+    {
+      "heading": "可行方案（当前技术栈）",
+      "body": "## 客户端\n- **React Native + Expo**（主方案）\n- **TypeScript**\n- **Expo Router**（文件路由）\n- 需要原生能力时：**Expo Dev Client + prebuild / Config Plugins**（不默认裸 RN）\n- 构建与热更新：**EAS Build / Submit / Update**\n\n## 明确不优先\n- **Flutter**：与现有 JS/TS 生态割裂，除非独立 Dart 团队\n- **裸 React Native**：短期自由度用不上，证书/依赖/OTA 成本更高\n\n## 工程与协作\n| 项 | 约定 |\n|----|------|\n| 本机路径 | `D:\\\\重要不可删除\\\\移动端设备` |\n| GitHub | https://github.com/CCharlie-xiu/mobile-calendar-director（private） |\n| 默认分支工作 | `dev`；`main` 为稳定基线 |\n| remote | SSH：`git@github.com:CCharlie-xiu/mobile-calendar-director.git` |\n| 操作记录 | 仓库内 `docs/ops-log.md` |\n| 知识归档 | 验证后回填 `KG_DATA`（本条目为栈与工程总览） |"
+    },
+    {
+      "heading": "关键步骤",
+      "body": "1. 工作目录切到 `移动端设备`，分支 `dev`\n2. 后续用 `create-expo-app` + TypeScript + Expo Router 搭骨架（尚未执行，属下一步）\n3. 安装 Expo 官方 skills（可参考 `海外短剧` 仓库已装的 26 个 skills；本仓按需同步）\n4. 原生能力（推送/日历权限等）走 Dev Client，勿依赖仅 Expo Go\n5. 已验证方案用 Skill `kg-ingest` 写入本库；半成品与密钥不入库"
+    },
+    {
+      "heading": "坑与验证",
+      "body": "- **已验证**：本机访问 `github.com:443` HTTPS 不稳定；`git push` 需用 SSH（已改 remote 并成功推送 `main`/`dev`）\n- **已验证**：`gh repo create` 可建仓；推送失败时仓已存在，改 SSH 后补推即可\n- **待验证**：Expo 脚手架、日历相关原生模块、导演台信息架构与 UI——跑通后再分别入库（architecture / design / ui-kit / breakthrough）\n- 承接会话曾因 User aborted 中断建仓；续做后基建已完整"
+    }
+  ]
+}
