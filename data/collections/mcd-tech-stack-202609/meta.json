@@ -18,11 +18,11 @@
     },
     {
       "heading": "关键步骤",
-      "body": "1. 工作目录切到 `移动端设备`，分支 `dev`\n2. 后续用 `create-expo-app` + TypeScript + Expo Router 搭骨架（尚未执行，属下一步）\n3. 安装 Expo 官方 skills（可参考 `海外短剧` 仓库已装的 26 个 skills；本仓按需同步）\n4. 原生能力（推送/日历权限等）走 Dev Client，勿依赖仅 Expo Go\n5. 已验证方案用 Skill `kg-ingest` 写入本库；半成品与密钥不入库"
+      "body": "1. 工作目录切到 `移动端设备`，分支 `dev`\n2. ~~脚手架~~ **已完成**：`create-expo-app` tabs 模板（Expo SDK ~57）提到仓库根目录\n3. 底部 Tab：**导演台** `app/(tabs)/index.tsx` · **个人** `app/(tabs)/profile.tsx`\n4. 本地启动：`npm start`（Expo Go）或 `npm run web` → `http://localhost:8081`\n5. 原生能力（推送/日历权限等）走 Dev Client，勿依赖仅 Expo Go\n6. 已验证方案用 Skill `kg-ingest` 写入本库；半成品与密钥不入库"
     },
     {
       "heading": "坑与验证",
-      "body": "- **已验证**：本机访问 `github.com:443` HTTPS 不稳定；`git push` 需用 SSH（已改 remote 并成功推送 `main`/`dev`）\n- **已验证**：`gh repo create` 可建仓；推送失败时仓已存在，改 SSH 后补推即可\n- **待验证**：Expo 脚手架、日历相关原生模块、导演台信息架构与 UI——跑通后再分别入库（architecture / design / ui-kit / breakthrough）\n- 承接会话曾因 User aborted 中断建仓；续做后基建已完整"
+      "body": "- **已验证**：本机访问 `github.com:443` HTTPS 不稳定；`git push` 需用 SSH\n- **已验证**：`gh repo create` + SSH 推送 `main`/`dev`\n- **已验证**：Expo 脚手架可跑；Web bundle 成功；`tsc --noEmit` 通过；底部双 Tab 可切换\n- **坑**：中文目录名不能直接作为 `create-expo-app` 项目名 → 先用英文子目录再提到根目录\n- **待做**：日历导演台业务 UI、权限与数据层"
     }
   ]
 }

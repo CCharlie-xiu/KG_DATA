@@ -116,13 +116,12 @@
       "category": "ops",
       "status": "published",
       "featured": true,
-      "summary": "日历导演台主栈为 React Native + Expo（TS / Expo Router / EAS）；不优先 Flutter 与裸 RN。含仓库、分支与 SSH 推送约定。",
-      "tags": ["Expo", "React Native", "日历导演台", "移动端", "EAS"],
       "updated": "2026-09-16",
       "viewer": "article",
       "entry": "meta.json",
       "section": "architecture",
-      "cover": "covers/kg-default.jpg"
-    }
+      "cover": "covers/kg-default.jpg",
+      "summary": "日历导演台主栈 Expo SDK 57 + Router；已跑通底部 Tab（导演台/个人）。含仓库、分支与 SSH 推送约定。",
+
   ]
 }
