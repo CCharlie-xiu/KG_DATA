@@ -5,24 +5,24 @@
   "sourceProject": "D:\\重要不可删除\\移动端设备",
   "notes": [
     "主栈：React Native + Expo（不选 Flutter / 裸 RN）。",
-    "能力矩阵、模块边界、Xcode(Swift)/Android(Kotlin) 搭配见 breakthrough：mcd-arch-native-capability-202609。"
+    "完整能力与 Xcode(Swift) / Android(Kotlin) 搭配见 `#/c/mcd-arch-native-capability-202609`。"
   ],
   "sections": [
     {
       "heading": "背景",
-      "body": "产品为移动端「日历导演台」。仓库已落在 `D:\\\\重要不可删除\\\\移动端设备`，GitHub 私有仓 `CCharlie-xiu/mobile-calendar-director`。选型参考早期会话（Expo vs 裸 RN vs Flutter）。后续完整架构与原生编辑搭配已归档到 `#/c/mcd-arch-native-capability-202609`。"
+      "body": "产品为移动端「日历导演台」。仓库落在 `D:\\重要不可删除\\移动端设备`，GitHub 私有仓 `CCharlie-xiu/mobile-calendar-director`。选型对比过 Expo、裸 RN、Flutter；结论是 Expo SDK 57 + Router。"
     },
     {
-      "heading": "可行方案（当前技术栈）",
-      "body": "## 客户端\n- **React Native + Expo SDK 57**（主方案）\n- **TypeScript** + **Expo Router**（文件路由）\n- 需要原生能力时：**Dev Client + prebuild / Config Plugins**（CNG；不默认裸 RN）\n- 原生编辑语言搭配：**Xcode → Swift**，**Android Studio → Kotlin**\n- 构建与热更新：**EAS Build / Submit / Update**\n\n## 明确不优先\n- **Flutter**：与现有 JS/TS 生态割裂\n- **裸 React Native**：证书/依赖/OTA 与升级成本更高；优先 CNG\n\n## 工程与协作\n| 项 | 约定 |\n|----|------|\n| 本机路径 | `D:\\\\重要不可删除\\\\移动端设备` |\n| GitHub | https://github.com/CCharlie-xiu/mobile-calendar-director（private） |\n| 默认分支工作 | `dev`；`main` 为稳定基线 |\n| remote | SSH：`git@github.com:CCharlie-xiu/mobile-calendar-director.git` |\n| 操作记录 | 仓库内 `docs/ops-log.md` |\n| 知识归档 | 验证后回填 `KG_DATA` |"
+      "heading": "可行方案",
+      "body": "客户端主栈：\n- React Native + Expo SDK 57\n- TypeScript + Expo Router（文件路由）\n- 原生能力：Dev Client + prebuild / Config Plugins（CNG，不默认裸 RN）\n- 原生编辑：Xcode → Swift；Android Studio → Kotlin\n- 发布：EAS Build / Submit / Update\n\n明确不优先：\n- Flutter（与现有 JS/TS 生态割裂）\n- 裸 React Native（证书、依赖、OTA、升级成本更高）\n\n工程约定：\n- 本机路径：`D:\\重要不可删除\\移动端设备`\n- GitHub：https://github.com/CCharlie-xiu/mobile-calendar-director（private）\n- 分支：`dev` 日常；`main` 稳定基线\n- remote：SSH `git@github.com:CCharlie-xiu/mobile-calendar-director.git`\n- 操作记录：仓库 `docs/ops-log.md`\n- 知识归档：验证后回填 KG_DATA"
     },
     {
       "heading": "关键步骤",
-      "body": "1. 工作目录切到 `移动端设备`，分支 `dev`\n2. 本地：`npm start`（Expo Go）或 `npm run web`\n3. 原生工程：`npx expo prebuild` 后分别用 Xcode / Android Studio\n4. 深度原生能力走 Dev Client，勿依赖仅 Expo Go\n5. 已验证方案用 Skill `kg-ingest` 写入本库；半成品与密钥不入库"
+      "body": "- 工作目录切到 `移动端设备`，分支 `dev`\n- 本地：`npm start`（Expo Go）或 `npm run web`\n- 原生工程：`npx expo prebuild` 后分别用 Xcode / Android Studio\n- 深度原生能力走 Dev Client，勿依赖仅 Expo Go\n- 已验证方案用 Skill `kg-ingest` 写入本库；半成品与密钥不入库"
     },
     {
       "heading": "坑与验证",
-      "body": "- **已验证**：本机 `github.com:443` HTTPS 不稳定；`git push` 需用 SSH\n- **已验证**：Expo 脚手架可跑；SSH 推送 `main`/`dev`\n- **坑**：中文目录名不能直接作为 `create-expo-app` 项目名\n- **更新**：产品已扩展为导演台/目标/搜索/加号等完整能力 — 详见 `mcd-arch-native-capability-202609`"
+      "body": "- 已验证：本机 `github.com:443` HTTPS 不稳定，`git push` 需用 SSH\n- 已验证：Expo 脚手架可跑；SSH 推送 `main` / `dev`\n- 坑：中文目录名不能直接作为 `create-expo-app` 项目名\n- 更新：产品已扩到导演台 / 目标 / 搜索 / 加号等能力，详见 `mcd-arch-native-capability-202609`"
     }
   ]
 }
