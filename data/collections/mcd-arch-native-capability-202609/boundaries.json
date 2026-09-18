@@ -1,0 +1,127 @@
+{
+  "lookLegend": [
+    { "id": "realtime", "label": "日常" },
+    { "id": "delayed", "label": "下钻" },
+    { "id": "waiting", "label": "云端" }
+  ],
+  "groups": [
+    {
+      "id": "ai",
+      "title": "AI Agent 层",
+      "note": "Cursor / Claude Code / Codex",
+      "rows": [
+        {
+          "channel": "AGENTS.md",
+          "afterComplete": "会话启动读项目约定",
+          "afterDue": "钉死 SDK 版本文档 URL",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo Skills",
+          "afterComplete": "注入已知好路径",
+          "afterDue": "升级 / Workflow / 原生 UI 范式",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo MCP (remote)",
+          "afterComplete": "文档 · install · EAS 工具",
+          "afterDue": "OAuth 登录 Expo 账号",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo MCP (local)",
+          "afterComplete": "截图 / 点击 / DevTools / sitemap",
+          "afterDue": "需 Dev Server + expo-mcp",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "js",
+      "title": "React / Expo 业务层",
+      "note": "TypeScript 主开发面",
+      "rows": [
+        {
+          "channel": "React + React Native",
+          "afterComplete": "组件与宿主视图",
+          "afterDue": "版本随 SDK 锁定",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo Router",
+          "afterComplete": "文件路由 / 多平台壳",
+          "afterDue": "*.web.tsx 分流",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo SDK modules",
+          "afterComplete": "权限与系统能力",
+          "afterDue": "app.json plugins 声明",
+          "timing": "realtime"
+        },
+        {
+          "channel": "@expo/ui + expo-symbols",
+          "afterComplete": "SwiftUI Host / SF+MD 图标",
+          "afterDue": "双端资源名成对",
+          "timing": "realtime"
+        },
+        {
+          "channel": "app.json + Config Plugins",
+          "afterComplete": "原生配置真源",
+          "afterDue": "prebuild 消费",
+          "timing": "realtime"
+        }
+      ]
+    },
+    {
+      "id": "native",
+      "title": "原生 IDE 层",
+      "note": "短命生成工程",
+      "rows": [
+        {
+          "channel": "prebuild → ios/",
+          "afterComplete": "生成 Xcode 工程",
+          "afterDue": "Swift 改 Capability / UI / Module",
+          "timing": "delayed"
+        },
+        {
+          "channel": "prebuild → android/",
+          "afterComplete": "生成 Gradle 工程",
+          "afterDue": "Kotlin 改 Manifest / Module",
+          "timing": "delayed"
+        },
+        {
+          "channel": "expo run:ios | run:android",
+          "afterComplete": "本机编译 + 装包 + Metro",
+          "afterDue": "加原生库或改 plugin 后重跑",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "cloud",
+      "title": "云构建与分发",
+      "note": "EAS",
+      "rows": [
+        {
+          "channel": "EAS Build",
+          "afterComplete": "云端出二进制",
+          "afterDue": "无原生目录则自动 prebuild",
+          "timing": "waiting"
+        },
+        {
+          "channel": "EAS Submit",
+          "afterComplete": "提交 App Store / Play",
+          "afterDue": "依赖已完成 Build",
+          "timing": "waiting"
+        },
+        {
+          "channel": "EAS Update",
+          "afterComplete": "JS Bundle OTA",
+          "afterDue": "原生变更不可只靠 Update",
+          "timing": "waiting"
+        }
+      ]
+    }
+  ]
+}

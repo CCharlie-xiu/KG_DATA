@@ -1,0 +1,112 @@
+{
+  "groups": [
+    {
+      "id": "ai-loop",
+      "title": "AI 编码环",
+      "note": "改 API 前先查文档",
+      "steps": [
+        {
+          "when": "session start",
+          "action": "读 AGENTS.md + package.json SDK",
+          "note": "三方版本必须一致"
+        },
+        {
+          "when": "unknown API",
+          "action": "MCP search_documentation → read_documentation",
+          "note": "禁止凭训练数据猜旧接口"
+        },
+        {
+          "when": "add package",
+          "action": "MCP add_library 或 expo install",
+          "note": "自动对齐 SDK"
+        },
+        {
+          "when": "verify UI (optional)",
+          "action": "local MCP screenshot / tap",
+          "note": "需 Dev Server + expo-mcp"
+        }
+      ]
+    },
+    {
+      "id": "js-loop",
+      "title": "TS / React 日常环",
+      "note": "不触原生配置时",
+      "steps": [
+        {
+          "when": "edit TS/TSX",
+          "action": "保存 → Metro 热更新",
+          "note": "expo start 已运行"
+        },
+        {
+          "when": "routes",
+          "action": "改 app/ 文件路由",
+          "note": "可用 expo_router_sitemap 核对"
+        },
+        {
+          "when": "permissions copy",
+          "action": "改 app.json plugins 文案",
+          "note": "下次原生编译生效"
+        }
+      ]
+    },
+    {
+      "id": "native-loop",
+      "title": "原生下钻环",
+      "note": "Xcode / Android Studio",
+      "steps": [
+        {
+          "when": "need binary",
+          "action": "expo run:ios | run:android",
+          "note": "缺目录则先 prebuild"
+        },
+        {
+          "when": "iOS deep work",
+          "action": "Xcode 打开 *.xcworkspace · Swift",
+          "note": "Capability / SwiftUI / Module"
+        },
+        {
+          "when": "Android deep work",
+          "action": "Android Studio 打开 android/ · Kotlin",
+          "note": "Gradle / Manifest / Module"
+        },
+        {
+          "when": "persist change",
+          "action": "抽 Config Plugin 或 Expo Module",
+          "note": "再 prebuild --clean 回归"
+        },
+        {
+          "when": "beyond Go",
+          "action": "Development Build (expo-dev-client)",
+          "note": "自定义原生不可用 Expo Go"
+        }
+      ]
+    },
+    {
+      "id": "ship-loop",
+      "title": "发布环",
+      "note": "EAS",
+      "steps": [
+        {
+          "when": "PR / release binary",
+          "action": "eas build",
+          "note": "MCP build_run / build_logs 可查"
+        },
+        {
+          "when": "store",
+          "action": "eas submit",
+          "note": "iOS App Store / Android Play"
+        },
+        {
+          "when": "js hotfix",
+          "action": "eas update",
+          "note": "原生变更禁止只 Update"
+        },
+        {
+          "when": "ci workflow",
+          "action": "MCP workflow_create + validate + run",
+          "note": ".eas/workflows/"
+        }
+      ]
+    }
+  ]
+}

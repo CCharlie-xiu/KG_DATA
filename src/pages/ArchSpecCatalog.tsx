@@ -13,6 +13,18 @@ import hotColdSchema from "../../data/collections/xmkf-rpa-workflow-run-hot-cold
 import hotColdFlows from "../../data/collections/xmkf-rpa-workflow-run-hot-cold-202609/flows.json";
 import hotColdImpl from "../../data/collections/xmkf-rpa-workflow-run-hot-cold-202609/implementation.json";
 
+import mcdStackMeta from "../../data/collections/mcd-tech-stack-202609/meta.json";
+import mcdStackBoundaries from "../../data/collections/mcd-tech-stack-202609/boundaries.json";
+import mcdStackSchema from "../../data/collections/mcd-tech-stack-202609/schema.json";
+import mcdStackFlows from "../../data/collections/mcd-tech-stack-202609/flows.json";
+import mcdStackImpl from "../../data/collections/mcd-tech-stack-202609/implementation.json";
+
+import mcdArchMeta from "../../data/collections/mcd-arch-native-capability-202609/meta.json";
+import mcdArchBoundaries from "../../data/collections/mcd-arch-native-capability-202609/boundaries.json";
+import mcdArchSchema from "../../data/collections/mcd-arch-native-capability-202609/schema.json";
+import mcdArchFlows from "../../data/collections/mcd-arch-native-capability-202609/flows.json";
+import mcdArchImpl from "../../data/collections/mcd-arch-native-capability-202609/implementation.json";
+
 import ArchBoundariesBoard from "./arch/ArchBoundariesBoard";
 import ArchSchemaBoard from "./arch/ArchSchemaBoard";
 import ArchFlowsBoard from "./arch/ArchFlowsBoard";
@@ -66,6 +78,20 @@ const SPECS: Record<string, ArchSpecBundle> = {
     schema: hotColdSchema,
     flows: hotColdFlows,
     impl: hotColdImpl,
+  },
+  "mcd-tech-stack-202609": {
+    meta: mcdStackMeta as ArchSpecBundle["meta"],
+    boundaries: mcdStackBoundaries,
+    schema: mcdStackSchema,
+    flows: mcdStackFlows,
+    impl: mcdStackImpl,
+  },
+  "mcd-arch-native-capability-202609": {
+    meta: mcdArchMeta as ArchSpecBundle["meta"],
+    boundaries: mcdArchBoundaries,
+    schema: mcdArchSchema,
+    flows: mcdArchFlows,
+    impl: mcdArchImpl,
   },
 };
 

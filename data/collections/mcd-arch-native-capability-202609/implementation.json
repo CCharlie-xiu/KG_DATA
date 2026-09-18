@@ -1,0 +1,18 @@
+{
+  "modules": [
+    { "area": "ai", "path": "AGENTS.md", "change": "SDK 文档钉死", "type": "edit" },
+    { "area": "ai", "path": "Expo MCP remote", "change": "docs / install / EAS tools", "type": "edit" },
+    { "area": "ai", "path": "npx expo install expo-mcp --dev", "change": "本机截图与自动化", "type": "new" },
+    { "area": "ai", "path": "EXPO_UNSTABLE_MCP_SERVER=1 npx expo start", "change": "启用 Local MCP", "type": "edit" },
+    { "area": "js", "path": "npx expo start", "change": "日常 Metro", "type": "edit" },
+    { "area": "js", "path": "npx expo install <pkg>", "change": "对齐 SDK 装包", "type": "edit" },
+    { "area": "config", "path": "app.json plugins[]", "change": "原生配置真源", "type": "edit" },
+    { "area": "native", "path": "npx expo prebuild --clean", "change": "重生 ios/android", "type": "edit" },
+    { "area": "native", "path": "npx expo run:ios", "change": "Xcode 工具链编译", "type": "edit" },
+    { "area": "native", "path": "npx expo run:android", "change": "Android SDK 编译", "type": "edit" },
+    { "area": "native", "path": "Xcode *.xcworkspace + Swift", "change": "iOS 深度编辑", "type": "edit" },
+    { "area": "native", "path": "Android Studio + Kotlin", "change": "Android 深度编辑", "type": "edit" },
+    { "area": "cloud", "path": "eas build | submit | update", "change": "二进制 / 上架 / OTA", "type": "edit" },
+    { "area": "cloud", "path": "eas.json / .eas/workflows", "change": "配置与 CI", "type": "new" }
+  ]
+}

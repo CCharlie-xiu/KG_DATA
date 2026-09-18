@@ -1,28 +1,25 @@
 {
   "id": "mcd-tech-stack-202609",
   "title": "Expo 移动全站技术栈选型与分层",
-  "status": "published",
+  "kicker": "Expo · React · React Native · CNG · EAS · AI",
+  "summary": "主栈钉死 React + React Native + Expo SDK 57 + TypeScript；原生走 CNG（prebuild）下钻 Xcode/Swift 与 Android Studio/Kotlin；AI 用 AGENTS.md + Skills + MCP。不含业务产品口径。",
   "sourceProject": "D:\\重要不可删除\\移动端设备",
   "notes": [
-    "主栈：React + React Native + Expo（不选 Flutter / 裸 RN）。",
-    "全站协作细节（AI / Xcode / Android Studio / EAS）见 `#/c/mcd-arch-native-capability-202609`。"
+    "文档入口固定 SDK 版本文档：https://docs.expo.dev/versions/v57.0.0/",
+    "装包一律 npx expo install，禁止随意 npm 拉飞原生相关版本。",
+    "ios/ android/ 默认不进主干；定制回填 Config Plugin / Expo Module。",
+    "协作全路线（换层时机、命令、MCP）见同风格条目 mcd-arch-native-capability-202609。"
   ],
-  "sections": [
-    {
-      "heading": "背景",
-      "body": "跨端移动应用需要同时覆盖：TypeScript/React 业务层、iOS/Android 原生编译层、云构建与 OTA、以及 AI 辅助研发。目标是选定一条可升级、可原生下钻、可被 Agent 正确驱动的技术主线，而不是按框架偏好分散选型。"
-    },
-    {
-      "heading": "可行方案",
-      "body": "选定主栈（钉死版本族）：\n- UI 运行时：React 19.x + React Native 0.86.x\n- 应用框架：Expo SDK 57（包版本与 RN/React 由 `npx expo install` 对齐）\n- 语言：TypeScript\n- 路由：Expo Router（文件路由；Web / iOS / Android 同源）\n- 原生工程策略：Continuous Native Generation（CNG）= `app.json` / Config Plugins + `npx expo prebuild`，不默认长期维护手改裸工程\n- 构建发布：EAS Build / Submit / Update\n- AI 研发面：Cursor（或 Claude Code / Codex）+ Expo Skills + Expo MCP + 根目录 `AGENTS.md`\n\n明确不优先：\n- Flutter / Dart（与 TS/React 生态、Agent 文档面割裂）\n- 手维裸 React Native（升级、证书、OTA、插件副作用成本更高；需要原生时仍用 Expo Modules / prebuild 下钻）\n\n分层职责（谁写什么语言）：\n- 业务与界面：TypeScript + React（组件、状态、路由、样式）\n- 跨端原生能力：Expo SDK / 社区原生模块（Autolinking）\n- iOS 深度定制：Swift（优先）在 Xcode；UIKit / SwiftUI / Capability / Entitlement\n- Android 深度定制：Kotlin（优先）在 Android Studio；Gradle / Manifest / Compose 或 View\n- 配置真源：`app.json` / `app.config.*` + Config Plugins（禁止把一次性手改当长期源）\n- AI：只改 TS/配置为主；查版本文档走 Expo MCP；触发原生重生与 EAS 走 CLI / MCP 工具\n\nSDK 57 平台底线（官方表）：\n- iOS 16.4+，配套较新 Xcode\n- Android `compileSdk` / `targetSdk` 36\n- 文档入口：https://docs.expo.dev/versions/v57.0.0/"
-    },
-    {
-      "heading": "关键步骤",
-      "body": "- 用 `npx create-expo-app@latest` 或把现有仓升到目标 SDK；依赖一律 `npx expo install <pkg>`\n- 根目录提交 `AGENTS.md`（必要时 `CLAUDE.md` → `@AGENTS.md`），写明「写代码前读对应 SDK 版本文档」\n- 接入 Expo MCP（`https://mcp.expo.dev/mcp`）与 Expo Skills，再开 Cursor Agent\n- 日常只改 JS/TS：`npx expo start`（Expo Go 或已装 Dev Client）\n- 需要原生二进制：`npx expo run:ios` / `run:android`（内部 prebuild + 调 Xcode / Android SDK）\n- 发版：`eas build` → `eas submit`；热更新用 EAS Update"
-    },
-    {
-      "heading": "坑与验证",
-      "body": "- 验证：Agent 能读出 `package.json` 中的 Expo SDK 版本，且 MCP `read_documentation` / `search_documentation` 指向同主版本\n- 验证：`expo install` 装的包与 SDK 匹配，无随意 `npm install` 拉飞版本\n- 坑：手改 `ios/` / `android/` 后 `prebuild --clean` 会丢改动 → 必须回填 Config Plugin 或 Expo Module\n- 坑：Expo Go 不含任意自定义原生代码；越界能力必须 Development Build\n- 对照：协作全路线与工具边界见 `mcd-arch-native-capability-202609`"
-    }
+  "stats": {
+    "boundaries": 12,
+    "newFields": 10,
+    "modules": 9,
+    "testCases": 12
+  },
+  "tabs": [
+    { "id": "boundaries", "label": "选型边界" },
+    { "id": "schema", "label": "版本模型" },
+    { "id": "flows", "label": "接入流程" },
+    { "id": "impl", "label": "工程清单" }
   ]
 }

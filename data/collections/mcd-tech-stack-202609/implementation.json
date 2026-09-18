@@ -1,0 +1,13 @@
+{
+  "modules": [
+    { "area": "docs", "path": "AGENTS.md", "change": "钉死 SDK 版本文档入口", "type": "new" },
+    { "area": "docs", "path": "CLAUDE.md", "change": "@AGENTS.md（Claude Code）", "type": "new" },
+    { "area": "config", "path": "app.json / app.config.*", "change": "应用元数据 + plugins 真源", "type": "edit" },
+    { "area": "config", "path": "package.json", "change": "expo / rn / react 版本锁", "type": "edit" },
+    { "area": "ai", "path": "Expo MCP", "change": "文档 · install · EAS 工具", "type": "edit" },
+    { "area": "ai", "path": "Expo Skills", "change": "已知好路径注入 Agent", "type": "edit" },
+    { "area": "native", "path": "ios/ (generated)", "change": "Xcode + Swift 短命工程", "type": "edit" },
+    { "area": "native", "path": "android/ (generated)", "change": "Android Studio + Kotlin 短命工程", "type": "edit" },
+    { "area": "cloud", "path": "eas.json / EAS", "change": "Build · Submit · Update", "type": "edit" }
+  ]
+}

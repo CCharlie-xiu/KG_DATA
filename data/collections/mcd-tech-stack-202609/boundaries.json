@@ -1,0 +1,95 @@
+{
+  "lookLegend": [
+    { "id": "realtime", "label": "采用" },
+    { "id": "delayed", "label": "不优先" },
+    { "id": "waiting", "label": "条件采用" }
+  ],
+  "groups": [
+    {
+      "id": "runtime",
+      "title": "运行时与框架",
+      "note": "业务与 UI 主路径",
+      "rows": [
+        {
+          "channel": "React 19.x",
+          "afterComplete": "组件模型 / 并发特性",
+          "afterDue": "经 React Native 映射宿主视图",
+          "timing": "realtime"
+        },
+        {
+          "channel": "React Native 0.86.x",
+          "afterComplete": "跨端视图与原生桥",
+          "afterDue": "版本由 Expo SDK 锁定",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo SDK 57",
+          "afterComplete": "模块、CLI、模板、文档面",
+          "afterDue": "expo install 对齐依赖",
+          "timing": "realtime"
+        },
+        {
+          "channel": "TypeScript",
+          "afterComplete": "业务与配置类型",
+          "afterDue": "Router typedRoutes 可选",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo Router",
+          "afterComplete": "文件路由 · 多平台壳",
+          "afterDue": "*.web.tsx 分流",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Flutter / Dart",
+          "afterComplete": "独立 UI 运行时",
+          "afterDue": "与 TS/Agent/Expo 文档面割裂",
+          "timing": "delayed"
+        },
+        {
+          "channel": "裸 React Native（长期手维 ios/android）",
+          "afterComplete": "全量原生工程自管",
+          "afterDue": "升级/证书/OTA/插件副作用成本高",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "native",
+      "title": "原生与构建",
+      "note": "何时离开 JS 层",
+      "rows": [
+        {
+          "channel": "CNG + prebuild",
+          "afterComplete": "app.json / plugins 为真源",
+          "afterDue": "生成短命 ios/ android/",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Xcode + Swift",
+          "afterComplete": "Capability / SwiftUI / 签名",
+          "afterDue": "改动回填 Plugin 或 Module",
+          "timing": "waiting"
+        },
+        {
+          "channel": "Android Studio + Kotlin",
+          "afterComplete": "Gradle / Manifest / Compose",
+          "afterDue": "改动回填 Plugin 或 Module",
+          "timing": "waiting"
+        },
+        {
+          "channel": "EAS Build / Submit / Update",
+          "afterComplete": "云编译 · 上架 · JS OTA",
+          "afterDue": "原生变更必须新 Build",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Expo Go 覆盖全部原生能力",
+          "afterComplete": "快速验 JS",
+          "afterDue": "自定义原生 / 部分模块不可用",
+          "timing": "delayed"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "sectionTitles": {
+    "workflow": "AI / 文档面",
+    "run": "运行时 / 原生 / 云",
+    "config": "协作拓扑示例"
+  },
+  "workflowFields": [
+    {
+      "name": "AGENTS.md",
+      "type": "markdown",
+      "model": "repo root",
+      "desc": "Cursor/Codex 项目上下文；指向 SDK 版本文档"
+    },
+    {
+      "name": "CLAUDE.md",
+      "type": "@AGENTS.md",
+      "model": "repo root",
+      "desc": "Claude Code 导入同一约定"
+    },
+    {
+      "name": "Expo Skills",
+      "type": "agent plugin",
+      "model": "machine",
+      "desc": "已知好路径：SDK 升级、EAS Workflow、SwiftUI/Compose"
+    },
+    {
+      "name": "Expo MCP URL",
+      "type": "https://mcp.expo.dev/mcp",
+      "model": "remote MCP",
+      "desc": "search/read docs · add_library · build_* · workflow_*"
+    },
+    {
+      "name": "expo-mcp",
+      "type": "devDependency",
+      "model": "local MCP",
+      "desc": "截图/点击/DevTools；需 EXPO_UNSTABLE_MCP_SERVER=1"
+    },
+    {
+      "name": "docs.expo.dev/versions/v57.0.0",
+      "type": "URL",
+      "model": "source of truth",
+      "desc": "写代码前必对齐的 API 面"
+    }
+  ],
+  "runFields": [
+    {
+      "name": "Metro + expo start",
+      "type": "dev server",
+      "model": "JS runtime",
+      "desc": "日常只改 TS 时不重编原生"
+    },
+    {
+      "name": "Expo Go",
+      "type": "client",
+      "model": "runtime",
+      "desc": "快速验 JS；无自定义原生"
+    },
+    {
+      "name": "expo-dev-client",
+      "type": "Development Build",
+      "model": "runtime",
+      "desc": "完整原生调试面"
+    },
+    {
+      "name": "Xcode + Swift",
+      "type": "IDE + language",
+      "model": "ios/",
+      "desc": "Capability、SwiftUI、签名；改动回填 Plugin"
+    },
+    {
+      "name": "Android Studio + Kotlin",
+      "type": "IDE + language",
+      "model": "android/",
+      "desc": "Gradle、Manifest、Compose；改动回填 Plugin"
+    },
+    {
+      "name": "EAS Build/Submit/Update",
+      "type": "cloud",
+      "model": "distribution",
+      "desc": "二进制、上架、JS OTA"
+    }
+  ],
+  "configExample": {
+    "layers": [
+      "AI: Cursor + Skills + MCP",
+      "App: TypeScript + React + Expo Router",
+      "Config: app.json + Config Plugins",
+      "Native: prebuild → Xcode(Swift) / Android Studio(Kotlin)",
+      "Ship: EAS Build | Submit | Update"
+    ],
+    "icons": { "ios": "sf=", "android": "md=" },
+    "localMcp": "EXPO_UNSTABLE_MCP_SERVER=1 npx expo start"
+  },
+  "requestOverride": {
+    "field": "when to leave JS layer",
+    "rules": [
+      "新增原生库或改 plugins → run:ios/android",
+      "改 Capability / 自定义 Module → 开 Xcode 或 Android Studio",
+      "仅 JS 热修 → eas update",
+      "原生 API 变更 → 必须 eas build"
+    ]
+  }
+}

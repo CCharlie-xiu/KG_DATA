@@ -1,0 +1,85 @@
+{
+  "sectionTitles": {
+    "workflow": "栈钉死（框架层）",
+    "run": "平台与工具层",
+    "config": "AGENTS.md / 文档钉死示例"
+  },
+  "workflowFields": [
+    {
+      "name": "expo",
+      "type": "~57.x",
+      "model": "package.json",
+      "desc": "SDK 主版本；一切文档与 install 对齐此主版本"
+    },
+    {
+      "name": "react",
+      "type": "19.2.x",
+      "model": "package.json",
+      "desc": "与 SDK 57 官方表一致"
+    },
+    {
+      "name": "react-native",
+      "type": "0.86.x",
+      "model": "package.json",
+      "desc": "由 Expo SDK 锁定，勿单独大版本跳跃"
+    },
+    {
+      "name": "expo-router",
+      "type": "~57.x",
+      "model": "package.json",
+      "desc": "文件路由；入口 expo-router/entry"
+    },
+    {
+      "name": "typescript",
+      "type": "dev",
+      "model": "package.json",
+      "desc": "业务与配置语言"
+    }
+  ],
+  "runFields": [
+    {
+      "name": "iOS min",
+      "type": "16.4+",
+      "model": "SDK57 platform",
+      "desc": "配套较新 Xcode；以官方版本表为准"
+    },
+    {
+      "name": "Android compile/targetSdk",
+      "type": "36",
+      "model": "SDK57 platform",
+      "desc": "min API 以官方表为准"
+    },
+    {
+      "name": "AI context",
+      "type": "AGENTS.md",
+      "model": "repo root",
+      "desc": "Cursor/Codex 直读；指向 SDK 版本文档"
+    },
+    {
+      "name": "Expo MCP",
+      "type": "https://mcp.expo.dev/mcp",
+      "model": "Agent tool",
+      "desc": "文档检索、expo install、EAS 工具"
+    },
+    {
+      "name": "Expo Skills",
+      "type": "plugin",
+      "model": "Agent",
+      "desc": "已知好路径：升级、Workflow、SwiftUI/Compose、API Routes"
+    }
+  ],
+  "configExample": {
+    "AGENTS.md": "Read https://docs.expo.dev/versions/v57.0.0/ before writing code.",
+    "install": "npx expo install <pkg>",
+    "reject": ["flutter", "long-lived bare ios/android without CNG"]
+  },
+  "requestOverride": {
+    "field": "SDK bump",
+    "rules": [
+      "先升 expo 主版本",
+      "再 npx expo install --fix",
+      "更新 AGENTS.md 文档链接",
+      "prebuild --clean 后跑通 run:ios / run:android"
+    ]
+  }
+}

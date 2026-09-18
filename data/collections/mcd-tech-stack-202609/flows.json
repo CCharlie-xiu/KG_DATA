@@ -1,0 +1,92 @@
+{
+  "groups": [
+    {
+      "id": "bootstrap",
+      "title": "脚手架与钉版本",
+      "note": "新建或迁入现有仓",
+      "steps": [
+        {
+          "when": "create / migrate",
+          "action": "create-expo-app 或升到目标 SDK",
+          "note": "依赖用 expo install 对齐"
+        },
+        {
+          "when": "agent context",
+          "action": "写入 AGENTS.md（+ 可选 CLAUDE.md）",
+          "note": "链接钉死版本文档"
+        },
+        {
+          "when": "AI tools",
+          "action": "接 Expo MCP + Skills",
+          "note": "自检：Agent 能报出 SDK 版本"
+        }
+      ]
+    },
+    {
+      "id": "daily",
+      "title": "日常开发",
+      "note": "只改 JS/TS 时",
+      "steps": [
+        {
+          "when": "dev server",
+          "action": "npx expo start",
+          "note": "Expo Go 或已装 Dev Client"
+        },
+        {
+          "when": "add library",
+          "action": "npx expo install / MCP add_library",
+          "note": "禁止随意 npm 装原生相关包"
+        },
+        {
+          "when": "web",
+          "action": "expo start --web",
+          "note": "platform 文件分流原生 UI"
+        }
+      ]
+    },
+    {
+      "id": "native",
+      "title": "原生下钻",
+      "note": "需要二进制或改原生配置时",
+      "steps": [
+        {
+          "when": "first native build",
+          "action": "expo run:ios | run:android",
+          "note": "内部 prebuild + 调本机工具链"
+        },
+        {
+          "when": "deep edit",
+          "action": "Xcode(Swift) / Android Studio(Kotlin)",
+          "note": "改完抽 Plugin/Module"
+        },
+        {
+          "when": "regen",
+          "action": "prebuild --clean",
+          "note": "确认可从配置重生"
+        }
+      ]
+    },
+    {
+      "id": "ship",
+      "title": "发布",
+      "note": "云构建与热更新",
+      "steps": [
+        {
+          "when": "store binary",
+          "action": "eas build → eas submit",
+          "note": "无原生目录时 EAS 自动 prebuild"
+        },
+        {
+          "when": "js only fix",
+          "action": "eas update",
+          "note": "触及原生 API 则必须新 Build"
+        },
+        {
+          "when": "sdk upgrade",
+          "action": "升版本 → install --fix → clean prebuild",
+          "note": "同步 AGENTS.md 文档链接"
+        }
+      ]
+    }
+  ]
+}

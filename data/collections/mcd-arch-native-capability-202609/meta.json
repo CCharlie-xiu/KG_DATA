@@ -1,28 +1,25 @@
 {
   "id": "mcd-arch-native-capability-202609",
   "title": "Expo · React · AI · Xcode / Android 全站协作路线",
-  "status": "published",
+  "kicker": "Agent · MCP · CNG · Swift · Kotlin · EAS",
+  "summary": "一条链路：AI Agent → TypeScript/React/Expo → prebuild → Xcode(Swift)/Android Studio(Kotlin) → EAS。表格给出分层边界、工具模型、换层流程与命令清单。",
   "sourceProject": "D:\\重要不可删除\\移动端设备",
   "notes": [
-    "一条链路：AI Agent → TypeScript/React → Expo（Metro / CNG / EAS）→ Xcode(Swift) / Android Studio(Kotlin)。",
-    "选型分层见 `#/c/mcd-tech-stack-202609`；本条写清各工具怎么配合、何时换层。"
+    "图例：日常=只改 TS/配置；下钻=进原生 IDE；云端=EAS 编译与分发。",
+    "AI 必须经 AGENTS.md + Expo MCP 读同主版本文档，禁止凭记忆写旧 API。",
+    "原生改动以 Config Plugin / Expo Module 回填；prebuild --clean 必须可重生。",
+    "Expo Go ≠ 完整原生运行时；自定义 Module / 部分系统能力用 Development Build。"
   ],
-  "sections": [
-    {
-      "heading": "背景",
-      "body": "移动全站不是「只写 React」或「只开 Xcode」。正确模型是多层协作：AI 辅助写配置与 TS；Expo 统一依赖、路由、预构建与云构建；真正进原生 IDE 时用 Swift / Kotlin。缺一层就会出现错版本文档、手改原生被洗掉、或 Agent 乱装不兼容包。"
-    },
-    {
-      "heading": "可行方案",
-      "body": "全站拓扑（从上到下）：\n\n```\nAI Agent（Cursor / Claude Code / Codex）\n  ├─ AGENTS.md / Skills（钉死 SDK 约定）\n  └─ Expo MCP（文档 · install · EAS · 可选本机自动化）\n        ▼\nTypeScript + React + React Native\n  ├─ Expo Router（文件路由，多平台壳）\n  ├─ Expo SDK / @expo/ui / Reanimated / RNGH …\n  └─ app.json + Config Plugins（原生配置真源）\n        ▼\nnpx expo prebuild | expo run:*\n   ┌────┴────┐\nios/         android/\nSwift        Kotlin\nXcode        Android Studio\n        ▼\nEAS Build / Submit / Update（云编译与分发）\n```\n\n1）AI 层怎么接 Expo\n- 项目上下文：根目录 `AGENTS.md` 指向 https://docs.expo.dev/versions/v57.0.0/ （Cursor / Codex 直读；Claude 用 `CLAUDE.md` → `@AGENTS.md`）\n- Expo Skills：教 Agent 已知好路径（升级 SDK、EAS Workflow、SwiftUI / Jetpack Compose 原生 UI、API Routes 等），避免用过期训练数据猜 API\n- Expo MCP 远程：`https://mcp.expo.dev/mcp`（OAuth）。常用能力：`search_documentation` / `read_documentation`、`add_library`（内部走 `expo install`）、EAS `build_*` / `workflow_*`、商店反馈与崩溃查询\n- 本机增强（官方要求较新 SDK）：`npx expo install expo-mcp --dev`，`EXPO_UNSTABLE_MCP_SERVER=1 npx expo start`，获得截图 / 点击 / DevTools / Router sitemap 等 Local tools\n- Cursor 侧：装 Expo Skills + MCP 后，用 Agent 改多文件、跑终端；原生 UI 提示可直接说「加 SwiftUI / Compose 控件」由 Skills 引导到 `@expo/ui` 等正路\n\n2）React / React Native / Expo 业务层\n- React：组件模型与并发特性；RN 负责宿主视图映射\n- Expo Router：`app/` 文件路由；实验特性如 `typedRoutes`、`unstable-native-tabs` 按 SDK 文档启用\n- 包管理铁律：原生相关依赖只用 `npx expo install`，让版本与当前 SDK 对齐\n- 原生 UI 桥：`@expo/ui`（SwiftUI / 社区控件）、`expo-symbols`（iOS SF Symbol + Android Material 名成对配置）\n- 动画与手势：`react-native-reanimated` + `react-native-gesture-handler`（根节点需 `GestureHandlerRootView`）\n- 存储 / 安全 / 系统能力：AsyncStorage、SecureStore、notifications、image-picker 等均以 Expo 模块 + app.json plugins 声明权限文案\n\n3）CNG：配置如何变成 Xcode / Android 工程\n- 真源：`app.json`（或 `app.config.ts`）+ `plugins[]` + Autolinking\n- 生成：`npx expo prebuild`（推荐排查时加 `--clean`）产出 `ios/`、`android/`\n- 本地编译：`npx expo run:ios` / `run:android` = prebuild（若缺目录）+ 调用本机 Xcode / Android SDK + 拉起 Metro\n- 日常迭代：只改 TS 时用 `npx expo start`，不必每次原生编译；加了原生库或改了 plugin 再 `run:*`\n- `ios/` / `android/` 默认进 `.gitignore`；长期定制写回 Config Plugin / Expo Module，禁止把分叉手改当主干\n\n4）Xcode + Swift 层\n- IDE：Xcode 打开 `ios/*.xcworkspace`（不是只开 `.xcodeproj`）\n- 语言：Swift 优先；遗留 Obj-C 仅兼容\n- 典型职责：Capability（Sign in with Apple、Push、Associated Domains）、Entitlements、Info.plist 细调、SwiftUI 视图经 Expo UI / Module 露出、证书与签名（本地或 EAS Credentials）\n- 与 TS 的界面约定：图标与文案在 JS 侧同时提供 `sf=`（SF Symbols）名；SwiftUI 片段可通过 `@expo/ui/swift-ui` 的 `Host` 嵌入 RN 树\n- Agent 边界：可让 AI 起草 Config Plugin / Expo Module 的 Swift；合并进仓前用 Xcode 编译验证，再 `--clean` 确认可重生\n\n5）Android Studio + Kotlin 层\n- IDE：Android Studio 打开 `android/`\n- 语言：Kotlin 优先；Java 仅遗留\n- 典型职责：Gradle（SDK/NDK）、`AndroidManifest` 权限与 intent-filter、Application/Activity 生命周期钩子（优先 Expo Modules lifecycle，少改模板入口）、Jetpack Compose / View 自定义\n- 与 TS 的界面约定：Material 图标用 `md=` 与 iOS `sf=` 成对；键盘模式等可用 RN 的 `android_*` props\n- 变体：`npx expo run:android --variant <flavorBuildType>`；应用 Id 可用 `--app-id`\n\n6）运行形态选择\n- Expo Go：快速验 JS/TS 与 Go 内已有原生模块；不能跑自定义原生代码\n- Development Build（`expo-dev-client` + `run:*` 或 EAS）：完整原生运行时，调试自定义 Module / 非 Go 能力\n- Release：EAS Build 云编译；无提交的 `ios/`/`android/` 时 EAS 会自动 prebuild\n- OTA：EAS Update 更新 JS 包；原生层变更必须重新 Build\n\n7）Web 同源\n- `react-native-web` + Metro；Router 可用 `*.web.tsx` 平台文件分流（例如 Web 不用 Native Tabs）\n- 无 `ios/`/`android/` 生成步骤；仍共享 TS 业务与大部分 Expo API"
-    },
-    {
-      "heading": "关键步骤",
-      "body": "- 钉版本：确认 `expo` 主版本与 https://docs.expo.dev/versions/v57.0.0/ 一致；更新 `AGENTS.md` 链接\n- 接 AI：Cursor 安装 Expo MCP + Skills；登录 Expo 账号；用「读 package.json 报 SDK 版本」自检\n- 接文档：Agent 改 API 前先 `search_documentation` / `read_documentation`，禁止凭记忆写旧 API\n- 装库：口头需求 → MCP `add_library` 或人工 `npx expo install`\n- 纯 TS 开发：`npx expo start`（可选 tunnel）；模拟器用已安装的 Go 或 Dev Client\n- 首次/原生变更：macOS 上 `npx expo run:ios`（调 Xcode）；任意桌面 `npx expo run:android`（调 Android Studio / SDK）\n- 下钻原生：在生成目录用 Swift / Kotlin 实现 → 抽成 Config Plugin 或 Expo Module → `prebuild --clean` 回归\n- 可选本机 MCP：`expo-mcp` + `EXPO_UNSTABLE_MCP_SERVER=1`，启停 Dev Server 后重连 MCP\n- 发布：`eas build` → 商店 `eas submit`；仅 JS 热修走 `eas update`"
-    },
-    {
-      "heading": "坑与验证",
-      "body": "- 验证：同一会话里 Agent、本地 `expo` CLI、文档 MCP 三者看到的 SDK 主版本一致\n- 验证：改 plugin 后 `prebuild --clean` 再 `run:ios` / `run:android` 可通过编译\n- 验证：iOS SF Symbol 与 Android Material 图标成对出现，一端不缺资源名\n- 坑：在生成工程里改完不回填 plugin，下次 clean 丢失\n- 坑：把 `npm install` 当默认装原生库，导致 RN/Expo 版本漂移\n- 坑：用 Expo Go 测自定义原生 / Live Activity / 未进 Go 的模块 → 误判「功能坏了」\n- 坑：MCP Local 能力未开或 Dev Server 未带 `EXPO_UNSTABLE_MCP_SERVER`，截图/点击工具不可用（且 iOS Local 仅模拟器 + macOS）\n- 坑：EAS Update 推了依赖新原生二进制的 JS → 客户端白屏；原生变更必须新 Build"
-    }
+  "stats": {
+    "boundaries": 15,
+    "newFields": 12,
+    "modules": 14,
+    "testCases": 16
+  },
+  "tabs": [
+    { "id": "boundaries", "label": "分层边界" },
+    { "id": "schema", "label": "工具模型" },
+    { "id": "flows", "label": "换层流程" },
+    { "id": "impl", "label": "命令清单" }
   ]
 }
