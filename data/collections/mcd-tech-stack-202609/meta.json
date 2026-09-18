@@ -1,28 +1,28 @@
 {
   "id": "mcd-tech-stack-202609",
-  "title": "移动端日历导演台 · 技术栈与工程约定",
+  "title": "Expo 移动全站技术栈选型与分层",
   "status": "published",
   "sourceProject": "D:\\重要不可删除\\移动端设备",
   "notes": [
-    "主栈：React Native + Expo（不选 Flutter / 裸 RN）。",
-    "完整能力与 Xcode(Swift) / Android(Kotlin) 搭配见 `#/c/mcd-arch-native-capability-202609`。"
+    "主栈：React + React Native + Expo（不选 Flutter / 裸 RN）。",
+    "全站协作细节（AI / Xcode / Android Studio / EAS）见 `#/c/mcd-arch-native-capability-202609`。"
   ],
   "sections": [
     {
       "heading": "背景",
-      "body": "产品为移动端「日历导演台」。仓库落在 `D:\\重要不可删除\\移动端设备`，GitHub 私有仓 `CCharlie-xiu/mobile-calendar-director`。选型对比过 Expo、裸 RN、Flutter；结论是 Expo SDK 57 + Router。"
+      "body": "跨端移动应用需要同时覆盖：TypeScript/React 业务层、iOS/Android 原生编译层、云构建与 OTA、以及 AI 辅助研发。目标是选定一条可升级、可原生下钻、可被 Agent 正确驱动的技术主线，而不是按框架偏好分散选型。"
     },
     {
       "heading": "可行方案",
-      "body": "客户端主栈：\n- React Native + Expo SDK 57\n- TypeScript + Expo Router（文件路由）\n- 原生能力：Dev Client + prebuild / Config Plugins（CNG，不默认裸 RN）\n- 原生编辑：Xcode → Swift；Android Studio → Kotlin\n- 发布：EAS Build / Submit / Update\n\n明确不优先：\n- Flutter（与现有 JS/TS 生态割裂）\n- 裸 React Native（证书、依赖、OTA、升级成本更高）\n\n工程约定：\n- 本机路径：`D:\\重要不可删除\\移动端设备`\n- GitHub：https://github.com/CCharlie-xiu/mobile-calendar-director（private）\n- 分支：`dev` 日常；`main` 稳定基线\n- remote：SSH `git@github.com:CCharlie-xiu/mobile-calendar-director.git`\n- 操作记录：仓库 `docs/ops-log.md`\n- 知识归档：验证后回填 KG_DATA"
+      "body": "选定主栈（钉死版本族）：\n- UI 运行时：React 19.x + React Native 0.86.x\n- 应用框架：Expo SDK 57（包版本与 RN/React 由 `npx expo install` 对齐）\n- 语言：TypeScript\n- 路由：Expo Router（文件路由；Web / iOS / Android 同源）\n- 原生工程策略：Continuous Native Generation（CNG）= `app.json` / Config Plugins + `npx expo prebuild`，不默认长期维护手改裸工程\n- 构建发布：EAS Build / Submit / Update\n- AI 研发面：Cursor（或 Claude Code / Codex）+ Expo Skills + Expo MCP + 根目录 `AGENTS.md`\n\n明确不优先：\n- Flutter / Dart（与 TS/React 生态、Agent 文档面割裂）\n- 手维裸 React Native（升级、证书、OTA、插件副作用成本更高；需要原生时仍用 Expo Modules / prebuild 下钻）\n\n分层职责（谁写什么语言）：\n- 业务与界面：TypeScript + React（组件、状态、路由、样式）\n- 跨端原生能力：Expo SDK / 社区原生模块（Autolinking）\n- iOS 深度定制：Swift（优先）在 Xcode；UIKit / SwiftUI / Capability / Entitlement\n- Android 深度定制：Kotlin（优先）在 Android Studio；Gradle / Manifest / Compose 或 View\n- 配置真源：`app.json` / `app.config.*` + Config Plugins（禁止把一次性手改当长期源）\n- AI：只改 TS/配置为主；查版本文档走 Expo MCP；触发原生重生与 EAS 走 CLI / MCP 工具\n\nSDK 57 平台底线（官方表）：\n- iOS 16.4+，配套较新 Xcode\n- Android `compileSdk` / `targetSdk` 36\n- 文档入口：https://docs.expo.dev/versions/v57.0.0/"
     },
     {
       "heading": "关键步骤",
-      "body": "- 工作目录切到 `移动端设备`，分支 `dev`\n- 本地：`npm start`（Expo Go）或 `npm run web`\n- 原生工程：`npx expo prebuild` 后分别用 Xcode / Android Studio\n- 深度原生能力走 Dev Client，勿依赖仅 Expo Go\n- 已验证方案用 Skill `kg-ingest` 写入本库；半成品与密钥不入库"
+      "body": "- 用 `npx create-expo-app@latest` 或把现有仓升到目标 SDK；依赖一律 `npx expo install <pkg>`\n- 根目录提交 `AGENTS.md`（必要时 `CLAUDE.md` → `@AGENTS.md`），写明「写代码前读对应 SDK 版本文档」\n- 接入 Expo MCP（`https://mcp.expo.dev/mcp`）与 Expo Skills，再开 Cursor Agent\n- 日常只改 JS/TS：`npx expo start`（Expo Go 或已装 Dev Client）\n- 需要原生二进制：`npx expo run:ios` / `run:android`（内部 prebuild + 调 Xcode / Android SDK）\n- 发版：`eas build` → `eas submit`；热更新用 EAS Update"
     },
     {
       "heading": "坑与验证",
-      "body": "- 已验证：本机 `github.com:443` HTTPS 不稳定，`git push` 需用 SSH\n- 已验证：Expo 脚手架可跑；SSH 推送 `main` / `dev`\n- 坑：中文目录名不能直接作为 `create-expo-app` 项目名\n- 更新：产品已扩到导演台 / 目标 / 搜索 / 加号等能力，详见 `mcd-arch-native-capability-202609`"
+      "body": "- 验证：Agent 能读出 `package.json` 中的 Expo SDK 版本，且 MCP `read_documentation` / `search_documentation` 指向同主版本\n- 验证：`expo install` 装的包与 SDK 匹配，无随意 `npm install` 拉飞版本\n- 坑：手改 `ios/` / `android/` 后 `prebuild --clean` 会丢改动 → 必须回填 Config Plugin 或 Expo Module\n- 坑：Expo Go 不含任意自定义原生代码；越界能力必须 Development Build\n- 对照：协作全路线与工具边界见 `mcd-arch-native-capability-202609`"
     }
   ]
 }
