@@ -115,13 +115,28 @@
       "subtitle": "Expo · RN · EAS · main/dev",
       "category": "ops",
       "status": "published",
-      "featured": true,
-      "summary": "日历导演台主栈 Expo SDK 57 + Router；已跑通底部 Tab（导演台/个人）。含仓库、分支与 SSH 推送约定。",
+      "featured": false,
+      "summary": "选型与仓库约定：Expo SDK 57 主栈、SSH、main/dev。完整能力矩阵与 Xcode(Swift)/Android(Kotlin) 搭配见 mcd-arch-native-capability-202609。",
       "tags": ["Expo", "React Native", "日历导演台", "移动端", "EAS"],
-      "updated": "2026-09-16",
+      "updated": "2026-09-18",
       "viewer": "article",
       "entry": "meta.json",
       "section": "architecture",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
+      "id": "mcd-arch-native-capability-202609",
+      "title": "日历导演台 · 全栈架构 / 能力矩阵 / 原生化语言搭配",
+      "subtitle": "CNG · Xcode/Swift · Android/Kotlin · 四 Tab 能力",
+      "category": "other",
+      "status": "published",
+      "featured": true,
+      "summary": "已验证架构与能力总表：Expo 57 + features 域隔离；TS 业务搭配 Xcode/Swift 与 Android Studio/Kotlin（CNG prebuild）；含插件、存储键与 Dev Client 边界。",
+      "tags": ["Expo", "CNG", "Xcode", "Swift", "Kotlin", "Android", "日历导演台", "NativeTabs"],
+      "updated": "2026-09-18",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "breakthrough",
       "cover": "covers/kg-default.jpg"
     }
   ]
