@@ -1,25 +1,25 @@
 {
   "id": "mcd-arch-native-capability-202609",
-  "title": "Expo · React · AI · Xcode / Android 全站协作路线",
-  "kicker": "Agent · MCP · CNG · Swift · Kotlin · EAS",
-  "summary": "一条链路：AI Agent → TypeScript/React/Expo → prebuild → Xcode(Swift)/Android Studio(Kotlin) → EAS。表格给出分层边界、工具模型、换层流程与命令清单。",
-  "sourceProject": "D:\\重要不可删除\\移动端设备",
+  "title": "Expo RN · iOS / Android / Harmony 三端原生与构建",
+  "kicker": "Platform · Simulator · Build",
+  "summary": "仅谈 Expo React Native 三端原生支持边界、模拟器搭配、构建选型。iOS/Android 为 Expo 一等公民；Harmony 走社区 RNOH + toolkit，非 Expo 官方目标。",
+  "sourceProject": "D:\\重要不可删除\\安卓功能全面使用",
   "notes": [
-    "图例：日常=只改 TS/配置；下钻=进原生 IDE；云端=EAS 编译与分发。",
-    "AI 必须经 AGENTS.md + Expo MCP 读同主版本文档，禁止凭记忆写旧 API。",
-    "原生改动以 Config Plugin / Expo Module 回填；prebuild --clean 必须可重生。",
-    "Expo Go ≠ 完整原生运行时；自定义 Module / 部分系统能力用 Development Build。"
+    "官方一等：iOS + Android（prebuild / run / EAS）。Harmony：社区路径，非 Expo 原生 platform target。",
+    "当前 showcase（Expo SDK 57）可直接出 iOS/Android；Harmony verified 矩阵钉在 SDK 55 + RN 0.82，不可与 57 同仓无脑混编。",
+    "模拟器：iOS Simulator（仅 macOS+Xcode）· Android Emulator（AVD）· Harmony（DevEco / 真机为主）。",
+    "构建阶梯：Expo Go → Development Build → 本地 run → EAS；Harmony 单独 doctor→init→bundle→build-hap。"
   ],
   "stats": {
-    "boundaries": 15,
-    "newFields": 12,
-    "modules": 14,
-    "testCases": 16
+    "boundaries": 12,
+    "newFields": 14,
+    "modules": 16,
+    "testCases": 12
   },
   "tabs": [
-    { "id": "boundaries", "label": "分层边界" },
-    { "id": "schema", "label": "工具模型" },
-    { "id": "flows", "label": "换层流程" },
+    { "id": "boundaries", "label": "三端支持边界" },
+    { "id": "schema", "label": "模拟器搭配" },
+    { "id": "flows", "label": "构建选型" },
     { "id": "impl", "label": "命令清单" }
   ]
 }

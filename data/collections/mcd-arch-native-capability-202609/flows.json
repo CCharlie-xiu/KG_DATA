@@ -1,110 +1,105 @@
 {
   "groups": [
     {
-      "id": "ai-loop",
-      "title": "AI 编码环",
-      "note": "改 API 前先查文档",
+      "id": "choose-runtime",
+      "title": "运行时选型（先选再编）",
+      "note": "决定能不能用 Go、要不要 Dev Client",
       "steps": [
         {
-          "when": "session start",
-          "action": "读 AGENTS.md + package.json SDK",
-          "note": "三方版本必须一致"
+          "when": "仅 Expo SDK 模块 + 无自定义原生",
+          "action": "Expo Go + Simulator/Emulator",
+          "note": "最快；iOS/Android"
         },
         {
-          "when": "unknown API",
-          "action": "MCP search_documentation → read_documentation",
-          "note": "禁止凭训练数据猜旧接口"
+          "when": "Config Plugin / 自定义 Module / 超出 Go 白名单",
+          "action": "Development Build（expo-dev-client）",
+          "note": "本机 run 或 EAS 出开发包再装模拟器"
         },
         {
-          "when": "add package",
-          "action": "MCP add_library 或 expo install",
-          "note": "自动对齐 SDK"
-        },
-        {
-          "when": "verify UI (optional)",
-          "action": "local MCP screenshot / tap",
-          "note": "需 Dev Server + expo-mcp"
+          "when": "目标 Harmony",
+          "action": "勿用 Expo Go / 官方 EAS；走 RNOH 壳 + toolkit",
+          "note": "另仓或 SDK 55 矩阵分支"
         }
       ]
     },
     {
-      "id": "js-loop",
-      "title": "TS / React 日常环",
-      "note": "不触原生配置时",
+      "id": "build-ios-android",
+      "title": "iOS / Android 构建阶梯",
+      "note": "同一 Expo 工程",
       "steps": [
         {
-          "when": "edit TS/TSX",
-          "action": "保存 → Metro 热更新",
-          "note": "expo start 已运行"
+          "when": "本地验证原生",
+          "action": "npx expo prebuild（按需）→ expo run:ios | run:android",
+          "note": "产出进 Simulator/Emulator/真机"
         },
         {
-          "when": "routes",
-          "action": "改 app/ 文件路由",
-          "note": "可用 expo_router_sitemap 核对"
+          "when": "团队/CI 二进制",
+          "action": "eas build --platform ios|android|all",
+          "note": "无原生目录则云端 prebuild；profile: development|preview|production"
         },
         {
-          "when": "permissions copy",
-          "action": "改 app.json plugins 文案",
-          "note": "下次原生编译生效"
-        }
-      ]
-    },
-    {
-      "id": "native-loop",
-      "title": "原生下钻环",
-      "note": "Xcode / Android Studio",
-      "steps": [
-        {
-          "when": "need binary",
-          "action": "expo run:ios | run:android",
-          "note": "缺目录则先 prebuild"
-        },
-        {
-          "when": "iOS deep work",
-          "action": "Xcode 打开 *.xcworkspace · Swift",
-          "note": "Capability / SwiftUI / Module"
-        },
-        {
-          "when": "Android deep work",
-          "action": "Android Studio 打开 android/ · Kotlin",
-          "note": "Gradle / Manifest / Module"
-        },
-        {
-          "when": "persist change",
-          "action": "抽 Config Plugin 或 Expo Module",
-          "note": "再 prebuild --clean 回归"
-        },
-        {
-          "when": "beyond Go",
-          "action": "Development Build (expo-dev-client)",
-          "note": "自定义原生不可用 Expo Go"
-        }
-      ]
-    },
-    {
-      "id": "ship-loop",
-      "title": "发布环",
-      "note": "EAS",
-      "steps": [
-        {
-          "when": "PR / release binary",
-          "action": "eas build",
-          "note": "MCP build_run / build_logs 可查"
-        },
-        {
-          "when": "store",
+          "when": "上架",
           "action": "eas submit",
-          "note": "iOS App Store / Android Play"
+          "note": "App Store / Play；与 Harmony 应用市场上架无关"
         },
         {
-          "when": "js hotfix",
+          "when": "仅 JS 热修且原生未变",
           "action": "eas update",
-          "note": "原生变更禁止只 Update"
+          "note": "原生 API/权限变更必须重新 build"
+        }
+      ]
+    },
+    {
+      "id": "build-harmony",
+      "title": "Harmony 构建路径（社区）",
+      "note": "与 EAS 并行、不互通",
+      "steps": [
+        {
+          "when": "评估可行性",
+          "action": "对照 toolkit support-matrix（verified = SDK 55 UI stack）",
+          "note": "showcase SDK 57 / expo-video 等需裁剪或降级"
         },
         {
-          "when": "ci workflow",
-          "action": "MCP workflow_create + validate + run",
-          "note": ".eas/workflows/"
+          "when": "初始化",
+          "action": "doctor → init（生成/对齐 RNOH 工程）",
+          "note": "Managed/CNG 为主要输入；bare 仅 intake baseline"
+        },
+        {
+          "when": "出包",
+          "action": "bundle → build-hap",
+          "note": "DevEco 签名与安装；非 eas build"
+        },
+        {
+          "when": "能力缺口",
+          "action": "查 verified / preview / experimental 分级",
+          "note": "缺口用条件编译或平台专用原生，勿假设与 iOS/Android 对等"
+        }
+      ]
+    },
+    {
+      "id": "profile-pairing",
+      "title": "构建 profile 与模拟器配对",
+      "note": "避免装错包类型",
+      "steps": [
+        {
+          "when": "development profile",
+          "action": "装 Dev Client 到 iOS Sim / Android AVD",
+          "note": "连本机 Metro；调试主路径"
+        },
+        {
+          "when": "preview profile",
+          "action": "内部分发 / 模拟器可装的 release-like 包",
+          "note": "验性能与打包配置，少连调试"
+        },
+        {
+          "when": "production profile",
+          "action": "商店包；真机为主",
+          "note": "Simulator 可跑部分 production，但签名与商店以真机构建为准"
+        },
+        {
+          "when": "Harmony hap",
+          "action": "独立 profile 文档；勿写入 eas.json 假装三端 all",
+          "note": "eas.json 只覆盖 ios/android"
         }
       ]
     }

@@ -1,103 +1,114 @@
 {
   "sectionTitles": {
-    "workflow": "AI / 文档面",
-    "run": "运行时 / 原生 / 云",
-    "config": "协作拓扑示例"
+    "workflow": "模拟器 / 运行面",
+    "run": "主机与工具链配对",
+    "config": "推荐日常组合"
   },
   "workflowFields": [
     {
-      "name": "AGENTS.md",
-      "type": "markdown",
-      "model": "repo root",
-      "desc": "Cursor/Codex 项目上下文；指向 SDK 版本文档"
+      "name": "iOS Simulator",
+      "type": "simulator",
+      "model": "Xcode",
+      "desc": "仅 macOS；expo run:ios 或 Xcode Run；验布局/手势/深链"
     },
     {
-      "name": "CLAUDE.md",
-      "type": "@AGENTS.md",
-      "model": "repo root",
-      "desc": "Claude Code 导入同一约定"
+      "name": "Android Emulator (AVD)",
+      "type": "emulator",
+      "model": "Android Studio",
+      "desc": "Win/Mac/Linux；API 与目标 minSdk 对齐；冷启动慢可常驻"
     },
     {
-      "name": "Expo Skills",
-      "type": "agent plugin",
-      "model": "machine",
-      "desc": "已知好路径：SDK 升级、EAS Workflow、SwiftUI/Compose"
-    },
-    {
-      "name": "Expo MCP URL",
-      "type": "https://mcp.expo.dev/mcp",
-      "model": "remote MCP",
-      "desc": "search/read docs · add_library · build_* · workflow_*"
-    },
-    {
-      "name": "expo-mcp",
-      "type": "devDependency",
-      "model": "local MCP",
-      "desc": "截图/点击/DevTools；需 EXPO_UNSTABLE_MCP_SERVER=1"
-    },
-    {
-      "name": "docs.expo.dev/versions/v57.0.0",
-      "type": "URL",
-      "model": "source of truth",
-      "desc": "写代码前必对齐的 API 面"
-    }
-  ],
-  "runFields": [
-    {
-      "name": "Metro + expo start",
-      "type": "dev server",
-      "model": "JS runtime",
-      "desc": "日常只改 TS 时不重编原生"
+      "name": "Harmony 模拟器 / 真机",
+      "type": "DevEco / device",
+      "model": "community",
+      "desc": "非 Expo 工具链；RNOH 工程在 DevEco 装 .hap；优先真机验系统能力"
     },
     {
       "name": "Expo Go",
       "type": "client",
-      "model": "runtime",
-      "desc": "快速验 JS；无自定义原生"
+      "model": "iOS+Android",
+      "desc": "扫码快速验 JS；无自定义原生 Module / 部分插件"
     },
     {
-      "name": "expo-dev-client",
-      "type": "Development Build",
-      "model": "runtime",
-      "desc": "完整原生调试面"
+      "name": "Development Build",
+      "type": "expo-dev-client",
+      "model": "iOS+Android",
+      "desc": "自定义原生后的主调试面；模拟器与真机均可装"
     },
     {
-      "name": "Xcode + Swift",
-      "type": "IDE + language",
-      "model": "ios/",
-      "desc": "Capability、SwiftUI、签名；改动回填 Plugin"
+      "name": "真机 USB / 无线",
+      "type": "device",
+      "model": "三端共用思路",
+      "desc": "支付、相机、推送、视频硬解优先真机；模拟器只做 UI 迭代"
+    }
+  ],
+  "runFields": [
+    {
+      "name": "开发机 = Windows",
+      "type": "host",
+      "model": "pairing",
+      "desc": "Android Emulator + 真机；iOS 需远程 Mac 或 EAS；Harmony 用 DevEco"
     },
     {
-      "name": "Android Studio + Kotlin",
-      "type": "IDE + language",
-      "model": "android/",
-      "desc": "Gradle、Manifest、Compose；改动回填 Plugin"
+      "name": "开发机 = macOS",
+      "type": "host",
+      "model": "pairing",
+      "desc": "iOS Simulator + Android Emulator 全开；Harmony 仍要 DevEco/另环境"
     },
     {
-      "name": "EAS Build/Submit/Update",
+      "name": "CI / 无本机原生",
       "type": "cloud",
-      "model": "distribution",
-      "desc": "二进制、上架、JS OTA"
+      "model": "EAS",
+      "desc": "iOS/Android 二进制用 EAS Build；本地只跑 Metro + Expo Go/已装 Dev Client"
+    },
+    {
+      "name": "AVD 选型",
+      "type": "profile",
+      "model": "Android",
+      "desc": "1× 手机 API（贴近 minSdk+1）+ 可选平板；开启硬件加速；少开多实例"
+    },
+    {
+      "name": "iOS Simulator 选型",
+      "type": "profile",
+      "model": "iOS",
+      "desc": "1× 主流 iPhone + 可选 iPad（supportsTablet）；系统版跟 Xcode 默认"
+    },
+    {
+      "name": "Harmony 环境",
+      "type": "profile",
+      "model": "OH/HarmonyNEXT",
+      "desc": "按 RNOH/toolkit 文档钉 SDK；模拟器能力弱于 Android AVD，关键路径真机签收"
+    },
+    {
+      "name": "Metro 热更新",
+      "type": "dev server",
+      "model": "JS",
+      "desc": "三端只要装了兼容客户端，改 TS 不重编原生；改 plugins/原生必须重编"
+    },
+    {
+      "name": "跨端勿混客户端",
+      "type": "rule",
+      "model": "runtime",
+      "desc": "Expo Go ≠ Dev Client ≠ Harmony RNOH 壳；扫错客户端会缺原生能力"
     }
   ],
   "configExample": {
     "layers": [
-      "AI: Cursor + Skills + MCP",
-      "App: TypeScript + React + Expo Router",
-      "Config: app.json + Config Plugins",
-      "Native: prebuild → Xcode(Swift) / Android Studio(Kotlin)",
-      "Ship: EAS Build | Submit | Update"
+      "日常 UI：macOS → iOS Sim + Android AVD；Windows → 仅 Android AVD/真机",
+      "自定义原生：Development Build 装进对应模拟器/真机",
+      "无 Mac：iOS 用 EAS Build + TestFlight / 内部分发",
+      "Harmony：独立 toolkit 仓 + DevEco，不挂在 EAS 同一 profile"
     ],
-    "icons": { "ios": "sf=", "android": "md=" },
+    "icons": { "ios": "sf=", "android": "md=", "harmony": "oh=" },
     "localMcp": "EXPO_UNSTABLE_MCP_SERVER=1 npx expo start"
   },
   "requestOverride": {
-    "field": "when to leave JS layer",
+    "field": "何时换模拟器 / 真机",
     "rules": [
-      "新增原生库或改 plugins → run:ios/android",
-      "改 Capability / 自定义 Module → 开 Xcode 或 Android Studio",
-      "仅 JS 热修 → eas update",
-      "原生 API 变更 → 必须 eas build"
+      "纯布局与导航 → Simulator / Emulator",
+      "相机、推送、IAP、后台播放、硬解视频 → 真机",
+      "Harmony 系统 API / 上架包体 → DevEco 真机签收",
+      "仅 JS 热修且原生未变 → 已装客户端 + Metro，不必换模拟器镜像"
     ]
   }
 }

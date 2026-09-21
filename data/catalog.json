@@ -126,17 +126,17 @@
     },
     {
       "id": "mcd-arch-native-capability-202609",
-      "title": "Expo · React · AI · Xcode / Android 全站协作路线",
-      "subtitle": "分层边界 · 工具模型 · 换层流程 · 命令清单",
+      "title": "Expo RN · iOS / Android / Harmony 三端原生与构建",
+      "subtitle": "三端支持边界 · 模拟器搭配 · 构建选型 · 命令清单",
       "category": "other",
       "status": "published",
       "featured": true,
-      "summary": "与埋点方案同款阅读页：统计头图 + 分册 Tab + 分组筛选表。覆盖 AI/MCP、React/Expo、Xcode/Swift、Android/Kotlin、EAS。",
-      "tags": ["Expo", "React", "AI", "Cursor", "MCP", "Xcode", "Swift", "Kotlin", "Android", "CNG", "EAS", "arch-spec"],
-      "updated": "2026-09-18",
+      "summary": "Expo 一等公民为 iOS+Android；Harmony 走社区 RNOH/toolkit。覆盖模拟器配对与 Go/Dev Client/EAS/HAP 构建阶梯。",
+      "tags": ["Expo", "React Native", "iOS", "Android", "Harmony", "RNOH", "Simulator", "EAS", "HAP", "arch-spec"],
+      "updated": "2026-09-21",
       "viewer": "arch-spec",
       "entry": "meta.json",
-      "section": "breakthrough",
+      "section": "architecture",
       "cover": "covers/kg-default.jpg"
     }
   ]

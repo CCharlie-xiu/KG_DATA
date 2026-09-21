@@ -1,18 +1,20 @@
 {
   "modules": [
-    { "area": "ai", "path": "AGENTS.md", "change": "SDK 文档钉死", "type": "edit" },
-    { "area": "ai", "path": "Expo MCP remote", "change": "docs / install / EAS tools", "type": "edit" },
-    { "area": "ai", "path": "npx expo install expo-mcp --dev", "change": "本机截图与自动化", "type": "new" },
-    { "area": "ai", "path": "EXPO_UNSTABLE_MCP_SERVER=1 npx expo start", "change": "启用 Local MCP", "type": "edit" },
-    { "area": "js", "path": "npx expo start", "change": "日常 Metro", "type": "edit" },
-    { "area": "js", "path": "npx expo install <pkg>", "change": "对齐 SDK 装包", "type": "edit" },
-    { "area": "config", "path": "app.json plugins[]", "change": "原生配置真源", "type": "edit" },
-    { "area": "native", "path": "npx expo prebuild --clean", "change": "重生 ios/android", "type": "edit" },
-    { "area": "native", "path": "npx expo run:ios", "change": "Xcode 工具链编译", "type": "edit" },
-    { "area": "native", "path": "npx expo run:android", "change": "Android SDK 编译", "type": "edit" },
-    { "area": "native", "path": "Xcode *.xcworkspace + Swift", "change": "iOS 深度编辑", "type": "edit" },
-    { "area": "native", "path": "Android Studio + Kotlin", "change": "Android 深度编辑", "type": "edit" },
-    { "area": "cloud", "path": "eas build | submit | update", "change": "二进制 / 上架 / OTA", "type": "edit" },
-    { "area": "cloud", "path": "eas.json / .eas/workflows", "change": "配置与 CI", "type": "new" }
+    { "area": "ios", "path": "app.json → expo.ios", "change": "bundleId / 权限 / tablet", "type": "edit" },
+    { "area": "android", "path": "app.json → expo.android", "change": "package / adaptiveIcon", "type": "edit" },
+    { "area": "js", "path": "npx expo start", "change": "Metro；扫 Go 或 Dev Client", "type": "edit" },
+    { "area": "ios", "path": "npx expo start --ios", "change": "拉起 iOS Simulator（需 Mac）", "type": "edit" },
+    { "area": "android", "path": "npx expo start --android", "change": "拉起已开 AVD 或真机", "type": "edit" },
+    { "area": "native", "path": "npx expo prebuild --clean", "change": "重生 ios/ + android/", "type": "edit" },
+    { "area": "native", "path": "npx expo run:ios", "change": "本机编 iOS → Simulator/真机", "type": "edit" },
+    { "area": "native", "path": "npx expo run:android", "change": "本机编 Android → AVD/真机", "type": "edit" },
+    { "area": "devclient", "path": "npx expo install expo-dev-client", "change": "自定义原生调试面", "type": "new" },
+    { "area": "cloud", "path": "eas build -p ios", "change": "云端 .ipa / 开发包", "type": "edit" },
+    { "area": "cloud", "path": "eas build -p android", "change": "云端 .aab/.apk", "type": "edit" },
+    { "area": "cloud", "path": "eas build -p all", "change": "仅 iOS+Android，不含 Harmony", "type": "edit" },
+    { "area": "cloud", "path": "eas submit / eas update", "change": "上架 / JS OTA", "type": "edit" },
+    { "area": "harmony", "path": "expo-harmony-toolkit doctor|init", "change": "矩阵与工程对齐（SDK 55）", "type": "new" },
+    { "area": "harmony", "path": "toolkit bundle → build-hap", "change": "出 .hap；DevEco 安装", "type": "new" },
+    { "area": "policy", "path": "勿 eas.json 写 harmony", "change": "三端 all 只存在于产品叙事，不存在于 EAS", "type": "edit" }
   ]
 }
