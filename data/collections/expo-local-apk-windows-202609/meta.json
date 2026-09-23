@@ -1,0 +1,28 @@
+{
+  "id": "expo-local-apk-windows-202609",
+  "title": "Expo 本地 Release APK（Windows / 中文路径）",
+  "status": "published",
+  "sourceProject": "D:\\重要不可删除\\IOS功能全面使用\\android-showcase",
+  "notes": [
+    "不走 EAS 云；ASCII 暂存目录 C:\\dev\\android-expo-apk",
+    "Cursor Skill: expo-local-apk；项目脚本 scripts/build-apk.ps1"
+  ],
+  "sections": [
+    {
+      "heading": "背景",
+      "body": "托管 Expo 项目要打可发给别人的 Release APK，且不能用 EAS 云。项目在中文路径下时，expo prebuild 的 fs.cpSync 与 Gradle includeBuild 会失败。"
+    },
+    {
+      "heading": "可行方案",
+      "body": "1) 模板用 robocopy 注入 android/，再 expo prebuild --no-clean\n2) 本地 keystore 签 release\n3) robocopy 同步到 C:\\dev\\android-expo-apk 纯英文路径后 gradlew assembleRelease\n4) APK 拷回 dist/ 与 C:\\dev\\"
+    },
+    {
+      "heading": "关键步骤",
+      "body": "```powershell\nnpm run build:apk\n# 或\npowershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/build-apk.ps1\n```\nAgent 读取 Skill `expo-local-apk`。"
+    },
+    {
+      "heading": "坑与验证",
+      "body": "- prebuild 默认会 clean：必须 --no-clean\n- 中文路径 MainApplication 丢失：勿依赖 fs.cpSync\n- Gradle Included build does not exist：勿在中文绝对路径编译\n- 已验证产出约 84MB app-release.apk 可侧载"
+    }
+  ]
+}

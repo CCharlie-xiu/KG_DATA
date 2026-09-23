@@ -8,15 +8,39 @@
     "defaultCover": "covers/kg-default.jpg"
   },
   "nav": [
-    { "id": "home", "label": "目录", "href": "/" },
-    { "id": "archive", "label": "归档", "href": "/archive" },
-    { "id": "about", "label": "约定", "href": "/about" }
+    {
+      "id": "home",
+      "label": "目录",
+      "href": "/"
+    },
+    {
+      "id": "archive",
+      "label": "归档",
+      "href": "/archive"
+    },
+    {
+      "id": "about",
+      "label": "约定",
+      "href": "/about"
+    }
   ],
   "categories": [
-    { "id": "analytics", "label": "埋点 / 分析" },
-    { "id": "drama", "label": "短剧" },
-    { "id": "rpa", "label": "RPA" },
-    { "id": "ops", "label": "运营" }
+    {
+      "id": "analytics",
+      "label": "埋点 / 分析"
+    },
+    {
+      "id": "drama",
+      "label": "短剧"
+    },
+    {
+      "id": "rpa",
+      "label": "RPA"
+    },
+    {
+      "id": "ops",
+      "label": "运营"
+    }
   ],
   "collections": [
     {
@@ -27,7 +51,13 @@
       "status": "published",
       "featured": true,
       "summary": "南非 H5 独立媒体资源的 GA4 口径：49 条事件（含官方双报）、前端可上报用户属性、10 条漏斗。测试服不上报。",
-      "tags": ["ZA", "ZAR", "GA4", "H5", "FunZone"],
+      "tags": [
+        "ZA",
+        "ZAR",
+        "GA4",
+        "H5",
+        "FunZone"
+      ],
       "updated": "2026-08-31",
       "viewer": "ga-catalog",
       "entry": "meta.json",
@@ -42,7 +72,13 @@
       "status": "published",
       "featured": true,
       "summary": "终态与 waiting 中间态延迟可独立配置；落库与 Dashboard 实时。中间态延时期间同任务 submit 返回 fail still pending。",
-      "tags": ["RPA", "Orchestrator", "OpenAPI", "延迟返回", "waiting"],
+      "tags": [
+        "RPA",
+        "Orchestrator",
+        "OpenAPI",
+        "延迟返回",
+        "waiting"
+      ],
       "updated": "2026-09-03",
       "viewer": "arch-spec",
       "entry": "meta.json",
@@ -57,7 +93,13 @@
       "status": "published",
       "featured": true,
       "summary": "热表保留最新 N 条，近 7 天不进冷表；超出且终态迁入 Archive。API Server 每晚 01:30 分批搬迁，水位闸门与 Redis 锁串行。",
-      "tags": ["RPA", "Orchestrator", "WorkflowRun", "冷热表", "归档"],
+      "tags": [
+        "RPA",
+        "Orchestrator",
+        "WorkflowRun",
+        "冷热表",
+        "归档"
+      ],
       "updated": "2026-09-09",
       "viewer": "arch-spec",
       "entry": "meta.json",
@@ -72,7 +114,9 @@
       "status": "planned",
       "featured": false,
       "summary": "短剧选题、分集、投放与转化口径将按本库规范接入。",
-      "tags": ["短剧"],
+      "tags": [
+        "短剧"
+      ],
       "updated": "2026-08-31",
       "viewer": "article",
       "entry": "meta.json",
@@ -87,7 +131,9 @@
       "status": "planned",
       "featured": false,
       "summary": "RPA 流程、账号与节点说明将按本库规范接入。",
-      "tags": ["RPA"],
+      "tags": [
+        "RPA"
+      ],
       "updated": "2026-08-31",
       "viewer": "article",
       "entry": "meta.json",
@@ -102,7 +148,12 @@
       "status": "published",
       "featured": false,
       "summary": "在其他项目验证可行的方案如何按 section/category 记入本库；本条目同时作为 article 查看器自检。",
-      "tags": ["KG_DATA", "Cursor", "Skill", "归档"],
+      "tags": [
+        "KG_DATA",
+        "Cursor",
+        "Skill",
+        "归档"
+      ],
       "updated": "2026-09-01",
       "viewer": "article",
       "entry": "meta.json",
@@ -117,7 +168,16 @@
       "status": "published",
       "featured": false,
       "summary": "与 GA/RPA 同款分册布局：采用/不优先/条件采用边界表 + 版本钉死 + 接入流程 + 工程清单。主栈 Expo 57 + React/RN + CNG。",
-      "tags": ["Expo", "React", "React Native", "TypeScript", "CNG", "EAS", "AI", "arch-spec"],
+      "tags": [
+        "Expo",
+        "React",
+        "React Native",
+        "TypeScript",
+        "CNG",
+        "EAS",
+        "AI",
+        "arch-spec"
+      ],
       "updated": "2026-09-18",
       "viewer": "arch-spec",
       "entry": "meta.json",
@@ -132,11 +192,43 @@
       "status": "published",
       "featured": true,
       "summary": "Expo 一等公民为 iOS+Android；Harmony 走社区 RNOH/toolkit。覆盖模拟器配对与 Go/Dev Client/EAS/HAP 构建阶梯。",
-      "tags": ["Expo", "React Native", "iOS", "Android", "Harmony", "RNOH", "Simulator", "EAS", "HAP", "arch-spec"],
+      "tags": [
+        "Expo",
+        "React Native",
+        "iOS",
+        "Android",
+        "Harmony",
+        "RNOH",
+        "Simulator",
+        "EAS",
+        "HAP",
+        "arch-spec"
+      ],
       "updated": "2026-09-21",
       "viewer": "arch-spec",
       "entry": "meta.json",
       "section": "architecture",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
+      "id": "expo-local-apk-windows-202609",
+      "title": "Expo 本地 Release APK（Windows / 中文路径）",
+      "subtitle": "不走云 · ASCII 暂存 · build-apk.ps1",
+      "category": "other",
+      "status": "published",
+      "featured": false,
+      "summary": "Windows 中文路径下 Expo 本地打可分发 Release APK：robocopy 模板 + prebuild --no-clean + C:\\\\dev\\\\android-expo-apk 编译。",
+      "tags": [
+        "Expo",
+        "Android",
+        "APK",
+        "Windows",
+        "本地构建"
+      ],
+      "updated": "2026-09-23",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "breakthrough",
       "cover": "covers/kg-default.jpg"
     }
   ]
