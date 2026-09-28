@@ -1,0 +1,28 @@
+{
+  "id": "overseas-drama-overlay-202609",
+  "title": "短剧播放叠层素材字段透传",
+  "status": "published",
+  "sourceProject": "D:\\重要不可删除\\海外短剧",
+  "notes": [
+    "getShortDrama.materialDisplayRuleVOList 原样透传，含 materialVO",
+    "识别与默认值在 epg/src/utils/materialOverlay.js"
+  ],
+  "sections": [
+    {
+      "heading": "背景",
+      "body": "播放页要在视频上叠加图片、GIF、视频或文本。getShortDrama 把规则和素材放在 materialDisplayRuleVOList[].materialVO，字段是扁平的 displayDuration、triggerPhase、displayPosition、sizeType。组件若只认方案稿里的 displayDurationMs，时长会落空。"
+    },
+    {
+      "heading": "可行方案",
+      "body": "播放页和 For You 继续把规则数组交给 PlaybackOverlay。materialOverlay 统一识别接口扁平字段和方案嵌套字段，每个展示字段带默认值，再按时机、位置、时长渲染。同一锚点的多条素材放进同一个槽，按 sort 升序纵向排开，间距 8px；不同锚点用 z-index，sort 小的在下层。"
+    },
+    {
+      "heading": "关键步骤",
+      "body": "默认值：phase=during，offsetType=second，offsetValue=0，durationMs=-1（直到阶段结束），displayPosition=center，坐标 0 / percent，sizeType=original，contentType=image，features=null。\n\n接口对照：displayDuration 为毫秒；contentType=IMG 视为图片；triggerOffsetValue=\"0.00\" 为立即；features=\"0\" 视为空。\n\n时机：before 在开播后按偏移秒触发；during 按秒或百分比；after 在 ended 后按偏移秒触发。duration=-1 时，before 播到正进度即收，during 收到 ended，after 留到离页。"
+    },
+    {
+      "heading": "坑与验证",
+      "body": "- 真实字段是 displayDuration，不是 displayDurationMs。截图样例 8000 会被识别成 8 秒居中原图。\n- 百分比偏移只在 during 生效，其它阶段退回秒。\n- 素材 status=0 或已删除、没有地址也没有文本，则不渲染。\n- 用截图规则、缺省规则、嵌套规则和同位置多条规则跑过 normalize / group，时长、排序和槽位符合预期。播放器实机画面未在本次打开。"
+    }
+  ]
+}

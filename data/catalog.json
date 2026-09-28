@@ -230,6 +230,26 @@
       "entry": "meta.json",
       "section": "breakthrough",
       "cover": "covers/kg-default.jpg"
+    },
+    {
+      "id": "overseas-drama-overlay-202609",
+      "title": "短剧播放叠层素材字段透传",
+      "subtitle": "materialVO · 默认值 · 时机位置时长 · 同锚点排版",
+      "category": "drama",
+      "status": "published",
+      "featured": false,
+      "summary": "getShortDrama 的 materialDisplayRuleVOList（含 materialVO）原样交给叠层组件。扁平字段补默认值后控制展示时机、位置和时长；同一位置多条素材按 sort 纵向排开。",
+      "tags": [
+        "短剧",
+        "叠层",
+        "materialVO",
+        "播放器"
+      ],
+      "updated": "2026-09-28",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "ui-kit",
+      "cover": "covers/kg-default.jpg"
     }
   ]
 }
