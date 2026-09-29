@@ -1,5 +1,6 @@
 import catalogJson from "../../data/catalog.json";
 import { type DriftWallItem } from "../components/DriftWall";
+import { type MasonryItem } from "../components/Masonry";
 import { loadArticleMeta } from "./articles";
 import { gateConfig } from "./gates";
 import type { Catalog, CatalogItem } from "./types";
@@ -55,25 +56,6 @@ export function homeTiles(): DriftWallItem[] {
     .filter((section) => section.id !== "search")
     .map((section) => sectionTile(section.id));
   return fillTiles([...fromCollections, ...fromSections]);
-}
-
-export function sectionTiles(sectionId: string): DriftWallItem[] {
-  const mine = catalog.collections.filter((item) => item.section === sectionId);
-  if (mine.length === 0) {
-    const section = gateConfig.sections.find((item) => item.id === sectionId);
-    return fillTiles([
-      {
-        title: "还没有条目",
-        kicker: section?.label ?? sectionId,
-        excerpt: clip(section?.summary ?? "这个类别还没有条目。"),
-      },
-    ]);
-  }
-  return fillTiles(mine.map(collectionTile));
-}
-
-export function archiveTiles(): DriftWallItem[] {
-  return fillTiles(catalog.collections.map(collectionTile));
 }
 
 /** 目录字段 + 正文（meta body / sections）全文检索 */
@@ -160,20 +142,33 @@ function itemBodyText(item: CatalogItem): string {
 
 function masonryHeight(excerpt: string, title: string) {
   const n = title.length + excerpt.length;
-  return 320 + Math.min(280, Math.floor(n * 1.6));
+  return 360 + Math.min(280, Math.floor(n * 1.6));
+}
+
+function masonryItem(item: CatalogItem, seedKey: string): MasonryItem {
+  const tile = collectionTile(item);
+  const excerpt = randomSnippet(itemBodyText(item), `${item.id}:${seedKey}`) || clip(item.summary, 140);
+  return {
+    id: item.id,
+    url: tile.href ?? `/s/${item.section ?? "architecture"}`,
+    height: masonryHeight(excerpt, item.title),
+    kicker: tile.kicker,
+    title: item.title,
+    excerpt,
+  };
 }
 
 /** 搜索页 Masonry：主题 + 随机正文摘录，无图 */
 export function searchMasonryItems(query: string) {
-  return searchHits(query).map((item) => {
-    const tile = collectionTile(item);
-    const excerpt = randomSnippet(itemBodyText(item), `${item.id}:${query}`) || clip(item.summary, 140);
-    return {
-      id: item.id,
-      url: tile.href ?? `/s/${item.section ?? "architecture"}`,
-      height: masonryHeight(excerpt, item.title),
-      title: item.title,
-      excerpt,
-    };
-  });
+  return searchHits(query).map((item) => masonryItem(item, query));
+}
+
+export function sectionMasonryItems(sectionId: string) {
+  return catalog.collections
+    .filter((item) => item.section === sectionId)
+    .map((item) => masonryItem(item, sectionId));
+}
+
+export function archiveMasonryItems() {
+  return catalog.collections.map((item) => masonryItem(item, "archive"));
 }

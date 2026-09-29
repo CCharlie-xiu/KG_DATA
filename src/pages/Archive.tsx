@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
-import BoardScreen from "../components/BoardScreen";
-import { archiveTiles } from "../lib/tiles";
+import MasonryScreen from "../components/MasonryScreen";
+import { archiveMasonryItems } from "../lib/tiles";
 
 export default function Archive() {
   return (
-    <BoardScreen
+    <MasonryScreen
       title="归档"
       action={
         <Link className="see-new" to="/">
           返回目录 →
         </Link>
       }
-      items={archiveTiles()}
+      items={archiveMasonryItems()}
+      empty="还没有条目。"
     />
   );
 }

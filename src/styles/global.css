@@ -506,40 +506,42 @@ select {
   margin: 0;
 }
 
-.search-screen {
+.scroll-screen {
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
 }
 
-.search-screen::-webkit-scrollbar {
+.scroll-screen::-webkit-scrollbar {
   width: 6px;
 }
 
-.search-screen::-webkit-scrollbar-track {
+.scroll-screen::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.search-screen::-webkit-scrollbar-thumb {
+.scroll-screen::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 999px;
 }
 
-.search-screen::-webkit-scrollbar-thumb:hover {
+.scroll-screen::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.34);
 }
 
-.search-masonry {
+/* 不能随 flex 收缩，否则瀑布流被裁到视口高度、外层无溢出可滚 */
+.masonry-stage {
   position: relative;
   z-index: 2;
-  flex: 1;
+  flex: 0 0 auto;
   width: 100%;
   padding: 4px 0 48px;
-  overflow: hidden;
 }
 
-.search-empty {
+.board-empty {
   margin: 24px 0 0;
   color: rgba(255, 255, 255, 0.45);
   font-family: Outfit, "PingFang SC", "Microsoft YaHei", sans-serif;

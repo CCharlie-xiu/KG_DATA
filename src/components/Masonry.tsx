@@ -6,6 +6,7 @@ export type MasonryItem = {
   id: string;
   url: string;
   height: number;
+  kicker?: string;
   title: string;
   excerpt: string;
   img?: string;
@@ -283,6 +284,7 @@ export default function Masonry({
             className={`item-card${item.img ? " item-card--media" : ""}`}
             style={item.img ? { backgroundImage: `url(${item.img})` } : undefined}
           >
+            {item.kicker ? <span className="item-kicker">{item.kicker}</span> : null}
             <strong className="item-title">{item.title}</strong>
             <p className="item-excerpt">{item.excerpt}</p>
             {colorShiftOnHover && (
