@@ -77,6 +77,33 @@
       ]
     },
     {
+      "id": "live-activity",
+      "title": "播放与灵动岛",
+      "note": "PlaybackController ↔ LiveActivityService",
+      "steps": [
+        {
+          "when": "开始播放",
+          "action": "PlaybackController.play → LiveActivityService.sync(state) → Activity.request",
+          "note": "ContentState 由 PlaybackSnapshot + 队列位置映射"
+        },
+        {
+          "when": "播放中",
+          "action": "只在播放状态 / 时长变化时 update",
+          "note": "进度用 ProgressView(timerInterval:) 由系统推进，不按秒推送"
+        },
+        {
+          "when": "点灵动岛按钮",
+          "action": "Button(intent:) → LiveActivityIntent.perform（App 进程）→ PlaybackCommandCenter.handler",
+          "note": "handler 在 AppDependencies 中指向 playback.handle"
+        },
+        {
+          "when": "停止 / 冷启动",
+          "action": "stop → end(.immediate)；启动时 endStaleActivities",
+          "note": "App 被回收后 handler 为空，Intent 直接结束残留活动"
+        }
+      ]
+    },
+    {
       "id": "feature",
       "title": "新增一个功能",
       "note": "按约定落位",

@@ -8,13 +8,14 @@
     "对外叫法：SwiftUI MV 架构（Model-View）+ Repository 模式；对 Android / 后端同事可说「基于 Observation 的轻量 MVVM」。不是标准 Clean Architecture（无 UseCase 层），也不是 TCA。",
     "调用链：View → @Observable Model → Repository 协议 / Service → Repository 实现 → Networking / Persistence。",
     "跨页面流程（登录、会话、播放、支付）下沉 Services；Feature Model 之间不互相调用。",
+    "灵动岛 / 锁屏实时活动由 PlaybackController 驱动；按钮是 LiveActivityIntent，在 App 进程经 PlaybackCommandCenter 回调播放器，不另起进程间通道。",
     "双端独立原生 + 同一份 GraphQL Schema；Android 走 Now in Android 式 Clean + UseCase，两端对齐 Schema / Entity / 错误分类 / 路由鉴权 / i18n Key。"
   ],
   "stats": {
     "boundaries": 18,
-    "newFields": 14,
-    "modules": 16,
-    "testCases": 4
+    "newFields": 15,
+    "modules": 18,
+    "testCases": 8
   },
   "tabs": [
     { "id": "boundaries", "label": "选型边界" },

@@ -134,9 +134,9 @@
           "timing": "delayed"
         },
         {
-          "channel": "WidgetKit + App Group",
-          "afterComplete": "播放状态小组件，Shared/WidgetBridge 共享快照",
-          "afterDue": "PiP / Live Activity 目前仅能力检测",
+          "channel": "WidgetKit + App Group + ActivityKit",
+          "afterComplete": "播放小组件（WidgetBridge 快照）+ 播放实时活动（锁屏 / 灵动岛，LiveActivityIntent 控制）",
+          "afterDue": "PiP 目前仅能力检测；实时活动未接远程推送",
           "timing": "waiting"
         }
       ]

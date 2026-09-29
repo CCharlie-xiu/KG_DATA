@@ -6,7 +6,8 @@
     { "area": "navigation", "path": "Navigation/RootView.swift", "change": "启动恢复会话 + TabView / NavigationStack", "type": "new" },
     { "area": "feature", "path": "Features/<Name>/<Name>View + <Name>Model", "change": "Home / Search / Login / Mine / Player / Creation", "type": "new" },
     { "area": "service", "path": "Services/Auth/AuthService.swift", "change": "短信 / Apple 登录、会话状态（@Observable）", "type": "new" },
-    { "area": "service", "path": "Services/Playback/PlaybackController.swift", "change": "AVPlayer 队列、后台音频、写 Widget 快照", "type": "new" },
+    { "area": "service", "path": "Services/Playback/PlaybackController.swift", "change": "AVPlayer 队列、后台音频、写 Widget 快照、驱动实时活动", "type": "new" },
+    { "area": "service", "path": "Services/System/LiveActivityService.swift", "change": "实时活动开始 / 更新 / 结束，启动清理残留", "type": "new" },
     { "area": "service", "path": "Services/Store/StoreService.swift", "change": "StoreKit 2 查询 / 购买 / 恢复", "type": "new" },
     { "area": "domain", "path": "Core/Domain/{Entity,Repository,Error}", "change": "Entity、Repository 协议、AppError", "type": "new" },
     { "area": "data", "path": "Core/Repository/*Impl.swift + ContentMapper", "change": "协议实现 + 模型映射", "type": "new" },
@@ -15,6 +16,7 @@
     { "area": "codegen", "path": "apollo-codegen-config.json + scripts/generate-graphql.sh", "change": "schema / .graphql → RingtoneAPI 本地 SPM 包", "type": "new" },
     { "area": "ui", "path": "DesignSystem/{Theme,Components,Localizable.xcstrings}", "change": "主题 token、空态 / 加载 / Toast、三语", "type": "new" },
     { "area": "widget", "path": "RingtoneWorldWidget/ + Shared/WidgetBridge.swift", "change": "播放 Widget，App Group 共享快照", "type": "new" },
+    { "area": "widget", "path": "RingtoneWorldWidget/PlaybackLiveActivity + Shared/{PlaybackActivityAttributes,PlaybackIntents}", "change": "锁屏 / 灵动岛三态；LiveActivityIntent → PlaybackCommandCenter → PlaybackController", "type": "new" },
     { "area": "docs", "path": "CLAUDE.md / README.md / docs/*architecture-design.md", "change": "按实际代码写明 MV 分层与双端契约对齐", "type": "edit" }
   ]
 }

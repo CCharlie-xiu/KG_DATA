@@ -80,10 +80,16 @@
       "desc": "App Group 读写 WidgetSnapshot"
     },
     {
+      "name": "实时活动 / 灵动岛",
+      "type": "ActivityKit + App Intents",
+      "model": "PlaybackActivityAttributes",
+      "desc": "NSSupportsLiveActivities；按钮用 Button(intent:) + LiveActivityIntent，在 App 进程执行"
+    },
+    {
       "name": "测试",
       "type": "Swift Testing",
       "model": "RingtoneWorldTests",
-      "desc": "@Test / #expect；覆盖路由鉴权、Mapper、DTO 解码"
+      "desc": "@Test / #expect；覆盖路由鉴权、Mapper、DTO 解码、实时活动状态映射与 Intent 转发"
     },
     {
       "name": "Android 对照",
