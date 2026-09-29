@@ -69,13 +69,6 @@ npm run archive
 
 ## 发布 Pages
 
-当前用 `gh-pages` 分支静态发布（OAuth 没有 `workflow` 权限，暂不走 Actions）。
+推送到 `main` 后由 `.github/workflows/pages.yml` 自动构建并部署（Pages 来源：GitHub Actions）。
 
-```bash
-# Windows PowerShell
-$env:VITE_BASE="/KG_DATA/"
-npm run build
-npx gh-pages -d dist -b gh-pages
-```
-
-若以后补上 `workflow` scope，可把 `.github/workflows/pages.yml` 推上 main，改为 Actions 自动发布。
+`package-lock.json` 的 `resolved` 必须指向公共 `https://registry.npmjs.org/`；本机若配置了私有镜像，装包后需检查，否则 CI 的 `npm ci` 会 401。
