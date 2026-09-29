@@ -71,4 +71,4 @@ npm run archive
 
 推送到 `main` 后由 `.github/workflows/pages.yml` 自动构建并部署（Pages 来源：GitHub Actions）。
 
-`package-lock.json` 的 `resolved` 必须指向公共 `https://registry.npmjs.org/`；本机若配置了私有镜像，装包后需检查，否则 CI 的 `npm ci` 会 401。
+项目 `.npmrc` 固定国内镜像 `https://registry.npmmirror.com/`，`package-lock.json` 的 `resolved` 也应指向它；不要提交指向需登录私有源的 lockfile，否则 CI 的 `npm ci` 会 401。
