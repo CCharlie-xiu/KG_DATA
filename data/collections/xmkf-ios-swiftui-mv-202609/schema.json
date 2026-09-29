@@ -1,0 +1,117 @@
+{
+  "sectionTitles": {
+    "workflow": "分层与职责（目录 → 角色）",
+    "run": "技术钉版本",
+    "config": "组合根装配示例"
+  },
+  "workflowFields": [
+    {
+      "name": "App/",
+      "type": "入口 · 组合根",
+      "model": "RingtoneWorldApp / AppConfig / AppDependencies",
+      "desc": "唯一装配点；环境配置按 DEBUG 切换"
+    },
+    {
+      "name": "Navigation/",
+      "type": "路由",
+      "model": "Route / AppRouter / RootView",
+      "desc": "每 Tab 一条 [Route] 路径；requiresAuth 且无会话时重定向 .login"
+    },
+    {
+      "name": "Features/",
+      "type": "页面",
+      "model": "XxxView + XxxModel",
+      "desc": "Model 为 @MainActor @Observable；只依赖协议与 Services"
+    },
+    {
+      "name": "Services/",
+      "type": "跨功能能力",
+      "model": "AuthService / PlaybackController / StoreService …",
+      "desc": "登录态、AVPlayer 播放、StoreKit 2、PiP / Live Activity"
+    },
+    {
+      "name": "Core/Domain",
+      "type": "领域",
+      "model": "Entity / Repository 协议 / AppError",
+      "desc": "不依赖 SwiftUI / Apollo；错误统一 network|api|auth|validation|unknown"
+    },
+    {
+      "name": "Core/Repository",
+      "type": "数据实现",
+      "model": "XxxRepositoryImpl + Mapper",
+      "desc": "Apollo 模型 / DTO → Entity；异常转 AppError"
+    },
+    {
+      "name": "Core/Networking · Persistence",
+      "type": "基础设施",
+      "model": "RestClient / ApolloGraphQLClient / Interceptors / AppLocalStorage",
+      "desc": "Basic-Auth + Tenant + B3 + Bearer；401 刷新重试"
+    },
+    {
+      "name": "DesignSystem/",
+      "type": "UI 基础",
+      "model": "Theme / AppComponents / Localizable.xcstrings",
+      "desc": "空态、加载、Toast；zh-Hans 源语言 + en + th"
+    }
+  ],
+  "runFields": [
+    {
+      "name": "iOS Deployment Target",
+      "type": "18.0",
+      "model": "project.pbxproj",
+      "desc": "Observation 需 17+，统一抬到 18"
+    },
+    {
+      "name": "Swift",
+      "type": "Swift 5 语言模式",
+      "model": "SWIFT_VERSION",
+      "desc": "类型标 Sendable；后续可切 Swift 6 严格并发"
+    },
+    {
+      "name": "Apollo iOS",
+      "type": "2.4.0",
+      "model": "SPM / Package.resolved",
+      "desc": "apollo-ios-cli 同版本；config 见 apollo-codegen-config.json"
+    },
+    {
+      "name": "Widget 扩展",
+      "type": "WidgetKit",
+      "model": "RingtoneWorldWidget",
+      "desc": "App Group 读写 WidgetSnapshot"
+    },
+    {
+      "name": "测试",
+      "type": "Swift Testing",
+      "model": "RingtoneWorldTests",
+      "desc": "@Test / #expect；覆盖路由鉴权、Mapper、DTO 解码"
+    },
+    {
+      "name": "Android 对照",
+      "type": "Clean + UseCase",
+      "model": "vrbt-show-android",
+      "desc": "HomeModel ↔ HomeViewModel；Service 方法 ↔ UseCase；AppDependencies ↔ Hilt"
+    }
+  ],
+  "configExample": {
+    "AppDependencies": {
+      "storage": "AppLocalStorage()",
+      "http": "AuthenticatedHTTPClient(interceptors: [BasicAuth, B3Tracing, Token])",
+      "userRepository": "UserRepositoryImpl(restClient: RestClient(http), storage)",
+      "contentRepository": "ContentRepositoryImpl(apollo: ApolloGraphQLClient.make(storage))",
+      "auth": "AuthService(userRepository, AppleSignInProvider())",
+      "homeModel": "HomeModel(repository: contentRepository)",
+      "loginModel": "LoginModel(auth: auth)",
+      "makePlayerModel": "PlayerModel(itemID, title, playback)"
+    },
+    "Model 模板": "@MainActor @Observable final class HomeModel { private(set) var items; private(set) var isLoading; private(set) var errorMessage; func load() async }"
+  },
+  "requestOverride": {
+    "field": "新增业务逻辑放哪",
+    "rules": [
+      "只影响一个页面 → 写在该 Feature 的 Model",
+      "多个页面共享或有全局状态 → 放 Services",
+      "纯数据获取 / 映射 → Repository 实现 + Mapper",
+      "同一逻辑出现第二处或需独立测试 → 抽独立类型（等价 UseCase）"
+    ]
+  }
+}

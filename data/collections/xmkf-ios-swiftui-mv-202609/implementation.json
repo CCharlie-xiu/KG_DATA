@@ -1,0 +1,20 @@
+{
+  "modules": [
+    { "area": "app", "path": "App/AppDependencies.swift", "change": "组合根：装配 Storage / HTTP / Apollo / Repository / Services / Models", "type": "new" },
+    { "area": "app", "path": "App/AppConfig.swift", "change": "环境域名、GraphQL 路径、租户（DEBUG 切换）", "type": "new" },
+    { "area": "navigation", "path": "Navigation/Route.swift · AppRouter.swift", "change": "路由枚举 + requiresAuth；每 Tab 路径", "type": "new" },
+    { "area": "navigation", "path": "Navigation/RootView.swift", "change": "启动恢复会话 + TabView / NavigationStack", "type": "new" },
+    { "area": "feature", "path": "Features/<Name>/<Name>View + <Name>Model", "change": "Home / Search / Login / Mine / Player / Creation", "type": "new" },
+    { "area": "service", "path": "Services/Auth/AuthService.swift", "change": "短信 / Apple 登录、会话状态（@Observable）", "type": "new" },
+    { "area": "service", "path": "Services/Playback/PlaybackController.swift", "change": "AVPlayer 队列、后台音频、写 Widget 快照", "type": "new" },
+    { "area": "service", "path": "Services/Store/StoreService.swift", "change": "StoreKit 2 查询 / 购买 / 恢复", "type": "new" },
+    { "area": "domain", "path": "Core/Domain/{Entity,Repository,Error}", "change": "Entity、Repository 协议、AppError", "type": "new" },
+    { "area": "data", "path": "Core/Repository/*Impl.swift + ContentMapper", "change": "协议实现 + 模型映射", "type": "new" },
+    { "area": "network", "path": "Core/Networking/AuthenticatedHTTPClient + Interceptors", "change": "REST 拦截器链 + 401 刷新重试", "type": "new" },
+    { "area": "network", "path": "Core/Networking/GraphQL/ApolloGraphQLClient.swift", "change": "Apollo InterceptorProvider：头注入 + 401 Retry", "type": "new" },
+    { "area": "codegen", "path": "apollo-codegen-config.json + scripts/generate-graphql.sh", "change": "schema / .graphql → RingtoneAPI 本地 SPM 包", "type": "new" },
+    { "area": "ui", "path": "DesignSystem/{Theme,Components,Localizable.xcstrings}", "change": "主题 token、空态 / 加载 / Toast、三语", "type": "new" },
+    { "area": "widget", "path": "RingtoneWorldWidget/ + Shared/WidgetBridge.swift", "change": "播放 Widget，App Group 共享快照", "type": "new" },
+    { "area": "docs", "path": "CLAUDE.md / README.md / docs/*architecture-design.md", "change": "按实际代码写明 MV 分层与双端契约对齐", "type": "edit" }
+  ]
+}

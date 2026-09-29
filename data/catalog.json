@@ -211,6 +211,30 @@
       "cover": "covers/kg-default.jpg"
     },
     {
+      "id": "xmkf-ios-swiftui-mv-202609",
+      "title": "iOS 原生 SwiftUI MV 架构（Observation + Repository）",
+      "subtitle": "选型边界 · 分层模型 · 执行流程 · 工程清单",
+      "category": "other",
+      "status": "published",
+      "featured": true,
+      "summary": "纯原生 SwiftUI：View + @Observable Model → Repository 协议 / Services → Apollo GraphQL + URLSession REST；AppDependencies 组合根手动注入。与 Android（Clean + UseCase）只对齐契约。",
+      "tags": [
+        "iOS",
+        "SwiftUI",
+        "Observation",
+        "MV",
+        "Apollo",
+        "GraphQL",
+        "Repository",
+        "arch-spec"
+      ],
+      "updated": "2026-09-29",
+      "viewer": "arch-spec",
+      "entry": "meta.json",
+      "section": "architecture",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
       "id": "expo-local-apk-windows-202609",
       "title": "Expo 本地 Release APK（Windows / 中文路径）",
       "subtitle": "不走云 · ASCII 暂存 · build-apk.ps1",

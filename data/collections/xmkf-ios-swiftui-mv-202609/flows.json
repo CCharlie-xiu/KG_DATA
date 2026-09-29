@@ -1,0 +1,112 @@
+{
+  "groups": [
+    {
+      "id": "launch",
+      "title": "启动与会话恢复",
+      "note": "RootView .task",
+      "steps": [
+        {
+          "when": "App 启动",
+          "action": "RootView 显示 AppLoadingView，.task 中创建 AppDependencies",
+          "note": "组合根只创建一次（@MainActor）"
+        },
+        {
+          "when": "恢复会话",
+          "action": "await auth.restoreSession() → mineModel.sync()",
+          "note": "读本地 token / 用户信息"
+        },
+        {
+          "when": "进入主界面",
+          "action": "AppTabs：TabView + 每 Tab 一个 NavigationStack",
+          "note": "路径绑定 AppRouter.xxxPath"
+        }
+      ]
+    },
+    {
+      "id": "request",
+      "title": "一次数据请求",
+      "note": "以首页列表为例",
+      "steps": [
+        {
+          "when": "View 出现",
+          "action": "HomeView .task → model.loadIfNeeded()",
+          "note": "下拉刷新走 model.load()"
+        },
+        {
+          "when": "Model",
+          "action": "isLoading = true → repository.fetchContentList()",
+          "note": "只认 ContentRepository 协议"
+        },
+        {
+          "when": "Repository 实现",
+          "action": "Apollo fetch GetContentListQuery → ContentMapper → [ContentEntity]",
+          "note": "失败转 AppError.api"
+        },
+        {
+          "when": "网络层",
+          "action": "GraphQLHeaderInterceptor 注入 Bearer / Basic-Auth / Tenant / B3",
+          "note": "401 → oauth/token 刷新 → RequestChain.Retry"
+        },
+        {
+          "when": "回到 UI",
+          "action": "items / errorMessage 更新 → SwiftUI 自动刷新",
+          "note": "错误文案走 i18n"
+        }
+      ]
+    },
+    {
+      "id": "navigate",
+      "title": "路由与鉴权",
+      "note": "AppRouter.open",
+      "steps": [
+        {
+          "when": "用户点击",
+          "action": "router.open(route, on: tab, hasSession: auth.hasSession)",
+          "note": "View 只传事件"
+        },
+        {
+          "when": "鉴权",
+          "action": "route.requiresAuth && !hasSession → 替换为 .login",
+          "note": "规则集中在 Route.requiresAuth"
+        },
+        {
+          "when": "渲染",
+          "action": "navigationDestination → RouteScreen 分发",
+          "note": "PlayerModel 由 makePlayerModel 按路由创建"
+        }
+      ]
+    },
+    {
+      "id": "feature",
+      "title": "新增一个功能",
+      "note": "按约定落位",
+      "steps": [
+        {
+          "when": "领域",
+          "action": "Core/Domain 加 Entity / Repository 方法",
+          "note": "Schema 变更先跑 generate-graphql.sh"
+        },
+        {
+          "when": "数据",
+          "action": "Core/Repository 实现 + Mapper",
+          "note": "异常统一转 AppError"
+        },
+        {
+          "when": "页面",
+          "action": "Features/Xxx 建 XxxView + XxxModel",
+          "note": "跨页面逻辑改放 Services"
+        },
+        {
+          "when": "装配 + 路由",
+          "action": "AppDependencies 注入；Route 加 case 与 requiresAuth",
+          "note": "文案加进 Localizable.xcstrings 三语"
+        },
+        {
+          "when": "验证",
+          "action": "Xcode Cmd+B / Cmd+U（Swift Testing）",
+          "note": "同步检查 Android 契约是否一致"
+        }
+      ]
+    }
+  ]
+}

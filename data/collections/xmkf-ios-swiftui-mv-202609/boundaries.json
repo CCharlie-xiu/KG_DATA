@@ -1,0 +1,145 @@
+{
+  "lookLegend": [
+    { "id": "realtime", "label": "采用" },
+    { "id": "delayed", "label": "不采用" },
+    { "id": "waiting", "label": "条件采用" }
+  ],
+  "groups": [
+    {
+      "id": "ui",
+      "title": "UI 与状态",
+      "note": "页面层怎么写",
+      "rows": [
+        {
+          "channel": "SwiftUI（iOS 18+）",
+          "afterComplete": "全部界面、TabView + NavigationStack",
+          "afterDue": "UIKit 仅在系统回调需要时（如 Apple 登录锚点）",
+          "timing": "realtime"
+        },
+        {
+          "channel": "@Observable + @MainActor Model",
+          "afterComplete": "每页一个 XxxModel 持有状态与事件",
+          "afterDue": "对外状态 private(set)，View 只读 + 调方法",
+          "timing": "realtime"
+        },
+        {
+          "channel": "ViewModel + Combine（ObservableObject）",
+          "afterComplete": "旧式 MVVM",
+          "afterDue": "iOS 17+ 被 Observation 取代，样板多",
+          "timing": "delayed"
+        },
+        {
+          "channel": "TCA 等第三方状态框架",
+          "afterComplete": "Reducer / Store 统一建模",
+          "afterDue": "学习与模板成本高，当前规模不需要",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "domain",
+      "title": "领域与业务逻辑",
+      "note": "逻辑放哪",
+      "rows": [
+        {
+          "channel": "Repository 协议 + Entity（Core/Domain）",
+          "afterComplete": "数据来源藏在协议后，Entity 为 Sendable struct",
+          "afterDue": "Domain 不 import SwiftUI / Apollo",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Services（Auth / Playback / Store / System）",
+          "afterComplete": "跨页面有状态能力，承担 UseCase 角色",
+          "afterDue": "需驱动 UI 的同时标 @Observable",
+          "timing": "realtime"
+        },
+        {
+          "channel": "UseCase 层（一类一方法）",
+          "afterComplete": "Android 侧标准做法",
+          "afterDue": "iOS 仅在逻辑多处重复或需独立测试时再抽",
+          "timing": "waiting"
+        },
+        {
+          "channel": "Model 直接调 Apollo / URLSession / UserDefaults",
+          "afterComplete": "省一层",
+          "afterDue": "破坏可替换性与测试，禁止",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "数据与网络",
+      "note": "GraphQL + REST 双通道",
+      "rows": [
+        {
+          "channel": "Apollo iOS 2.4（SPM）",
+          "afterComplete": "内容查询；codegen 到本地包 RingtoneAPI",
+          "afterDue": "产物禁止手改，脚本重生",
+          "timing": "realtime"
+        },
+        {
+          "channel": "URLSession REST（AuthenticatedHTTPClient）",
+          "afterComplete": "oauth/token 登录 / 刷新",
+          "afterDue": "拦截器链 + 401 刷新重试一次",
+          "timing": "realtime"
+        },
+        {
+          "channel": "UserDefaults（AppLocalStorage）",
+          "afterComplete": "token、用户信息等轻量 KV",
+          "afterDue": "敏感数据后续迁 Keychain",
+          "timing": "realtime"
+        },
+        {
+          "channel": "SwiftData 离线缓存",
+          "afterComplete": "结构化本地数据",
+          "afterDue": "等媒体 / 离线需求再引入",
+          "timing": "waiting"
+        }
+      ]
+    },
+    {
+      "id": "wiring",
+      "title": "依赖与跨端",
+      "note": "怎么装配、怎么和 Android 对齐",
+      "rows": [
+        {
+          "channel": "手动组合根 AppDependencies",
+          "afterComplete": "全 App 唯一装配点，构造器注入",
+          "afterDue": "按路由创建的 Model 用 makeXxxModel 工厂",
+          "timing": "realtime"
+        },
+        {
+          "channel": "第三方 DI 框架 / 全局单例",
+          "afterComplete": "自动注入",
+          "afterDue": "依赖图小，隐式依赖难测，不引入",
+          "timing": "delayed"
+        },
+        {
+          "channel": "SwiftUI Environment 传依赖",
+          "afterComplete": "深层子视图取共享对象",
+          "afterDue": "当前 Model 直接作参数传给 View",
+          "timing": "waiting"
+        },
+        {
+          "channel": "双端独立原生 + GraphQL Schema 契约",
+          "afterComplete": "两端各自 codegen，模型不漂移",
+          "afterDue": "对齐契约，不强求目录一致",
+          "timing": "realtime"
+        },
+        {
+          "channel": "KMP / Compose Multiplatform 共享层",
+          "afterComplete": "共享业务代码",
+          "afterDue": "平台能力占比高，shared 层太薄",
+          "timing": "delayed"
+        },
+        {
+          "channel": "WidgetKit + App Group",
+          "afterComplete": "播放状态小组件，Shared/WidgetBridge 共享快照",
+          "afterDue": "PiP / Live Activity 目前仅能力检测",
+          "timing": "waiting"
+        }
+      ]
+    }
+  ]
+}

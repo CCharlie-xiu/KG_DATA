@@ -1,0 +1,25 @@
+{
+  "id": "xmkf-ios-swiftui-mv-202609",
+  "title": "iOS 原生 SwiftUI MV 架构（Observation + Repository）",
+  "kicker": "SwiftUI · Observation · Apollo · Repository · Composition Root",
+  "summary": "纯原生 SwiftUI App：每页 View + @Observable Model，经 Repository 协议 / Service 取数，Apollo GraphQL + URLSession REST 走统一拦截器，依赖在 AppDependencies 组合根手动注入。与 Android 只对齐契约，不对齐目录。",
+  "sourceProject": "/Users/wuch/重要不可删除/iosXcode/xmkf-ringtone-world-app/ringtone-world-ios",
+  "notes": [
+    "对外叫法：SwiftUI MV 架构（Model-View）+ Repository 模式；对 Android / 后端同事可说「基于 Observation 的轻量 MVVM」。不是标准 Clean Architecture（无 UseCase 层），也不是 TCA。",
+    "调用链：View → @Observable Model → Repository 协议 / Service → Repository 实现 → Networking / Persistence。",
+    "跨页面流程（登录、会话、播放、支付）下沉 Services；Feature Model 之间不互相调用。",
+    "双端独立原生 + 同一份 GraphQL Schema；Android 走 Now in Android 式 Clean + UseCase，两端对齐 Schema / Entity / 错误分类 / 路由鉴权 / i18n Key。"
+  ],
+  "stats": {
+    "boundaries": 18,
+    "newFields": 14,
+    "modules": 16,
+    "testCases": 4
+  },
+  "tabs": [
+    { "id": "boundaries", "label": "选型边界" },
+    { "id": "schema", "label": "分层模型" },
+    { "id": "flows", "label": "执行流程" },
+    { "id": "impl", "label": "工程清单" }
+  ]
+}

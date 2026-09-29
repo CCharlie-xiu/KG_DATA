@@ -25,6 +25,12 @@ import mcdArchSchema from "../../data/collections/mcd-arch-native-capability-202
 import mcdArchFlows from "../../data/collections/mcd-arch-native-capability-202609/flows.json";
 import mcdArchImpl from "../../data/collections/mcd-arch-native-capability-202609/implementation.json";
 
+import iosMvMeta from "../../data/collections/xmkf-ios-swiftui-mv-202609/meta.json";
+import iosMvBoundaries from "../../data/collections/xmkf-ios-swiftui-mv-202609/boundaries.json";
+import iosMvSchema from "../../data/collections/xmkf-ios-swiftui-mv-202609/schema.json";
+import iosMvFlows from "../../data/collections/xmkf-ios-swiftui-mv-202609/flows.json";
+import iosMvImpl from "../../data/collections/xmkf-ios-swiftui-mv-202609/implementation.json";
+
 import ArchBoundariesBoard from "./arch/ArchBoundariesBoard";
 import ArchSchemaBoard from "./arch/ArchSchemaBoard";
 import ArchFlowsBoard from "./arch/ArchFlowsBoard";
@@ -92,6 +98,13 @@ const SPECS: Record<string, ArchSpecBundle> = {
     schema: mcdArchSchema,
     flows: mcdArchFlows,
     impl: mcdArchImpl,
+  },
+  "xmkf-ios-swiftui-mv-202609": {
+    meta: iosMvMeta as ArchSpecBundle["meta"],
+    boundaries: iosMvBoundaries,
+    schema: iosMvSchema,
+    flows: iosMvFlows,
+    impl: iosMvImpl,
   },
 };
 
