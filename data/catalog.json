@@ -256,6 +256,27 @@
       "cover": "covers/kg-default.jpg"
     },
     {
+      "id": "macos-dev-env-homebrew-202609",
+      "title": "macOS 新机开发环境：Homebrew + Node + gh",
+      "subtitle": "官方 / 清华镜像 · PATH · gh 登录",
+      "category": "other",
+      "status": "published",
+      "featured": false,
+      "summary": "Apple 芯片 Mac 从零装 Homebrew（官方或清华镜像）→ 写入 ~/.zprofile → brew install node gh → gh auth login。含 sudo 密码、旧终端 PATH、私有 npm 源 E401 等坑。",
+      "tags": [
+        "macOS",
+        "Homebrew",
+        "Node",
+        "gh",
+        "环境搭建"
+      ],
+      "updated": "2026-09-29",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "breakthrough",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
       "id": "overseas-drama-overlay-202609",
       "title": "短剧播放叠层素材字段透传",
       "subtitle": "materialVO · 默认值 · 时机位置时长 · 同锚点排版",

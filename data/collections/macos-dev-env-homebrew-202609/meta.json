@@ -1,0 +1,28 @@
+{
+  "id": "macos-dev-env-homebrew-202609",
+  "title": "macOS 新机开发环境：Homebrew + Node + gh",
+  "status": "published",
+  "sourceProject": "/Users/wuch（Apple 芯片 Mac mini）",
+  "notes": [
+    "Apple 芯片 Homebrew 装在 /opt/homebrew；Intel 为 /usr/local",
+    "安装需要管理员密码，必须在自己的终端里手动跑，Agent 无法代输 sudo 密码"
+  ],
+  "sections": [
+    {
+      "heading": "背景",
+      "body": "新 Mac 上没有 brew / node / gh：Vite 项目无法构建、GitHub Pages 无法发布，也只能通过公开 API 看到公开仓库。需要一套可复用的初始化步骤，国内网络下也能装上。"
+    },
+    {
+      "heading": "可行方案",
+      "body": "- 官方脚本安装 Homebrew（GitHub 慢时用清华镜像）\n- 把 brew shellenv 写进 ~/.zprofile\n- brew install node gh\n- gh auth login 走浏览器授权，之后 git push over HTTPS 也复用该凭据"
+    },
+    {
+      "heading": "关键步骤",
+      "body": "### 0. 前置检查\n\n```bash\nxcode-select -p        # 有输出即已装命令行工具；否则 xcode-select --install\nid -Gn | grep admin    # 账号需为管理员\n```\n\n### 1. 安装 Homebrew（官方）\n\n```bash\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"\n```\n\n### 1'. 安装 Homebrew（清华镜像，GitHub 连不上时）\n\n```bash\nexport HOMEBREW_BREW_GIT_REMOTE=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"\nexport HOMEBREW_CORE_GIT_REMOTE=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git\"\nexport HOMEBREW_API_DOMAIN=\"https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api\"\nexport HOMEBREW_BOTTLE_DOMAIN=\"https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles\"\n/bin/bash -c \"$(curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install/raw/HEAD/install.sh)\"\n```\n\n### 2. 加入 PATH（Apple 芯片）\n\n```bash\necho 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> ~/.zprofile\neval \"$(/opt/homebrew/bin/brew shellenv)\"\nbrew -v\n```\n\n### 3. 常用工具\n\n```bash\nbrew install node gh\nnode -v && npm -v && gh --version\n```\n\n### 4. 登录 GitHub\n\n```bash\ngh auth login          # GitHub.com → HTTPS → Login with a web browser\ngh auth status\ngh repo list <user> --limit 100   # 私有仓库也可见\n```"
+    },
+    {
+      "heading": "坑与验证",
+      "body": "- Agent / 非交互 shell 里跑安装脚本会卡在 sudo 密码：只能自己在终端执行\n- 已打开的终端（含 Cursor 内置终端）不会自动识别 brew：重开或 source ~/.zprofile\n- brew install node 结尾提示 Single Executable Application is disabled 属正常，不影响使用\n- 仓库 package-lock.json 若指向私有源（如 packages.aliyun.com）会 npm E401：临时 npm install --no-package-lock --registry=https://registry.npmmirror.com，不改锁文件\n- 装 brew 版 node 前用过便携 Node 的，删掉 ~/.local/node，避免 PATH 里两份 node\n- 已验证：Homebrew 7.0.7、Node 26.10.0、gh 2.101.0，gh 登录后可列出公开 + 私有仓库，Vite 构建与 gh-pages 发布正常"
+    }
+  ]
+}
