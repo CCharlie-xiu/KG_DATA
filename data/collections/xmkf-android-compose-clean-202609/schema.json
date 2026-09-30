@@ -1,0 +1,128 @@
+{
+  "sectionTitles": {
+    "workflow": "分层与职责（目录 → 角色）",
+    "run": "技术钉版本",
+    "config": "Hilt 模块装配"
+  },
+  "workflowFields": [
+    {
+      "name": "presentation/feature",
+      "type": "页面",
+      "model": "XxxScreen + XxxViewModel",
+      "desc": "Screen 只读状态、传事件；ViewModel 依赖 UseCase"
+    },
+    {
+      "name": "presentation/navigation",
+      "type": "路由",
+      "model": "Route / AppRouter / RouteInterceptor / AppNavHost",
+      "desc": "Tab：HOME / MINE；子页面搜索、登录、播放、会员"
+    },
+    {
+      "name": "domain/usecase",
+      "type": "业务用例",
+      "model": "LoginUseCase / SearchContentUseCase / SetAppLanguageUseCase …",
+      "desc": "动词开头，一个公开方法，不持有状态"
+    },
+    {
+      "name": "domain/entity · repository",
+      "type": "领域",
+      "model": "UserEntity / ContentEntity / AppLanguage / SettingsRepository",
+      "desc": "字段与 iOS Entity 一致"
+    },
+    {
+      "name": "data/repository",
+      "type": "数据实现",
+      "model": "XxxRepositoryImpl + ContentMapper",
+      "desc": "Apollo 异常 → AppError（NetworkError / ApiError(statusCode)）"
+    },
+    {
+      "name": "data/network · local",
+      "type": "基础设施",
+      "model": "ApolloClient / Retrofit / Interceptors / AppDataStore",
+      "desc": "共用 OkHttpClient；401 自动刷新"
+    },
+    {
+      "name": "platform/",
+      "type": "平台能力",
+      "model": "media/audio · payment · auth · system/widget · system/locale",
+      "desc": "播放、支付、登录、小组件、语言"
+    },
+    {
+      "name": "di/",
+      "type": "装配",
+      "model": "NetworkModule / RepositoryModule / PlatformModule",
+      "desc": "@Binds 接口 → 实现，@Singleton"
+    }
+  ],
+  "runFields": [
+    {
+      "name": "Kotlin / AGP / Gradle",
+      "type": "2.1 / 8.7 / 8.11",
+      "model": "libs.versions.toml",
+      "desc": "构建需 JDK 17–21（Android Studio 自带 JBR 25 跑不了）"
+    },
+    {
+      "name": "compileSdk / minSdk",
+      "type": "35 / 26",
+      "model": "app/build.gradle.kts",
+      "desc": "Glance、Credential Manager 最低要求"
+    },
+    {
+      "name": "Compose BOM · Material 3",
+      "type": "BOM 统一",
+      "model": "compose-bom",
+      "desc": "UI 基础"
+    },
+    {
+      "name": "Media3",
+      "type": "1.5.1",
+      "model": "exoplayer + session",
+      "desc": "foregroundServiceType=mediaPlayback"
+    },
+    {
+      "name": "Glance",
+      "type": "1.1.1",
+      "model": "appwidget + material3",
+      "desc": "小组件"
+    },
+    {
+      "name": "Play Billing",
+      "type": "7.1.1",
+      "model": "billing-ktx",
+      "desc": "会员购买"
+    },
+    {
+      "name": "AppCompat",
+      "type": "1.7.0",
+      "model": "appcompat",
+      "desc": "App 内语言（per-app locales）"
+    },
+    {
+      "name": "测试",
+      "type": "JUnit 5 + MockK + Turbine",
+      "model": "app/src/test",
+      "desc": "模板 23 个单测"
+    }
+  ],
+  "configExample": {
+    "RepositoryModule": {
+      "UserRepository": "UserRepositoryImpl",
+      "ContentRepository": "ContentRepositoryImpl",
+      "SettingsRepository": "SettingsRepositoryImpl(dataStore, localeController)"
+    },
+    "PlatformModule": {
+      "PaymentManager": "PlayBillingManager",
+      "AppLocaleController": "AppCompatLocaleController(widgetBridge)"
+    },
+    "ViewModel 模板": "@HiltViewModel class MineViewModel @Inject constructor(observeAppLanguage: ObserveAppLanguageUseCase, private val setAppLanguage: SetAppLanguageUseCase) : ViewModel()"
+  },
+  "requestOverride": {
+    "field": "新增业务逻辑放哪",
+    "rules": [
+      "纯业务规则 → domain/usecase 新建 XxxUseCase，ViewModel 注入",
+      "数据获取 / 映射 → data/repository 实现 + Mapper，domain 只放接口",
+      "系统能力（播放、支付、登录、小组件、语言） → platform/，接口放 data 或 domain，Hilt 绑定",
+      "文案 → values / values-en / values-th 三语同时加，key 与 iOS 一致"
+    ]
+  }
+}

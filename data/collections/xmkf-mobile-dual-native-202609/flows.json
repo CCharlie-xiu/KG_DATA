@@ -1,0 +1,102 @@
+{
+  "groups": [
+    {
+      "id": "start",
+      "title": "开工",
+      "note": "Skill mobile-project-start",
+      "steps": [
+        {
+          "when": "前置检查",
+          "action": "确认 ~/.cursor/skills 下四个 Skill 已安装",
+          "note": "缺失时运行业务仓库或总仓库的 scripts/install-skills.sh"
+        },
+        {
+          "when": "开工三问",
+          "action": "一次 AskQuestion：项目来源 / 主端 / 同步模式",
+          "note": "已有 .mobile-template.json 时推荐原选项"
+        },
+        {
+          "when": "接入或搭建",
+          "action": "adopt-project.sh 或 new-project.sh",
+          "note": "首次接入跑一次 verify.sh i18n 报告现有缺口"
+        },
+        {
+          "when": "启动主端",
+          "action": "preflight → xcode-first-run.sh / first-run.sh，截图首屏",
+          "note": "静默模式下跟随端后台跑 verify 基线"
+        }
+      ]
+    },
+    {
+      "id": "develop",
+      "title": "主端开发",
+      "note": "用户只和主端交互",
+      "steps": [
+        {
+          "when": "新功能",
+          "action": "先写契约 docs/contracts/<功能>.md",
+          "note": "两端一致层 + 平台实现层"
+        },
+        {
+          "when": "实现",
+          "action": "主端按平台惯用写法实现；新文案三语一次写齐",
+          "note": "key 按 模块_场景_描述"
+        },
+        {
+          "when": "验证",
+          "action": "verify.sh <根> <主端>",
+          "note": "只做主端三语自检，避免跟随端未对齐就报错"
+        }
+      ]
+    },
+    {
+      "id": "align",
+      "title": "跟随端静默对齐",
+      "note": "不提问、不开跟随端 IDE",
+      "steps": [
+        {
+          "when": "触发",
+          "action": "主端功能验证通过，或用户说「对齐」",
+          "note": "单端模式只记 parity.md"
+        },
+        {
+          "when": "实现",
+          "action": "以主端代码为准补契约，跟随端实现同名 Entity 字段 / i18n key / 错误分类 / 测试",
+          "note": "可交给后台子 Agent"
+        },
+        {
+          "when": "验证",
+          "action": "verify.sh <根> <跟随端>：双端三语交叉校验 + 构建 + 单测",
+          "note": "失败读日志修复直到通过"
+        },
+        {
+          "when": "收尾",
+          "action": "更新 parity.md，一两句话汇报",
+          "note": "平台替代方案单独说明"
+        }
+      ]
+    },
+    {
+      "id": "sync",
+      "title": "模板更新同步到业务项目",
+      "note": "包名不同也能合",
+      "steps": [
+        {
+          "when": "Android",
+          "action": "模板 git diff → sed 替换包路径 → git apply --directory=<android 目录> --reject",
+          "note": "导航、strings、gradle 等冲突手工合并"
+        },
+        {
+          "when": "iOS",
+          "action": "模板 diff → git apply --reject，处理 .rej",
+          "note": "在外层业务仓库提交"
+        },
+        {
+          "when": "校验",
+          "action": "verify.sh <根> all",
+          "note": "三语校验能发现漏合的文案"
+        }
+      ]
+    }
+  ]
+}

@@ -17,6 +17,7 @@
     { "area": "ui", "path": "DesignSystem/{Theme,Components,Localizable.xcstrings}", "change": "主题 token、空态 / 加载 / Toast、三语", "type": "new" },
     { "area": "widget", "path": "RingtoneWorldWidget/ + Shared/WidgetBridge.swift", "change": "播放 Widget，App Group 共享快照", "type": "new" },
     { "area": "widget", "path": "RingtoneWorldWidget/PlaybackLiveActivity + Shared/{PlaybackActivityAttributes,PlaybackIntents}", "change": "锁屏 / 灵动岛三态；LiveActivityIntent → PlaybackCommandCenter → PlaybackController", "type": "new" },
+    { "area": "service", "path": "Services/Localization/LanguageService + Core/Domain/Localization/{AppLanguage,L10n}", "change": "App 内语言：跟随系统 / 简中 / English / ไทย，同步小组件与实时活动", "type": "new" },
     { "area": "docs", "path": "CLAUDE.md / README.md / docs/*architecture-design.md", "change": "按实际代码写明 MV 分层与双端契约对齐", "type": "edit" }
   ]
 }

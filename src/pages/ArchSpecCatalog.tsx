@@ -31,6 +31,18 @@ import iosMvSchema from "../../data/collections/xmkf-ios-swiftui-mv-202609/schem
 import iosMvFlows from "../../data/collections/xmkf-ios-swiftui-mv-202609/flows.json";
 import iosMvImpl from "../../data/collections/xmkf-ios-swiftui-mv-202609/implementation.json";
 
+import androidMeta from "../../data/collections/xmkf-android-compose-clean-202609/meta.json";
+import androidBoundaries from "../../data/collections/xmkf-android-compose-clean-202609/boundaries.json";
+import androidSchema from "../../data/collections/xmkf-android-compose-clean-202609/schema.json";
+import androidFlows from "../../data/collections/xmkf-android-compose-clean-202609/flows.json";
+import androidImpl from "../../data/collections/xmkf-android-compose-clean-202609/implementation.json";
+
+import dualMeta from "../../data/collections/xmkf-mobile-dual-native-202609/meta.json";
+import dualBoundaries from "../../data/collections/xmkf-mobile-dual-native-202609/boundaries.json";
+import dualSchema from "../../data/collections/xmkf-mobile-dual-native-202609/schema.json";
+import dualFlows from "../../data/collections/xmkf-mobile-dual-native-202609/flows.json";
+import dualImpl from "../../data/collections/xmkf-mobile-dual-native-202609/implementation.json";
+
 import ArchBoundariesBoard from "./arch/ArchBoundariesBoard";
 import ArchSchemaBoard from "./arch/ArchSchemaBoard";
 import ArchFlowsBoard from "./arch/ArchFlowsBoard";
@@ -47,6 +59,7 @@ type ArchSpecBundle = {
     summary: string;
     notes: string[];
     stats: { boundaries: number; newFields: number; modules: number; testCases: number };
+    statLabels?: { boundaries?: string; newFields?: string; modules?: string; testCases?: string };
     tabs?: { id: Tab; label: string }[];
   };
   boundaries: React.ComponentProps<typeof ArchBoundariesBoard>["data"];
@@ -106,7 +119,24 @@ const SPECS: Record<string, ArchSpecBundle> = {
     flows: iosMvFlows,
     impl: iosMvImpl,
   },
+  "xmkf-android-compose-clean-202609": {
+    meta: androidMeta as ArchSpecBundle["meta"],
+    boundaries: androidBoundaries as ArchSpecBundle["boundaries"],
+    schema: androidSchema,
+    flows: androidFlows,
+    impl: androidImpl,
+  },
+  "xmkf-mobile-dual-native-202609": {
+    meta: dualMeta as ArchSpecBundle["meta"],
+    boundaries: dualBoundaries as ArchSpecBundle["boundaries"],
+    schema: dualSchema,
+    flows: dualFlows,
+    impl: dualImpl,
+  },
 };
+
+const STAT_KEYS = ["boundaries", "newFields", "modules", "testCases"] as const;
+const DEFAULT_STAT_LABELS = { boundaries: "边界", newFields: "字段", modules: "模块", testCases: "用例" };
 
 export default function ArchSpecCatalog() {
   const { id } = useParams();
@@ -141,22 +171,12 @@ export default function ArchSpecCatalog() {
           <p className="muted">{meta.summary}</p>
         </div>
         <div className="ga-figures">
-          <div>
-            <b>{meta.stats.boundaries}</b>
-            <span>边界</span>
-          </div>
-          <div>
-            <b>{meta.stats.newFields}</b>
-            <span>字段</span>
-          </div>
-          <div>
-            <b>{meta.stats.modules}</b>
-            <span>模块</span>
-          </div>
-          <div>
-            <b>{meta.stats.testCases}</b>
-            <span>用例</span>
-          </div>
+          {STAT_KEYS.map((key) => (
+            <div key={key}>
+              <b>{meta.stats[key]}</b>
+              <span>{meta.statLabels?.[key] ?? DEFAULT_STAT_LABELS[key]}</span>
+            </div>
+          ))}
         </div>
       </header>
 

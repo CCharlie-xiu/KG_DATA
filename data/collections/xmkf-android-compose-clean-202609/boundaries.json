@@ -1,0 +1,154 @@
+{
+  "lookLegend": [
+    {
+      "id": "realtime",
+      "label": "采用"
+    },
+    {
+      "id": "delayed",
+      "label": "不采用"
+    },
+    {
+      "id": "waiting",
+      "label": "条件采用"
+    }
+  ],
+  "columns": [
+    "选型",
+    "用在哪",
+    "约束 / 原因",
+    "结论"
+  ],
+  "groups": [
+    {
+      "id": "ui",
+      "title": "UI 与状态",
+      "note": "页面层怎么写",
+      "rows": [
+        {
+          "channel": "Jetpack Compose + Material 3",
+          "afterComplete": "全部界面、底部 Tab、播放页",
+          "afterDue": "minSdk 26；XML View 只留 Glance 小组件的 RemoteViews",
+          "timing": "realtime"
+        },
+        {
+          "channel": "ViewModel + StateFlow",
+          "afterComplete": "每页 XxxViewModel，collectAsStateWithLifecycle",
+          "afterDue": "对外只暴露 StateFlow，事件走方法",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Navigation Compose + RouteInterceptor",
+          "afterComplete": "Tab 与子页面路由，/mine/member 需登录",
+          "afterDue": "鉴权规则与 iOS Route.requiresAuth 一致",
+          "timing": "realtime"
+        },
+        {
+          "channel": "MVI / Orbit 等状态框架",
+          "afterComplete": "单向数据流统一建模",
+          "afterDue": "模板规模不需要，样板多",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "domain",
+      "title": "领域与业务逻辑",
+      "note": "逻辑放哪",
+      "rows": [
+        {
+          "channel": "UseCase（一类一个 execute）",
+          "afterComplete": "ViewModel 只依赖 UseCase",
+          "afterDue": "不持有状态；和 iOS Model → Service 对齐",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Repository 接口 + Entity（domain/）",
+          "afterComplete": "数据来源藏在接口后",
+          "afterDue": "domain 不依赖 Android 框架",
+          "timing": "realtime"
+        },
+        {
+          "channel": "ViewModel 直接依赖 platform/",
+          "afterComplete": "播放、支付、Google 登录",
+          "afterDue": "平台能力例外：PlaybackController / PaymentManager / GoogleSignInProvider",
+          "timing": "waiting"
+        },
+        {
+          "channel": "ViewModel 直接调 Repository",
+          "afterComplete": "省一层",
+          "afterDue": "破坏分层，禁止",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "数据与网络",
+      "note": "GraphQL + REST 共用拦截器",
+      "rows": [
+        {
+          "channel": "Apollo Kotlin 4",
+          "afterComplete": "内容列表、搜索",
+          "afterDue": "与 Retrofit 共用 OkHttpClient",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Retrofit + OkHttp",
+          "afterComplete": "登录、刷新 Token 等 REST",
+          "afterDue": "Token / Basic-Auth / Tenant / B3 拦截器 + 401 Authenticator 一次配置两处生效",
+          "timing": "realtime"
+        },
+        {
+          "channel": "DataStore Preferences",
+          "afterComplete": "Token、用户、外观",
+          "afterDue": "SharedPreferences 只给小组件跨进程读",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Room",
+          "afterComplete": "本地缓存",
+          "afterDue": "暂无离线需求，按需再加",
+          "timing": "waiting"
+        }
+      ]
+    },
+    {
+      "id": "platform",
+      "title": "平台能力",
+      "note": "与 iOS 一一对应",
+      "rows": [
+        {
+          "channel": "Media3 ExoPlayer + MediaSessionService",
+          "afterComplete": "后台播放、媒体通知、锁屏、耳机按键",
+          "afterDue": "对应 iOS AVPlayer + Now Playing；灵动岛以媒体通知覆盖",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Jetpack Glance",
+          "afterComplete": "桌面小组件：播放状态 + 播放/暂停",
+          "afterDue": "按钮 ActionCallback → Hilt EntryPoint → PlaybackController",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Play Billing 7",
+          "afterComplete": "会员商品 / 购买 / 确认 / 恢复",
+          "afterDue": "INAPP 与 SUBS 都查询，订阅带 offerToken",
+          "timing": "realtime"
+        },
+        {
+          "channel": "Credential Manager + GoogleId",
+          "afterComplete": "Google 登录",
+          "afterDue": "对应 iOS Sign in with Apple；需配置 Web client ID",
+          "timing": "realtime"
+        },
+        {
+          "channel": "AppCompat setApplicationLocales",
+          "afterComplete": "App 内语言：跟随系统 / 简中 / English / ไทย",
+          "afterDue": "需 AppCompatActivity + AppCompat 主题；13 以下靠 autoStoreLocales",
+          "timing": "realtime"
+        }
+      ]
+    }
+  ]
+}

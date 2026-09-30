@@ -1,0 +1,148 @@
+{
+  "lookLegend": [
+    {
+      "id": "realtime",
+      "label": "必须"
+    },
+    {
+      "id": "waiting",
+      "label": "按需"
+    },
+    {
+      "id": "delayed",
+      "label": "禁止"
+    }
+  ],
+  "columns": [
+    "规则",
+    "做法",
+    "原因 / 例外",
+    "级别"
+  ],
+  "groups": [
+    {
+      "id": "repo",
+      "title": "仓库与模板",
+      "note": "代码归属",
+      "rows": [
+        {
+          "channel": "模板只放通用能力",
+          "afterComplete": "mobile-template-ios / -android 只收可复用能力",
+          "afterDue": "业务代码、密钥不进模板",
+          "timing": "realtime"
+        },
+        {
+          "channel": "业务项目单一仓库",
+          "afterComplete": "根目录 + ios/ + android/（或已有目录，路径记在 .mobile-template.json）",
+          "afterDue": "一次提交覆盖两端",
+          "timing": "realtime"
+        },
+        {
+          "channel": "模板远端只读",
+          "afterComplete": "template-ios / template-android 的 push URL 改成无效地址",
+          "afterDue": "防止业务代码推到 GitHub 模板",
+          "timing": "realtime"
+        },
+        {
+          "channel": "在业务项目里直接改模板",
+          "afterComplete": "改模板要在单独克隆的模板仓库里改",
+          "afterDue": "避免把业务改动带进模板",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "parity",
+      "title": "能力对等",
+      "note": "一端有的另一端必须有",
+      "rows": [
+        {
+          "channel": "对齐契约，不对齐目录",
+          "afterComplete": "Entity 字段、Repository 能力、错误分类、路由鉴权、i18n key 两端一致",
+          "afterDue": "分层按平台惯用写法（iOS MV / Android Clean）",
+          "timing": "realtime"
+        },
+        {
+          "channel": "docs/parity.md 能力对齐表",
+          "afterComplete": "每个用户可感知能力一行，✅ / 🟡 / ❌",
+          "afterDue": "任一端 ✅ 另一端不是 ✅ 即待对齐",
+          "timing": "realtime"
+        },
+        {
+          "channel": "平台独有能力",
+          "afterComplete": "标「—」并写明另一端如何覆盖同一需求",
+          "afterDue": "灵动岛 ↔ 媒体通知；Apple 登录 ↔ Google 登录",
+          "timing": "waiting"
+        },
+        {
+          "channel": "契约文档先行",
+          "afterComplete": "docs/contracts/<功能>.md：两端一致层 + 平台实现层",
+          "afterDue": "跨端新功能必须",
+          "timing": "realtime"
+        }
+      ]
+    },
+    {
+      "id": "i18n",
+      "title": "三语对齐",
+      "note": "简体中文 / English / ไทย",
+      "rows": [
+        {
+          "channel": "check-i18n.py",
+          "afterComplete": "校验两端 key 集合、三语齐全、占位符、逐语言文案一致",
+          "afterDue": "verify.sh 每次先跑；%@ ↔ %s、%lld ↔ %d 归一化后比较",
+          "timing": "realtime"
+        },
+        {
+          "channel": "单端专有 key",
+          "afterComplete": "登记 docs/i18n-platform-keys.txt 的 [ios] / [android]",
+          "afterDue": "如 login_with_apple、app_name；有意不同的文案进 [value-diff]",
+          "timing": "waiting"
+        },
+        {
+          "channel": "App 内语言切换",
+          "afterComplete": "我的页 跟随系统 / 简中 / English / ไทย，标签 system / zh-Hans / en / th",
+          "afterDue": "iOS LanguageService + L10n；Android AppCompat per-app locales",
+          "timing": "realtime"
+        },
+        {
+          "channel": "iOS 用 String(localized:) 取文案",
+          "afterComplete": "改用 L10n.string(key)",
+          "afterDue": "String(localized:) 只认启动时语言，不跟随 App 内切换",
+          "timing": "delayed"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "协作方式",
+      "note": "主端 / 跟随端",
+      "rows": [
+        {
+          "channel": "用户只和主端交互",
+          "afterComplete": "只启动主端 IDE 与模拟器",
+          "afterDue": "跟随端后台构建测试，不打扰",
+          "timing": "realtime"
+        },
+        {
+          "channel": "静默同步双端",
+          "afterComplete": "主端功能验证通过后自动对齐跟随端并跑 verify",
+          "afterDue": "结束时一两句话汇报",
+          "timing": "waiting"
+        },
+        {
+          "channel": "单端开发",
+          "afterComplete": "只做主端，缺口逐条记入 parity.md",
+          "afterDue": "改回双端时按清单补齐",
+          "timing": "waiting"
+        },
+        {
+          "channel": "自动提交 / 推送",
+          "afterComplete": "需用户明确指令",
+          "afterDue": "模板仓库只推功能分支或经确认",
+          "timing": "delayed"
+        }
+      ]
+    }
+  ]
+}

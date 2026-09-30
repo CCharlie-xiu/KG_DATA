@@ -1,0 +1,104 @@
+{
+  "sectionTitles": {
+    "workflow": "仓库与目录",
+    "run": "工具脚本",
+    "config": ".mobile-template.json 示例"
+  },
+  "workflowFields": [
+    {
+      "name": "mobile-template-ios",
+      "type": "iOS 模板",
+      "model": "SwiftUI + Observation",
+      "desc": "Apollo iOS、AVPlayer + Now Playing、Live Activity、WidgetKit、StoreKit 2、外观、语言切换"
+    },
+    {
+      "name": "mobile-template-android",
+      "type": "Android 模板",
+      "model": "Compose + Clean + Hilt",
+      "desc": "Apollo Kotlin、Media3、Glance、Play Billing、Google 登录、外观、语言切换"
+    },
+    {
+      "name": "mobile-template/templates",
+      "type": "总仓库 · 子模块",
+      "model": "templates/ios · templates/android",
+      "desc": "只用于对照版本；新项目直接拉模板最新 main"
+    },
+    {
+      "name": "mobile-template/skills",
+      "type": "总仓库 · Skill",
+      "model": "mobile-project-start / mobile-app-from-template / ios- / android-app-from-template",
+      "desc": "scripts/install-skills.sh 装到 ~/.cursor/skills"
+    },
+    {
+      "name": "mobile-template/workspace",
+      "type": "新项目骨架",
+      "model": "AGENTS.md / docs/parity.md / docs/contracts / docs/i18n-platform-keys.txt",
+      "desc": "搭建或接入时复制到项目根"
+    },
+    {
+      "name": "业务仓库根目录 skills/",
+      "type": "Skill 副本",
+      "model": "skills/ + scripts/install-skills.sh",
+      "desc": "成员克隆后运行一次安装即可说「开始做项目」"
+    }
+  ],
+  "runFields": [
+    {
+      "name": "new-project.sh",
+      "type": "搭建",
+      "model": "--lead ios|android [--only 端] [--remote]",
+      "desc": "可拉到当前目录（非空也行）；已是 git 仓库时不自动提交"
+    },
+    {
+      "name": "adopt-project.sh",
+      "type": "接入已有项目",
+      "model": "--lead --mode dual|single [--ios 路径] [--android 路径]",
+      "desc": "探测 .xcodeproj / settings.gradle 写入 ios.path / android.path"
+    },
+    {
+      "name": "verify.sh",
+      "type": "静默验证",
+      "model": "<根目录> ios|android|all|i18n",
+      "desc": "先三语校验再构建 + 单测；只验主端时只做主端自检"
+    },
+    {
+      "name": "check-i18n.py",
+      "type": "三语对齐",
+      "model": "<根目录> 或 --ios --android --allow",
+      "desc": "Python 3.9 无依赖；失败退出码 1"
+    },
+    {
+      "name": "sync-template.sh",
+      "type": "模板更新",
+      "model": "<根目录> ios|android",
+      "desc": "按记录的模板 SHA 三方合并"
+    },
+    {
+      "name": "preflight / first-run",
+      "type": "预检与启动",
+      "model": "xcode-first-run.sh / first-run.sh",
+      "desc": "自动发现工程名；JDK 17–21"
+    }
+  ],
+  "configExample": {
+    "mode": "dual",
+    "lead": "ios",
+    "follower": "android",
+    "ios": {
+      "path": "ringtone-world-ios",
+      "bundleId": "com.cdcytd.vrbt"
+    },
+    "android": {
+      "path": "vrbt-show-android",
+      "package": "com.cdcytd.vrbt"
+    }
+  },
+  "requestOverride": {
+    "field": "开工三问（说「开始做项目」触发）",
+    "rules": [
+      "① 基于当前项目继续 → adopt-project.sh；从模板库拉框架到当前位置 → new-project.sh",
+      "② 第一优先级 iOS → 启动 Xcode + iOS 模拟器；Android → 启动 Android Studio + 安卓模拟器",
+      "③ 静默同步双端 → 主端完成后自动对齐跟随端；单端开发 → --only 主端，缺口记 parity.md"
+    ]
+  }
+}

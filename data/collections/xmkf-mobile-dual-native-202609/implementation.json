@@ -1,0 +1,94 @@
+{
+  "modules": [
+    {
+      "area": "skill",
+      "path": "skills/mobile-project-start/SKILL.md",
+      "change": "开工入口：三问 → 接入/搭建 → 启动主端 → 开发循环",
+      "type": "new"
+    },
+    {
+      "area": "skill",
+      "path": "skills/mobile-app-from-template/SKILL.md",
+      "change": "双端流程与故障排查",
+      "type": "edit"
+    },
+    {
+      "area": "script",
+      "path": "scripts/new-project.sh",
+      "change": "当前目录、--only 单端、已有 git 仓库不自动提交",
+      "type": "edit"
+    },
+    {
+      "area": "script",
+      "path": "scripts/adopt-project.sh",
+      "change": "接入已有项目，探测两端目录与标识",
+      "type": "new"
+    },
+    {
+      "area": "script",
+      "path": "scripts/verify.sh",
+      "change": "读 ios.path / android.path，先三语校验再构建测试",
+      "type": "edit"
+    },
+    {
+      "area": "script",
+      "path": "scripts/check-i18n.py",
+      "change": "双端三语对齐校验",
+      "type": "new"
+    },
+    {
+      "area": "script",
+      "path": "scripts/sync-template.sh",
+      "change": "三方合并模板更新",
+      "type": "new"
+    },
+    {
+      "area": "script",
+      "path": "ios-app-from-template/scripts/xcode-first-run.sh · preflight.sh",
+      "change": "自动发现 .xcodeproj，不再写死工程名",
+      "type": "edit"
+    },
+    {
+      "area": "workspace",
+      "path": "workspace/AGENTS.md",
+      "change": "双端规则、两端必须一致的项",
+      "type": "new"
+    },
+    {
+      "area": "workspace",
+      "path": "workspace/docs/parity.md",
+      "change": "能力对齐表（含语言切换、三语校验）",
+      "type": "new"
+    },
+    {
+      "area": "workspace",
+      "path": "workspace/docs/contracts/",
+      "change": "能力对等契约模板",
+      "type": "new"
+    },
+    {
+      "area": "workspace",
+      "path": "workspace/docs/i18n-platform-keys.txt",
+      "change": "单端专有 key 登记表",
+      "type": "new"
+    },
+    {
+      "area": "hub",
+      "path": "scripts/install-skills.sh",
+      "change": "安装 Skill 到 ~/.cursor/skills，附带 workspace/",
+      "type": "new"
+    },
+    {
+      "area": "business",
+      "path": "业务仓库 skills/ + scripts/install-skills.sh + skills/README.md",
+      "change": "Skill 副本与安装前置条件",
+      "type": "new"
+    },
+    {
+      "area": "business",
+      "path": ".mobile-template.json",
+      "change": "mode / lead / follower / 两端路径",
+      "type": "new"
+    }
+  ]
+}

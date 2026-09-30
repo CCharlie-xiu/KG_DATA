@@ -1,36 +1,47 @@
 {
   "id": "xmkf-mobile-dual-native-202609",
-  "title": "双端原生模板工作流：主端开发 + 跟随端静默对齐",
+  "title": "双端原生模板工作流",
   "status": "published",
   "sourceProject": "github.com/CCharlie-xiu/mobile-template（总仓库）；mobile-template-ios；mobile-template-android",
   "notes": [
     "目标：一端有的功能另一端必须有；两端对齐能力与契约，不对齐目录，各用平台特性实现。",
-    "模板只放通用能力，业务代码推业务仓库；模板远端在业务项目里是只读的（push URL 被改成无效地址）。"
+    "模板只放通用能力，业务代码推业务仓库；模板远端在业务项目里是只读的（push URL 被改成无效地址）。",
+    "开工入口 Skill mobile-project-start：①基于当前项目 / 从模板拉框架到当前位置 ②主端 iOS / Android ③静默同步双端 / 单端开发。",
+    "三语对齐靠脚本兜底：check-i18n.py 查 key、三语齐全、占位符、逐语言文案；单端 key 登记 docs/i18n-platform-keys.txt。",
+    "引用 Skill 的前置条件：业务仓库根目录带 skills/ 副本，成员克隆后运行一次 scripts/install-skills.sh；拉模板需 GitHub 私有仓库权限。",
+    "坑：bash 里 $var 后紧跟全角字符会被当作变量名一部分，一律写 ${var}；zsh 不对 $VAR 分词，批量替换用 rg -l -0 | xargs -0。",
+    "私有仓库在 GitHub 免费套餐下不能开分支保护 / 规则集，需 Pro 或公开仓库。"
   ],
-  "sections": [
+  "kicker": "iOS + Android · 模板总仓库 · Cursor Skill · 能力对等 · 三语对齐",
+  "summary": "iOS / Android 两个模板 + 总仓库（子模块、Cursor Skill、项目骨架）。说「开始做项目」后依次选 项目来源、主端、同步模式；只启动主端开发，跟随端后台构建并按 parity.md 补齐，verify 先跑三语对齐校验，保证一端有的功能另一端也有。",
+  "stats": {
+    "boundaries": 16,
+    "newFields": 12,
+    "modules": 15,
+    "testCases": 41
+  },
+  "statLabels": {
+    "boundaries": "规则",
+    "newFields": "仓库与脚本",
+    "modules": "文件",
+    "testCases": "模板单测"
+  },
+  "tabs": [
     {
-      "heading": "背景",
-      "body": "移动端新项目希望同时启动 iOS 与 Android，并行开发、保证功能对等。之前只有 iOS 模板，Android 能力缺口大（播放、锁屏、小组件、支付都只有接口）。"
+      "id": "boundaries",
+      "label": "协作规则"
     },
     {
-      "heading": "仓库结构",
-      "body": "| 仓库 | 内容 |\n|---|---|\n| mobile-template-ios | SwiftUI + Observation 模板：Apollo iOS、AVPlayer 后台播放、Now Playing / 远程控制、Live Activity + 灵动岛、WidgetKit、StoreKit 2、外观切换、三语 String Catalog |\n| mobile-template-android | Compose + Clean 模板：Apollo Kotlin、Media3 + MediaSession、Glance、Play Billing、Credential Manager、外观切换、三语 strings.xml（共享 key 同 iOS） |\n| mobile-template（总仓库） | 两个模板作为子模块（templates/ios、templates/android）；skills/（iOS、Android、双端三个 Cursor Skill）；workspace/（双端项目骨架：AGENTS.md、docs/parity.md 能力对齐表、能力对等契约模板）；scripts/install-skills.sh |"
+      "id": "schema",
+      "label": "仓库与工具"
     },
     {
-      "heading": "启动流程（Skill mobile-app-from-template）",
-      "body": "1. 先询问以哪端为主端（iOS / Android）。\n2. preflight：检查 Xcode、JDK 17–21、Android SDK、模拟器。\n3. new-project.sh <目录> --name --ios-bundle-id --android-package --lead ios|android：克隆总仓库，分别跑两端 init 脚本（改 Bundle ID / 包名 / 应用名 / App Group / DataStore 名），记录模板 SHA 到 .mobile-template.json，git init 并添加只读的 template-ios / template-android 远端。\n4. 只启动主端（iOS 开 Xcode + 模拟器；Android 构建 + 模拟器安装截图 + 打开 Android Studio）。\n5. 跟随端后台 verify.sh 静默构建与测试；主端每完成一个功能，按 parity.md 在跟随端补齐，不打扰用户。\n6. sync-template.sh 用 git diff 旧SHA 新SHA | git apply -3 --directory=<端> 拉取模板更新。"
+      "id": "flows",
+      "label": "工作流程"
     },
     {
-      "heading": "能力对等规则",
-      "body": "- docs/parity.md 每个用户可感知能力一行，状态 ✅ / 🟡 / ❌；任一端 ✅ 另一端不是 ✅ 即为待对齐项。\n- 平台独有能力标「—」，必须写明另一端用什么覆盖同一用户需求（例：灵动岛 ↔ Android 媒体通知）。\n- 契约分两层：两端一致层（Entity 字段、Repository 接口、错误分类、业务规则、i18n key、测试场景）+ 平台实现层（各自 API 与限制）。"
-    },
-    {
-      "heading": "业务项目同步模板更新的做法",
-      "body": "- Android（包名不同）：对模板提交做 git diff，sed 替换包路径与类名后 git apply --directory=<android 目录>；先比较模板旧版与业务文件，一致的直接套用，不一致的（导航、Tab、strings、gradle）手工合并。\n- iOS：业务项目内层 .git 只作只读模板远端，fetch 后 git diff 旧 新 | git apply --reject，处理 .rej 后在外层仓库提交。"
-    },
-    {
-      "heading": "坑与验证",
-      "body": "- Android Studio 自带 JBR 25 与 Gradle 8.11 不兼容，脚本按 JAVA_HOME → java_home -v 21/17 → JBR → PATH 选 17–21 的 JDK。\n- 老版 avdmanager 读不到新系统镜像：直接写 ~/.android/avd/<name>.ini 与 config.ini。\n- 脚本退出会带走模拟器进程：用 python subprocess.Popen(start_new_session=True) 启动。\n- zsh 不对 $VAR 分词，批量替换改用 rg -l -0 | xargs -0。\n- bash 里 $var 后紧跟全角字符会被当作变量名一部分，一律写成 ${var}。\n- 已验证：iOS 模板 14 个测试、Android 模板 19 个测试通过；new-project 以 iOS / Android 为主端各跑通一次，改包名后的 Android 工程 verify 通过。"
+      "id": "impl",
+      "label": "文件清单"
     }
   ]
 }

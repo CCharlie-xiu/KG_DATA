@@ -12,14 +12,16 @@
     "双端独立原生 + 同一份 GraphQL Schema；Android 走 Now in Android 式 Clean + UseCase，两端对齐 Schema / Entity / 错误分类 / 路由鉴权 / i18n Key。",
     "系统媒体控制由 NowPlayingService 负责：MPNowPlayingInfoCenter 显示标题 / 进度，MPRemoteCommandCenter 处理播放、暂停、上一首、下一首；回调用 MainActor.assumeIsolated 回到主线程。",
     "会员页 MembershipModel 依赖 MembershipStore 协议（StoreService 实现），便于单测；取消购买（validation/purchase）不算错误。",
+    "App 内语言：LanguageService 持久化选择并写 AppleLanguages，RootView 注入 .environment(\\.locale) + .id(localization) 即时刷新；代码取文案用 L10n.string(key)（String(localized:) 不跟随 App 内语言）；小组件 / 实时活动读 App Group 里的语言。",
     "已沉淀为模板 github.com/CCharlie-xiu/mobile-template-ios，与 mobile-template-android 成对，由总仓库 mobile-template 管理。"
   ],
   "stats": {
     "boundaries": 18,
     "newFields": 15,
-    "modules": 18,
-    "testCases": 14
+    "modules": 19,
+    "testCases": 18
   },
+  "statLabels": { "boundaries": "选型", "newFields": "分层与版本", "modules": "模块", "testCases": "单测" },
   "tabs": [
     { "id": "boundaries", "label": "选型边界" },
     { "id": "schema", "label": "分层模型" },

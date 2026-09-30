@@ -1,0 +1,134 @@
+{
+  "groups": [
+    {
+      "id": "launch",
+      "title": "启动",
+      "note": "MainActivity",
+      "steps": [
+        {
+          "when": "Application",
+          "action": "@HiltAndroidApp 初始化依赖图",
+          "note": "单例：ApolloClient、PlaybackController、WidgetBridge"
+        },
+        {
+          "when": "onCreate",
+          "action": "AppCompatActivity 恢复应用语言 → WidgetBridge.syncLanguage",
+          "note": "语言重建后同步刷新小组件"
+        },
+        {
+          "when": "setContent",
+          "action": "AppViewModel 观察外观 → RingtoneWorldTheme(darkTheme) → AppNavHost",
+          "note": "外观来自 DataStore"
+        }
+      ]
+    },
+    {
+      "id": "request",
+      "title": "一次数据请求",
+      "note": "以搜索为例",
+      "steps": [
+        {
+          "when": "Screen",
+          "action": "输入关键词 → viewModel.search(query)",
+          "note": "Screen 不含逻辑"
+        },
+        {
+          "when": "ViewModel",
+          "action": "LoadState.Loading → SearchContentUseCase.execute(query)",
+          "note": "只依赖 UseCase"
+        },
+        {
+          "when": "Repository",
+          "action": "Apollo SearchQuery → ContentMapper → List<ContentEntity>",
+          "note": "异常转 AppError"
+        },
+        {
+          "when": "网络层",
+          "action": "OkHttp 拦截器注入 Bearer / Basic-Auth / Tenant / B3",
+          "note": "401 → Authenticator 刷新后重试"
+        },
+        {
+          "when": "回到 UI",
+          "action": "LoadState.Success / Error → Compose 重组",
+          "note": "错误文案走 strings.xml"
+        }
+      ]
+    },
+    {
+      "id": "playback",
+      "title": "后台播放与系统控制",
+      "note": "Media3",
+      "steps": [
+        {
+          "when": "点击播放",
+          "action": "PlaybackController.play(items) → MediaController.setMediaItems",
+          "note": "连接 PlaybackService 前的操作进待执行队列"
+        },
+        {
+          "when": "前台服务",
+          "action": "MediaSessionService 自动发媒体通知",
+          "note": "锁屏、快捷设置媒体面板、耳机按键"
+        },
+        {
+          "when": "状态变化",
+          "action": "Player.Listener.onEvents → PlaybackState(StateFlow)",
+          "note": "同时 WidgetBridge.publish → Glance updateAll"
+        }
+      ]
+    },
+    {
+      "id": "language",
+      "title": "App 内语言切换",
+      "note": "与 iOS 行为一致",
+      "steps": [
+        {
+          "when": "我的页",
+          "action": "下拉选择 跟随系统 / 简体中文 / English / ไทย",
+          "note": "标签 \"\" / zh-Hans / en / th，与 iOS AppLanguage 一致"
+        },
+        {
+          "when": "UseCase → Repository",
+          "action": "SetAppLanguageUseCase → SettingsRepositoryImpl.setAppLanguage",
+          "note": "同一语言不重复应用"
+        },
+        {
+          "when": "平台",
+          "action": "AppCompatDelegate.setApplicationLocales(forLanguageTags(tag))",
+          "note": "Activity 自动重建，停留在当前页"
+        },
+        {
+          "when": "小组件",
+          "action": "WidgetBridge 记录语言 → localizedContext 渲染",
+          "note": "Android 13 以下小组件进程拿不到 AppCompat 语言"
+        }
+      ]
+    },
+    {
+      "id": "billing",
+      "title": "会员购买",
+      "note": "Play Billing",
+      "steps": [
+        {
+          "when": "进入会员页",
+          "action": "路由拦截：未登录跳登录页",
+          "note": "只有 /mine/member 需要登录"
+        },
+        {
+          "when": "加载商品",
+          "action": "queryProductDetails（INAPP + SUBS）",
+          "note": "商品 ID 配在 MEMBERSHIP_PRODUCT_IDS"
+        },
+        {
+          "when": "购买",
+          "action": "launchBillingFlow（订阅带 offerToken）→ acknowledge",
+          "note": "用户取消不算错误"
+        },
+        {
+          "when": "恢复",
+          "action": "queryPurchasesAsync",
+          "note": "与 iOS restore 对齐"
+        }
+      ]
+    }
+  ]
+}

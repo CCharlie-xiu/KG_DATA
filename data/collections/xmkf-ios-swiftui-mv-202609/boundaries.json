@@ -1,4 +1,5 @@
 {
+  "columns": ["选型", "用在哪", "约束 / 原因", "结论"],
   "lookLegend": [
     { "id": "realtime", "label": "采用" },
     { "id": "delayed", "label": "不采用" },

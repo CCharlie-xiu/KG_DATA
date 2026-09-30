@@ -1,0 +1,106 @@
+{
+  "modules": [
+    {
+      "area": "app",
+      "path": "MainActivity.kt",
+      "change": "AppCompatActivity；外观主题；启动时同步小组件语言",
+      "type": "new"
+    },
+    {
+      "area": "navigation",
+      "path": "presentation/navigation/*",
+      "change": "Route / AppRouter / RouteInterceptor / AppNavHost / Tab",
+      "type": "new"
+    },
+    {
+      "area": "feature",
+      "path": "presentation/feature/<name>/",
+      "change": "Home / Search / Login / Mine / Player / Membership：Screen + ViewModel",
+      "type": "new"
+    },
+    {
+      "area": "feature",
+      "path": "presentation/feature/mine/MineScreen.kt",
+      "change": "外观分段按钮 + 语言下拉菜单",
+      "type": "edit"
+    },
+    {
+      "area": "domain",
+      "path": "domain/entity · repository · error",
+      "change": "Entity、Repository 接口、AppError、AppLanguage",
+      "type": "new"
+    },
+    {
+      "area": "domain",
+      "path": "domain/usecase/*",
+      "change": "Login / Logout / GetCurrentUser / Search / Appearance / AppLanguage",
+      "type": "new"
+    },
+    {
+      "area": "data",
+      "path": "data/repository/*Impl.kt + ContentMapper",
+      "change": "接口实现 + 模型映射，异常转 AppError",
+      "type": "new"
+    },
+    {
+      "area": "network",
+      "path": "data/network/{rest,graphql,interceptor}",
+      "change": "Retrofit + Apollo 共用 OkHttp；Token 刷新 Authenticator",
+      "type": "new"
+    },
+    {
+      "area": "data",
+      "path": "data/local/AppDataStore · AppLocaleController",
+      "change": "DataStore 持久化；语言控制接口",
+      "type": "new"
+    },
+    {
+      "area": "platform",
+      "path": "platform/media/audio/PlaybackController · PlaybackService",
+      "change": "Media3 播放 + MediaSessionService",
+      "type": "new"
+    },
+    {
+      "area": "platform",
+      "path": "platform/payment/PlayBillingManager",
+      "change": "查询 / 购买 / 确认 / 恢复",
+      "type": "new"
+    },
+    {
+      "area": "platform",
+      "path": "platform/auth/GoogleSignInProvider",
+      "change": "Credential Manager Google 登录",
+      "type": "new"
+    },
+    {
+      "area": "platform",
+      "path": "platform/system/locale/AppCompatLocaleController",
+      "change": "setApplicationLocales + 同步小组件",
+      "type": "new"
+    },
+    {
+      "area": "widget",
+      "path": "platform/system/widget/PlaybackWidget · WidgetBridge",
+      "change": "Glance 小组件、快照与语言同步",
+      "type": "new"
+    },
+    {
+      "area": "di",
+      "path": "di/NetworkModule · RepositoryModule · PlatformModule",
+      "change": "Hilt 装配",
+      "type": "new"
+    },
+    {
+      "area": "res",
+      "path": "res/values{,-en,-th}/strings.xml · xml/locales_config.xml",
+      "change": "三语文案（共享 key 与 iOS 一致）、支持语言声明",
+      "type": "new"
+    },
+    {
+      "area": "test",
+      "path": "app/src/test/*",
+      "change": "登录、当前用户、路由鉴权、Mapper、小组件快照、拦截器、语言设置",
+      "type": "new"
+    }
+  ]
+}

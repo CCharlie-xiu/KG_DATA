@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 export type BoundariesData = {
   lookLegend: { id: string; label: string }[];
+  columns?: string[];
   groups: {
     id: string;
     title: string;
@@ -17,6 +18,8 @@ export type BoundariesData = {
 
 type Props = { data: BoundariesData };
 
+const DEFAULT_COLUMNS = ["通道", "完成后", "到期后", "时序"];
+
 export default function ArchBoundariesBoard({ data }: Props) {
   const [groupId, setGroupId] = useState("all");
   const groups = data.groups;
@@ -29,6 +32,7 @@ export default function ArchBoundariesBoard({ data }: Props) {
     [groupId, groups],
   );
   const total = groups.reduce((n, g) => n + g.rows.length, 0);
+  const columns = data.columns ?? DEFAULT_COLUMNS;
 
   return (
     <div>
@@ -69,10 +73,9 @@ export default function ArchBoundariesBoard({ data }: Props) {
             <table className="ga-ledger">
               <thead>
                 <tr>
-                  <th>通道</th>
-                  <th>完成后</th>
-                  <th>到期后</th>
-                  <th>时序</th>
+                  {columns.map((label) => (
+                    <th key={label}>{label}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>

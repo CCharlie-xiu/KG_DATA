@@ -229,7 +229,8 @@
         "Live Activity",
         "arch-spec",
         "Now Playing",
-        "StoreKit 2"
+        "StoreKit 2",
+        "App 内语言"
       ],
       "updated": "2026-09-30",
       "viewer": "arch-spec",
@@ -302,11 +303,11 @@
     {
       "id": "xmkf-android-compose-clean-202609",
       "title": "Android 原生 Compose + Clean Architecture",
-      "subtitle": "Media3 · Glance · Play Billing · 与 iOS 对等",
+      "subtitle": "选型边界 · 分层模型 · 执行流程 · 工程清单",
       "category": "other",
       "status": "published",
       "featured": true,
-      "summary": "Compose + Hilt + Clean（UseCase）；Apollo Kotlin 与 Retrofit 共用 OkHttp 拦截器；Media3 MediaSession 做后台播放与系统媒体控制，Glance 小组件，Play Billing 会员购买，能力与 iOS 模板一一对应。",
+      "summary": "Compose + Hilt + Clean（UseCase）；Apollo Kotlin 与 Retrofit 共用 OkHttp 拦截器；Media3 后台播放与系统媒体控制、Glance 小组件、Play Billing、Google 登录、App 内语言切换，能力与 iOS 模板一一对应。",
       "tags": [
         "Android",
         "Compose",
@@ -315,10 +316,12 @@
         "Apollo",
         "Media3",
         "Glance",
-        "Play Billing"
+        "Play Billing",
+        "App 内语言",
+        "arch-spec"
       ],
       "updated": "2026-09-30",
-      "viewer": "article",
+      "viewer": "arch-spec",
       "entry": "meta.json",
       "section": "architecture",
       "cover": "covers/kg-default.jpg"
@@ -326,21 +329,24 @@
     {
       "id": "xmkf-mobile-dual-native-202609",
       "title": "双端原生模板工作流",
-      "subtitle": "主端开发 · 跟随端静默对齐 · 能力对齐表",
+      "subtitle": "协作规则 · 仓库与工具 · 工作流程 · 文件清单",
       "category": "other",
       "status": "published",
       "featured": true,
-      "summary": "iOS / Android 两个模板 + 总仓库（子模块、Cursor Skill、双端骨架）。新项目先选主端，只启动主端开发，跟随端后台构建并按 parity.md 补齐，保证一端有的功能另一端也有。",
+      "summary": "说「开始做项目」→ 选项目来源、主端、同步模式；只启动主端开发，跟随端后台构建并按 parity.md 补齐；verify 先跑三语对齐校验，保证一端有的功能另一端也有。",
       "tags": [
         "iOS",
         "Android",
         "模板",
         "Cursor Skill",
         "双端",
-        "parity"
+        "parity",
+        "i18n",
+        "开工 Skill",
+        "arch-spec"
       ],
       "updated": "2026-09-30",
-      "viewer": "article",
+      "viewer": "arch-spec",
       "entry": "meta.json",
       "section": "architecture",
       "cover": "covers/kg-default.jpg"
