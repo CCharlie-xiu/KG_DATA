@@ -1,0 +1,37 @@
+{
+  "id": "xmkf-android-compose-clean-202609",
+  "title": "Android 原生 Compose + Clean Architecture（与 iOS 能力对等）",
+  "status": "published",
+  "sourceProject": "/Users/wuch/重要不可删除/iosXcode/xmkf-ringtone-world-app/vrbt-show-android；模板 github.com/CCharlie-xiu/mobile-template-android",
+  "notes": [
+    "Now in Android 风格：presentation → domain ← data，ViewModel 只依赖 UseCase，UseCase 一个类一个 execute。",
+    "例外：播放、支付、Google 登录属于平台能力，ViewModel 直接依赖 platform/ 下的 PlaybackController / PaymentManager / GoogleSignInProvider，与 iOS Model → Service 对齐。",
+    "构建要求 JDK 17–21：Android Studio 自带 JBR 25 跑不了 Gradle 8.11，报错只显示版本号 25.0.3。"
+  ],
+  "sections": [
+    {
+      "heading": "背景",
+      "body": "铃声类文娱 App 双端独立原生开发（Swift + Kotlin），GraphQL Schema 做共享契约。iOS 已有播放、锁屏、小组件、支付，Android 需要用各自平台能力做出等价功能，并沉淀为可复用模板。"
+    },
+    {
+      "heading": "技术栈",
+      "body": "- Kotlin 2.1 + AGP 8.7 + Gradle 8.11，compileSdk 35 / minSdk 26\n- Jetpack Compose（Material 3）+ ViewModel + StateFlow，Navigation Compose\n- Hilt；DataStore；Retrofit/OkHttp；Apollo Kotlin 4（与 REST 共用 OkHttpClient，Token / Basic-Auth / Tenant / B3 拦截器与 401 Authenticator 一次配置两处生效）\n- Media3 1.5（ExoPlayer + MediaSessionService）、Glance 1.1、Play Billing 7.1、Credential Manager（Google 登录）\n- JUnit 5 + MockK"
+    },
+    {
+      "heading": "分层与目录",
+      "body": "```\ndata/          network（rest / graphql / interceptor）、local（DataStore）、repository 实现 + Mapper\ndomain/        entity、repository 接口、usecase、AppError\npresentation/  feature（XxxScreen + XxxViewModel）、navigation、theme、component、state（LoadState）\nplatform/      auth、media/audio（播放）、payment、system/widget\ndi/            NetworkModule / RepositoryModule / PlatformModule\n```\n\n错误统一为 AppError（NetworkError / ApiError / AuthError / ValidationError / UnknownError）：Repository 把 ApolloNetworkException → NetworkError、ApolloHttpException → ApiError(statusCode)，ViewModel 转成 UI 状态，文案走 strings.xml。"
+    },
+    {
+      "heading": "与 iOS 的能力映射",
+      "body": "| 能力 | iOS | Android |\n|---|---|---|\n| 后台播放 | AVPlayer + AVAudioSession | Media3 ExoPlayer + PlaybackService（MediaSessionService，foregroundServiceType=mediaPlayback） |\n| 系统媒体控制 | MPNowPlayingInfoCenter + MPRemoteCommandCenter | MediaSession 自动生成媒体通知、锁屏与快捷设置媒体面板、耳机/蓝牙按键 |\n| 锁屏实时活动 / 灵动岛 | Live Activity + LiveActivityIntent | 平台独有，以媒体通知覆盖同一需求 |\n| 桌面小组件 | WidgetKit + App Group | Glance GlanceAppWidget + SharedPreferences，按钮走 ActionCallback → Hilt EntryPoint → PlaybackController |\n| 应用内购买 | StoreKit 2 | Play Billing：INAPP 与 SUBS 都查询，订阅带 offerToken，购买后 acknowledge，restore 用 queryPurchasesAsync |\n| 第三方登录 | Sign in with Apple | Credential Manager + GetGoogleIdOption |\n| 外观 | overrideUserInterfaceStyle | DataStore 持久化 + Theme(darkTheme) |"
+    },
+    {
+      "heading": "关键实现",
+      "body": "- PlaybackController（@Singleton）：通过 SessionToken 连接 PlaybackService 拿 MediaController；连接完成前的操作放进待执行队列；Player.Listener.onEvents 汇总成 PlaybackState(StateFlow)，同时推给 WidgetBridge 刷新 Glance。\n- 路由鉴权与 iOS 一致：只有 /mine/member 需要登录；Compose 导航经 NavigatorViewModel → AppRouter → RouteInterceptor。\n- 播放页路由 /player/{id}?title=&url=，参数用 Uri.encode。\n- 登录成功后 LoginUseCase 保存用户（与 iOS 一致），GetCurrentUserUseCase 在无 token 或无用户信息时返回 null。\n- i18n：共享 key 与 iOS String Catalog 完全一致，用脚本从 xcstrings 同步译文，Android 独有 key（app_name、login_with_google 等）单独保留。"
+    },
+    {
+      "heading": "坑与验证",
+      "body": "- Glance 的 Button 没有图标变体，core Material 图标里也没有 Pause / SkipNext，播放页用文字按钮。\n- 用 R.string 引用统计“未使用字符串”时必须把 Manifest / res/xml 里的 @string/ 引用算进去，否则会删掉 widget_display_name 导致 AAPT 链接失败。\n- 模拟器验证：dumpsys media_session 看到 state=PLAYING；dumpsys activity services 显示前台服务 types=mediaPlayback；input keyevent KEYCODE_MEDIA_PAUSE 后变为 PAUSED；run-as 读 shared_prefs/widget_playback.xml 确认小组件数据同步；dumpsys appwidget 能看到 PlaybackWidgetReceiver。\n- 单元测试 24 个（业务项目）/ 19 个（模板），覆盖登录保存用户、当前用户、路由鉴权、ContentMapper、WidgetSnapshot、Token 拦截器。"
+    }
+  ]
+}

@@ -227,9 +227,11 @@
         "GraphQL",
         "Repository",
         "Live Activity",
-        "arch-spec"
+        "arch-spec",
+        "Now Playing",
+        "StoreKit 2"
       ],
-      "updated": "2026-09-29",
+      "updated": "2026-09-30",
       "viewer": "arch-spec",
       "entry": "meta.json",
       "section": "architecture",
@@ -295,6 +297,52 @@
       "viewer": "article",
       "entry": "meta.json",
       "section": "ui-kit",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
+      "id": "xmkf-android-compose-clean-202609",
+      "title": "Android 原生 Compose + Clean Architecture",
+      "subtitle": "Media3 · Glance · Play Billing · 与 iOS 对等",
+      "category": "other",
+      "status": "published",
+      "featured": true,
+      "summary": "Compose + Hilt + Clean（UseCase）；Apollo Kotlin 与 Retrofit 共用 OkHttp 拦截器；Media3 MediaSession 做后台播放与系统媒体控制，Glance 小组件，Play Billing 会员购买，能力与 iOS 模板一一对应。",
+      "tags": [
+        "Android",
+        "Compose",
+        "Clean Architecture",
+        "Hilt",
+        "Apollo",
+        "Media3",
+        "Glance",
+        "Play Billing"
+      ],
+      "updated": "2026-09-30",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "architecture",
+      "cover": "covers/kg-default.jpg"
+    },
+    {
+      "id": "xmkf-mobile-dual-native-202609",
+      "title": "双端原生模板工作流",
+      "subtitle": "主端开发 · 跟随端静默对齐 · 能力对齐表",
+      "category": "other",
+      "status": "published",
+      "featured": true,
+      "summary": "iOS / Android 两个模板 + 总仓库（子模块、Cursor Skill、双端骨架）。新项目先选主端，只启动主端开发，跟随端后台构建并按 parity.md 补齐，保证一端有的功能另一端也有。",
+      "tags": [
+        "iOS",
+        "Android",
+        "模板",
+        "Cursor Skill",
+        "双端",
+        "parity"
+      ],
+      "updated": "2026-09-30",
+      "viewer": "article",
+      "entry": "meta.json",
+      "section": "architecture",
       "cover": "covers/kg-default.jpg"
     }
   ]
